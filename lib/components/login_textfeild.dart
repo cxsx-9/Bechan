@@ -1,7 +1,8 @@
+// import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class InputTextFeild extends StatelessWidget {
-  final controller;
+  final dynamic controller;
   final String infoText;
   final String hintText;
   final bool obscureText;
@@ -21,13 +22,14 @@ class InputTextFeild extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            textAlign: TextAlign.left,
             style: const TextStyle(
               fontSize: 12,
-              fontWeight: FontWeight.w600
+              fontWeight: FontWeight.w600,
+              // backgroundColor: Colors.amberAccent,
               ),
             infoText
           ),
+          const SizedBox(height: 8,),
           TextField(
             controller: controller,
             obscureText: obscureText,
@@ -38,7 +40,7 @@ class InputTextFeild extends StatelessWidget {
               ),
               focusedBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
-                borderSide: BorderSide(color: Colors.grey)
+                borderSide: BorderSide(color: Colors.black26)
               ),
               fillColor: Colors.white,
               filled: true,
