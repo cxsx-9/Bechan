@@ -1,5 +1,6 @@
 import 'package:bechan/components/input_textfeild.dart';
 import 'package:bechan/components/submit_button.dart';
+import 'package:bechan/services/loginService.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -7,6 +8,31 @@ class LoginPage extends StatelessWidget {
 
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+
+  Future <String> getStatus() async {
+    String message = await LoginService('login').callApi(usernameController.text, passwordController.text).toString();
+    return message;
+  }
+
+  Future<void> login(context) async {
+    final message = await getStatus();
+    print(message);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(milliseconds: 1500),
+        width: 280.0, // Width of the SnackBar.
+        padding: const EdgeInsets.symmetric(
+          horizontal:
+              8.0, // Inner padding for SnackBar content.
+        ),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +86,11 @@ class LoginPage extends StatelessWidget {
                   children: [
                     SubmitButton(
                         onTap: () {
-                          Navigator.pushNamed(context, '/homePage');
+                          login(context);
                         },
+                        // onTap: () {
+                        //   Navigator.pushNamed(context, '/homePage');
+                        // },
                         btnText: "Login",
                         active: true),
                     const SizedBox(

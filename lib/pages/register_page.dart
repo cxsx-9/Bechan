@@ -72,7 +72,8 @@ class RegisterPage extends StatelessWidget {
                   children: [
                     SubmitButton(
                       onTap: () {
-                        Navigator.pushNamed(context, '/homePage');
+                        Navigator.pop(context);
+                        // Navigator.pushNamed(context, '/homePage');
                       },
                       btnText: "Register",
                       active: true,

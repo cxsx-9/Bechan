@@ -13,12 +13,11 @@ class HomePage extends StatelessWidget {
           children: [
             const Text("Home Page"),
             SubmitButton(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    btnText: "Back",
-                    active: false
-                  ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                btnText: "Back",
+                active: false),
           ],
         ),
       ),
