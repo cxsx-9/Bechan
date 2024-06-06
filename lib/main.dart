@@ -3,7 +3,6 @@ import 'pages/login_page.dart';
 import 'pages/register_page.dart';
 import 'pages/home_page.dart';
 import 'package:flutter/services.dart';
-import 'package:vibration/vibration.dart';
 
 void main() {
   runApp(const MyApp());
