@@ -9,6 +9,7 @@ class RegisterPage extends StatelessWidget {
 
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   void signInUser() {}
   void registerUser() {}
@@ -51,7 +52,7 @@ class RegisterPage extends StatelessWidget {
               height: 10,
             ),
             InputTextFeild(
-                controller: passwordController,
+                controller: confirmPasswordController,
                 infoText: "Confirm Password",
                 hintText: "Confirm Password",
                 obscureText: true),
