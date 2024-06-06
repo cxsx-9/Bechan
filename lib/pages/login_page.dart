@@ -1,6 +1,7 @@
 import 'package:bechan/components/login_textfeild.dart';
 import 'package:bechan/components/submit_button.dart';
 import 'package:bechan/pages/home_page.dart';
+import 'package:bechan/pages/register_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -9,26 +10,24 @@ class LoginPage extends StatelessWidget {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void signInUser() {}
-  void registerUser() {}
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
             // LOGO
             const SizedBox(
-              height: 100,
+              height: 70,
             ),
             Image.asset(
-              'Banche_logo.png',
+              'assets/Banche_logo.png',
               height: 83,
             ),
             const SizedBox(
-              height: 70,
+              height: 50,
             ),
 
             // TextFeild
@@ -48,40 +47,54 @@ class LoginPage extends StatelessWidget {
 
             // Register
             const SizedBox(
-              height: 300,
+              height: 230,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  "Don't have an account? ",
-                  style: TextStyle(
-                    color: Colors.black38,
-                  ),
-                ),
-                GestureDetector(
-                    onTap: registerUser,
-                    child: const Text(
-                      "Register",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
-                        backgroundColor: Color.fromRGBO(255, 215, 64, 1),
+            Expanded(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Don't have an account? ",
+                        style: TextStyle(
+                          color: Colors.black38,
+                        ),
                       ),
-                    )
-                  )
-              ],
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            SubmitButton(onTap: () {
-              Navigator.pop(context);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const HomePage()));
-              },
-              btnText: "Login",
-            ),
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RegisterPage()));
+                          },
+                          child: const Text(
+                            "Register",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              backgroundColor: Color.fromRGBO(255, 215, 64, 1),
+                            ),
+                          ))
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  SubmitButton(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomePage()));
+                    },
+                    btnText: "Login",
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
