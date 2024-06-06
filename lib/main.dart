@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'pages/login_page.dart';
+import 'pages/register_page.dart';
+import 'pages/home_page.dart';
 import 'package:flutter/services.dart';
 
 void main() {
@@ -17,6 +19,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: LoginPage(),
+      routes: {
+        '/loginPage' : (context) => LoginPage(),
+        '/registerPage' : (context) => RegisterPage(),
+        '/homePage' : (context) => const HomePage(),
+      },
     );
   }
 }

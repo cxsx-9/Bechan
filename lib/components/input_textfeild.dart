@@ -20,6 +20,7 @@ class InputTextFeild extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 55.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             style: const TextStyle(
@@ -29,7 +30,7 @@ class InputTextFeild extends StatelessWidget {
               ),
             infoText
           ),
-          const SizedBox(height: 8,),
+          const SizedBox(height: 2,),
           TextField(
             controller: controller,
             obscureText: obscureText,
