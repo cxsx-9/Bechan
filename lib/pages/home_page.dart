@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bechan/components/submit_button.dart';
+import 'package:bechan/widgets/submit_button.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

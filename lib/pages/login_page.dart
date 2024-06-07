@@ -1,6 +1,6 @@
-import 'package:bechan/components/input_textfeild.dart';
-import 'package:bechan/components/submit_button.dart';
-import 'package:bechan/services/loginService.dart';
+import 'package:bechan/widgets/input_textfeild.dart';
+import 'package:bechan/widgets/submit_button.dart';
+import 'package:bechan/services/login_service.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -10,23 +10,23 @@ class LoginPage extends StatelessWidget {
   final passwordController = TextEditingController();
 
   Future <String> getStatus() async {
-    String message = await LoginService('login').callApi(usernameController.text, passwordController.text).toString();
+    String message = await LoginService('login').callApi(usernameController.text, passwordController.text);
     return message;
   }
 
   Future<void> login(context) async {
     final message = await getStatus();
-    print(message);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
         duration: const Duration(milliseconds: 1500),
-        width: 280.0, // Width of the SnackBar.
+        width: 280.0, // Width of the SnackBar.r
         padding: const EdgeInsets.symmetric(
           horizontal:
               8.0, // Inner padding for SnackBar content.
         ),
         behavior: SnackBarBehavior.floating,
+        // margin: const EdgeInsets.only(bottom: 100.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
@@ -88,9 +88,6 @@ class LoginPage extends StatelessWidget {
                         onTap: () {
                           login(context);
                         },
-                        // onTap: () {
-                        //   Navigator.pushNamed(context, '/homePage');
-                        // },
                         btnText: "Login",
                         active: true),
                     const SizedBox(

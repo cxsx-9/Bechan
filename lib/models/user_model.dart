@@ -1,13 +1,11 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 class User {
   int? id;
-  String? username; 
-  String? password; 
   String? token;
 
   User ({
     this.id,
-    this.username,
-    this.password,
     this.token
   });
 
@@ -15,8 +13,6 @@ class User {
     return User(
       id: json['id'],
       token: json['token'],
-      username: json['username'],
-      password: json['password'],
       // cityName: json['name'],
       // temperature: json['main']['temp'].toDouble(),
       // mainCondition: json['weather'][0]['main']
@@ -25,29 +21,34 @@ class User {
 }
 
 class Status {
-  final String status;
-  final String message;
-  // final String ? token;
+  String status;
+  String message;
+  String token;
 
-  const Status({
-    required this.status,
-    required this.message,
-    // required this.token,
-  });
+  Status({
+    String ? status,
+    String ? message,
+    String ? token,
+  })
+  :
+    status =status ?? "" ,
+    message =message ?? "" ,
+    token =token ?? "" 
+  ;
 
   factory Status.fromJson(Map<String, dynamic> json) {
-    return switch (json) {
-      {
-        'status': String status,
-        'message': String message,
-        // 'token': String ? token,
-      } =>
-        Status(
-          status: status,
-          message: message,
-          // token: token,
-        ),
-      _ => throw const FormatException('Failed to load user.'),
+    return Status(
+        status: json['status'].runtimeType == "String" ? json['status']: json['status'].toString(),
+        message: json['message'].runtimeType == "String" ? json['message']: json['message'].toString(),
+        token: json['token'].runtimeType == "String" ? json['token']: json['token'].toString(),
+      );
+  }
+
+  Map<String, dynamic> toObject(){
+    return {
+      'status' : status,
+      'message' : message,
+      'token' : token,
     };
   }
 }

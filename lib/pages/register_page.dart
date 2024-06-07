@@ -1,5 +1,5 @@
-import 'package:bechan/components/input_textfeild.dart';
-import 'package:bechan/components/submit_button.dart';
+import 'package:bechan/widgets/input_textfeild.dart';
+import 'package:bechan/widgets/submit_button.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -81,28 +81,24 @@ class RegisterPage extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           "Already have an account? ",
                           style: TextStyle(
                             color: Colors.black38,
                           ),
                         ),
-                        GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/loginPage');
-                            },
-                            child: const Text(
-                              "Login",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600,
-                                backgroundColor:
-                                    Color.fromRGBO(255, 215, 64, 1),
-                              ),
-                            ))
+                        Text(
+                          "Login",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                            backgroundColor:
+                                Color.fromRGBO(255, 215, 64, 1),
+                          ),
+                        )
                       ],
                     ),
                     const SizedBox(
