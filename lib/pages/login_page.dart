@@ -1,32 +1,47 @@
+import 'package:bechan/models/user_model.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/widgets/submit_button.dart';
-import 'package:bechan/services/login_service.dart';
+import 'package:bechan/services/user_service.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
+  final user = TextEditingController();
+  final pass = TextEditingController();
 
-  Future <String> getStatus() async {
-    String message = await LoginService('login').callApi(usernameController.text, passwordController.text);
-    return message;
+  Future<String> getStatus() async {
+    Status res = await UserService()
+        .callApi('login', {'username': user.text, 'password': pass.text});
+    return res.message;
   }
 
   Future<void> login(context) async {
-    final message = await getStatus();
+    String message = await getStatus();
+    if (message == "Login success") {
+      await UserService().callApi('user', null);
+      Navigator.pushNamed(context, '/homePage');
+      return;
+    }
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
-        duration: const Duration(milliseconds: 1500),
-        width: 280.0, // Width of the SnackBar.r
-        padding: const EdgeInsets.symmetric(
-          horizontal:
-              8.0, // Inner padding for SnackBar content.
+        backgroundColor: Colors.amber,
+        content: Text(
+          message,
+          textAlign: TextAlign.center,
+          style: const TextStyle(color: Colors.black),
         ),
+        duration: const Duration(milliseconds: 1500),
+        // width: 280.0,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 8.0,
+        ),
+        dismissDirection: DismissDirection.up,
+        margin: const EdgeInsets.only(
+            bottom: 220,
+            left: 55,
+            right: 55),
         behavior: SnackBarBehavior.floating,
-        // margin: const EdgeInsets.only(bottom: 100.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
@@ -64,7 +79,7 @@ class LoginPage extends StatelessWidget {
 
               // TextFeild
               InputTextFeild(
-                  controller: usernameController,
+                  controller: user,
                   infoText: "Username or Email",
                   hintText: "Enter Username or Email",
                   obscureText: false),
@@ -72,12 +87,12 @@ class LoginPage extends StatelessWidget {
                 height: 20,
               ),
               InputTextFeild(
-                  controller: passwordController,
+                  controller: pass,
                   infoText: "Password",
                   hintText: "Enter Password",
                   obscureText: true),
 
-              // Register
+              // Button
               const SizedBox(
                 height: 180,
               ),
@@ -117,7 +132,6 @@ class LoginPage extends StatelessWidget {
                     ),
                     SubmitButton(
                         onTap: () {
-                          // Navigator.pop(context);
                           Navigator.pushNamed(context, '/registerPage');
                         },
                         btnText: "Register",

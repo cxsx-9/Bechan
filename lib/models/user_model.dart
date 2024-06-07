@@ -1,25 +1,4 @@
 // ignore_for_file: unrelated_type_equality_checks
-
-class User {
-  int? id;
-  String? token;
-
-  User ({
-    this.id,
-    this.token
-  });
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      id: json['id'],
-      token: json['token'],
-      // cityName: json['name'],
-      // temperature: json['main']['temp'].toDouble(),
-      // mainCondition: json['weather'][0]['main']
-    );
-  }
-}
-
 class Status {
   String status;
   String message;
@@ -49,6 +28,39 @@ class Status {
       'status' : status,
       'message' : message,
       'token' : token,
+    };
+  }
+}
+
+class User {
+  String username;
+  String firstname;
+  String lastname;
+
+  User({
+    String ? username,
+    String ? firstname,
+    String ? lastname,
+  })
+  :
+    username = username ?? "" ,
+    firstname = firstname ?? "" ,
+    lastname = lastname ?? "" 
+  ;
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      username: json['Data']['User']['username'] as String,
+      firstname: json['Data']['User']['firstname'] as String,
+      lastname: json['Data']['User']['lastname'] as String,
+    );
+  }
+
+  Map<String, dynamic> toObject(){
+    return {
+      'username' : username,
+      'firstname' : firstname,
+      'lastname' : lastname,
     };
   }
 }
