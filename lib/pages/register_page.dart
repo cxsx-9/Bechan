@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 class RegisterPage extends StatelessWidget {
   RegisterPage({super.key});
 
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
+  final user = TextEditingController();
+  final pass = TextEditingController();
+  final cpass = TextEditingController();
 
   void signInUser() {}
   void registerUser() {}
@@ -42,7 +42,7 @@ class RegisterPage extends StatelessWidget {
 
               // TextFeild
               InputTextFeild(
-                  controller: usernameController,
+                  controller: user,
                   infoText: "Username or Email",
                   hintText: "Enter Username or Email",
                   obscureText: false),
@@ -50,7 +50,7 @@ class RegisterPage extends StatelessWidget {
                 height: 10,
               ),
               InputTextFeild(
-                  controller: passwordController,
+                  controller: pass,
                   infoText: "Password",
                   hintText: "Enter Password",
                   obscureText: true),
@@ -58,7 +58,7 @@ class RegisterPage extends StatelessWidget {
                 height: 10,
               ),
               InputTextFeild(
-                  controller: confirmPasswordController,
+                  controller: cpass,
                   infoText: "Confirm Password",
                   hintText: "Confirm Password",
                   obscureText: true),
@@ -71,12 +71,12 @@ class RegisterPage extends StatelessWidget {
                 child: Column(
                   children: [
                     SubmitButton(
-                      onTap: () {
+                      onTap: user.text.isNotEmpty && pass.text.isNotEmpty && cpass.text.isNotEmpty ? () {
                         Navigator.pop(context);
                         // Navigator.pushNamed(context, '/homePage');
-                      },
+                      } : null,
                       btnText: "Register",
-                      active: true,
+                      type: user.text.isNotEmpty && pass.text.isNotEmpty && cpass.text.isNotEmpty ? 1 : 0
                     ),
                     const SizedBox(
                       height: 20,
@@ -110,7 +110,7 @@ class RegisterPage extends StatelessWidget {
                           // Navigator.pushNamed(context, '/loginPage');
                         },
                         icondata: Icons.arrow_back_rounded,
-                        active: false),
+                        type: 2),
                   ],
                 ),
               )

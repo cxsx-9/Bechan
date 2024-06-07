@@ -1,6 +1,4 @@
-import 'package:bechan/models/user_model.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 
 class TextInfo extends StatelessWidget{
   final topic;

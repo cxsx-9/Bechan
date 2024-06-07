@@ -36,7 +36,7 @@ class HomePage extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 btnText: "Back",
-                active: false),
+                type: 2),
           ],
         ),
       ),

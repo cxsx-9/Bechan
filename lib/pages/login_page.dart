@@ -4,19 +4,28 @@ import 'package:bechan/widgets/submit_button.dart';
 import 'package:bechan/services/user_service.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final user = TextEditingController();
+
   final pass = TextEditingController();
 
   Future<String> getStatus() async {
     Status res = await UserService()
         .callApi('login', {'username': user.text, 'password': pass.text});
-    return res.message;
+    return res.message.toString();
   }
 
   Future<void> login(context) async {
+    if (user.text.isEmpty || pass.text.isEmpty) {
+      return;
+    }
     String message = await getStatus();
     if (message == "Login success") {
       await UserService().callApi('user', null);
@@ -26,21 +35,17 @@ class LoginPage extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.amber,
-        content: Text(
-          message,
+        content: const Text(
+          "Wrong username or password.",
           textAlign: TextAlign.center,
-          style: const TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black),
         ),
         duration: const Duration(milliseconds: 1500),
-        // width: 280.0,
         padding: const EdgeInsets.symmetric(
           horizontal: 8.0,
         ),
         dismissDirection: DismissDirection.up,
-        margin: const EdgeInsets.only(
-            bottom: 220,
-            left: 55,
-            right: 55),
+        margin: const EdgeInsets.only(bottom: 220, left: 55, right: 55),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -104,7 +109,7 @@ class LoginPage extends StatelessWidget {
                           login(context);
                         },
                         btnText: "Login",
-                        active: true),
+                        type: user.text.isNotEmpty && pass.text.isNotEmpty ? 1 : 0),
                     const SizedBox(
                       height: 20,
                     ),
@@ -135,7 +140,7 @@ class LoginPage extends StatelessWidget {
                           Navigator.pushNamed(context, '/registerPage');
                         },
                         btnText: "Register",
-                        active: false),
+                        type: 2),
                   ],
                 ),
               )
