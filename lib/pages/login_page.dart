@@ -1,6 +1,6 @@
-import 'package:bechan/models/user_model.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/widgets/submit_button.dart';
+import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:bechan/services/user_service.dart';
 import 'package:flutter/material.dart';
 
@@ -13,45 +13,30 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final user = TextEditingController();
-
   final pass = TextEditingController();
+  bool enableBtn = true;
+  bool isFeildFull = false;
 
-  Future<String> getStatus() async {
-    Status res = await UserService()
-        .callApi('login', {'username': user.text, 'password': pass.text});
-    return res.message.toString();
+  @override
+  void initState() {
+    super.initState();
+    void setIsFull() {
+      setState(() { isFeildFull = user.text.isNotEmpty && pass.text.isNotEmpty; });
+    }
+
+    user.addListener(() { setIsFull(); });
+    pass.addListener(() { setIsFull(); });
   }
 
   Future<void> login(context) async {
-    if (user.text.isEmpty || pass.text.isEmpty) {
-      return;
-    }
-    String message = await getStatus();
+    dynamic response = await UserService().callApi('login', {'username': user.text, 'password': pass.text});
+    String message = response != null ? response.message : "";
     if (message == "Login success") {
       await UserService().callApi('user', null);
       Navigator.pushNamed(context, '/homePage');
       return;
-    }
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: Colors.amber,
-        content: const Text(
-          "Wrong username or password.",
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.black),
-        ),
-        duration: const Duration(milliseconds: 1500),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 8.0,
-        ),
-        dismissDirection: DismissDirection.up,
-        margin: const EdgeInsets.only(bottom: 220, left: 55, right: 55),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-      ),
-    );
+    } else { message = "Wrong username or password."; }
+    ScaffoldMessenger.of(context).showSnackBar(getSnackBar(message,55,240,false));
   }
 
   @override
@@ -59,7 +44,6 @@ class _LoginPageState extends State<LoginPage> {
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
-
         if (!currentFocus.hasPrimaryFocus) {
           currentFocus.unfocus();
         }
@@ -70,7 +54,6 @@ class _LoginPageState extends State<LoginPage> {
         body: SafeArea(
           child: Column(
             children: [
-              // LOGO
               const SizedBox(
                 height: 70,
               ),
@@ -81,35 +64,49 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 50,
               ),
-
-              // TextFeild
-              InputTextFeild(
-                  controller: user,
-                  infoText: "Username or Email",
-                  hintText: "Enter Username or Email",
-                  obscureText: false),
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 55.0),
+                  child: Column(
+                    children: [
+                      InputTextFeild(
+                          controller: user,
+                          infoText: "Username or Email",
+                          hintText: "Enter Username or Email",
+                          obscureText: false),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      InputTextFeild(
+                          controller: pass,
+                          infoText: "Password",
+                          hintText: "Enter Password",
+                          obscureText: true),
+                    ],
+                  )),
               const SizedBox(
-                height: 20,
-              ),
-              InputTextFeild(
-                  controller: pass,
-                  infoText: "Password",
-                  hintText: "Enter Password",
-                  obscureText: true),
-
-              // Button
-              const SizedBox(
-                height: 180,
+                height: 190,
               ),
               Expanded(
                 child: Column(
                   children: [
                     SubmitButton(
-                        onTap: () {
-                          login(context);
-                        },
+                        onTap: (user.text.isNotEmpty && pass.text.isNotEmpty) &&
+                                enableBtn
+                            ? () async {
+                                setState(() {
+                                  enableBtn = false;
+                                });
+                                await login(context);
+                                setState(() {
+                                  enableBtn = true;
+                                });
+                              }
+                            : null,
                         btnText: "Login",
-                        type: user.text.isNotEmpty && pass.text.isNotEmpty ? 1 : 0),
+                        type: (user.text.isNotEmpty && pass.text.isNotEmpty) &&
+                                enableBtn
+                            ? 1
+                            : 0),
                     const SizedBox(
                       height: 20,
                     ),

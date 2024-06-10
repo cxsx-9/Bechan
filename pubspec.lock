@@ -123,6 +123,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  font_awesome_flutter:
+    dependency: "direct main"
+    description:
+      name: font_awesome_flutter
+      sha256: "275ff26905134bcb59417cf60ad979136f1f8257f2f449914b2c3e05bbb4cd6f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.7.0"
   http:
     dependency: "direct main"
     description:
@@ -211,6 +219,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.12.0"
+  password_strength_checker:
+    dependency: "direct main"
+    description:
+      name: password_strength_checker
+      sha256: aeaf889c9528d667d653a159f7488f42d5b79836e0074f709c3048ef6013e08a
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.3"
   path:
     dependency: transitive
     description:

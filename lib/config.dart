@@ -2,7 +2,7 @@
 
 import 'package:bechan/models/user_model.dart';
 
-const String BASE_URL = "https://9af7-49-0-64-52.ngrok-free.app";
+const String BASE_URL = "https://fd50-49-0-64-52.ngrok-free.app";
 
 Status LOGIN_STATUS = Status();
 User USER_DATA = User();

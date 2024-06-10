@@ -8,7 +8,7 @@ class UserService {
     try {
       dynamic response;
 
-      if (method == 'login') {
+      if (method == 'login' || method == 'register') {
         response = await http.post(
           Uri.parse('${config.BASE_URL}/$method'),
           headers: <String, String>{
@@ -29,7 +29,7 @@ class UserService {
 
       if (response.statusCode == 200) {
         print(response.body);
-        if (method == 'login') {
+        if (method == 'login' || method == 'register') {
           config.LOGIN_STATUS =
               Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
           return config.LOGIN_STATUS;
@@ -40,10 +40,10 @@ class UserService {
         }
       } else {
         print("error : ${response.statusCode}");
-        return "Can not log in now."; // Return null for non-200 status codes
+        return null; // Return null for non-200 status codes
       }
     } catch (e) {
-      print('Error during API call: $e');
+      print('Error during API call: /$e');
       return null; // Return null if an error occurs
     }
   }

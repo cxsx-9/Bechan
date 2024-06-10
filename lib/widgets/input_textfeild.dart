@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class InputTextFeild extends StatefulWidget {
   final dynamic controller;
   final String infoText;
   final String hintText;
   final bool obscureText;
+  bool obscure;
 
-  const InputTextFeild({
+  InputTextFeild({
     super.key,
     required this.controller,
     required this.infoText,
     required this.hintText,
     required this.obscureText,
-  });
+    bool ? obscure
+  }) 
+  :
+    obscure = obscureText
+  ;
 
   @override
   State<InputTextFeild> createState() => _InputTextFeildState();
@@ -21,22 +27,26 @@ class InputTextFeild extends StatefulWidget {
 class _InputTextFeildState extends State<InputTextFeild> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 55.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              ),
-            widget.infoText
-          ),
-          const SizedBox(height: 2,),
-          TextField(
+            ),
+            widget.infoText),
+        const SizedBox(
+          height: 2,
+        ),
+        SizedBox(
+          height: 40,
+          child: TextField(
+            onSubmitted: (value) => {
+              
+            },
             controller: widget.controller,
-            obscureText: widget.obscureText,
+            obscureText: widget.obscure,
             decoration: InputDecoration(
               enabledBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -49,11 +59,25 @@ class _InputTextFeildState extends State<InputTextFeild> {
               fillColor: Colors.white,
               filled: true,
               hintText: widget.hintText,
-              hintStyle: const TextStyle(color: Colors.black26, fontSize: 14)
+              hintStyle: const TextStyle(color: Colors.black26, fontSize: 14),
+              suffixIcon: widget.obscureText ? IconButton(
+                  icon:
+                  FaIcon(
+                    widget.obscure
+                    ? FontAwesomeIcons.eyeSlash
+                    : FontAwesomeIcons.eye
+                    ,size: 17,
+                    color: Colors.black26,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      widget.obscure = !widget.obscure;
+                    });
+                  }) : null,
             ),
           ),
-        ],
-      )
+        ),
+      ],
     );
   }
 }
