@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+// ignore: must_be_immutable
 class InputTextFeild extends StatefulWidget {
   final dynamic controller;
   final String infoText;
