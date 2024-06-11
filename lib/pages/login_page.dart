@@ -3,7 +3,10 @@ import 'package:bechan/widgets/submit_button.dart';
 import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:bechan/services/user_service.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:bechan/theme/theme.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -58,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: SafeArea(
           child: Column(
             children: [
@@ -66,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 70,
               ),
               Image.asset(
-                'assets/Banche_logo.png',
+                Provider.of<ThemeProvider>(context, listen: false).isDarkMode ? 'assets/Banche_logo_dark.png' : 'assets/Banche_logo_light.png',
                 height: 83,
               ),
               const SizedBox(
@@ -113,10 +116,10 @@ class _LoginPageState extends State<LoginPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           "Don't have an account? ",
                           style: TextStyle(
-                            color: Colors.black38,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                         ),
                         Text(
@@ -140,7 +143,8 @@ class _LoginPageState extends State<LoginPage> {
                         type: 2),
                   ],
                 ),
-              )
+              ),
+              CupertinoSwitch(value:Provider.of<ThemeProvider>(context, listen: false).isDarkMode,onChanged: (value) {Provider.of<ThemeProvider>(context, listen: false).toggleTheme();},),
             ],
           ),
         ),

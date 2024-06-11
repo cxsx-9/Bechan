@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'pages/login_page.dart';
 import 'pages/register_page.dart';
 import 'pages/home_page.dart';
 import 'package:flutter/services.dart';
+import 'theme/theme.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(create: (context) => ThemeProvider(),
+      child: const MyApp(),
+    ));
 }
 
 class MyApp extends StatelessWidget {
@@ -19,11 +24,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const LoginPage(),
+      theme: Provider.of<ThemeProvider>(context).themeData,
       routes: {
-        '/loginPage' : (context) => const LoginPage(),
-        '/registerPage' : (context) => const RegisterPage(),
-        '/homePage' : (context) => const HomePage(),
+        '/loginPage': (context) => const LoginPage(),
+        '/registerPage': (context) => const RegisterPage(),
+        '/homePage': (context) => const HomePage(),
       },
     );
   }
 }
+

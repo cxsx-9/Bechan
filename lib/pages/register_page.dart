@@ -4,6 +4,8 @@ import 'package:bechan/widgets/submit_button.dart';
 import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:bechan/theme/theme.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -74,7 +76,7 @@ class _RegisterPageState extends State<RegisterPage> {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: SafeArea(
           child: Column(
             children: [
@@ -83,7 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 height: 70,
               ),
               Image.asset(
-                'assets/Banche_logo.png',
+                Provider.of<ThemeProvider>(context, listen: false).isDarkMode ? 'assets/Banche_logo_dark.png' : 'assets/Banche_logo_light.png',
                 height: 83,
               ),
               const SizedBox(
@@ -167,10 +169,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           "Already have an account? ",
                           style: TextStyle(
-                            color: Colors.black38,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                         ),
                         Text(
@@ -186,11 +188,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     const SizedBox(
                       height: 5,
                     ),
-                    IconSubmitButton(
+                    SubmitButton(
                         onTap: () {
                           Navigator.pop(context);
                         },
-                        icondata: Icons.arrow_back_rounded,
+                        icon: Icons.arrow_back_rounded,
                         type: 2),
                   ],
                 ),

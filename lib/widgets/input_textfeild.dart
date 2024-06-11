@@ -59,18 +59,18 @@ class _InputTextFeildState extends State<InputTextFeild> {
               errorText: isValid || widget.controller.text.isEmpty
                   ? null
                   : widget.errorText,
-              enabledBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                borderSide: BorderSide(color: Colors.black26),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary),
               ),
-              focusedBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                borderSide: BorderSide(color: Colors.black),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
               ),
-              fillColor: Colors.white,
+              fillColor: Theme.of(context).colorScheme.surface,
               filled: true,
               hintText: widget.hintText,
-              hintStyle: const TextStyle(color: Colors.black26, fontSize: 14),
+              hintStyle: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14),
               suffixIcon: widget.obscureText
                   ? IconButton(
                       icon: FaIcon(
@@ -78,7 +78,7 @@ class _InputTextFeildState extends State<InputTextFeild> {
                             ? FontAwesomeIcons.eyeSlash
                             : FontAwesomeIcons.eye,
                         size: 17,
-                        color: Colors.black26,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                       onPressed: () {
                         setState(() {
