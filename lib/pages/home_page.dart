@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextInfo(topic: 'username', info: config.USER_DATA.username),
+                  TextInfo(topic: 'email', info: config.USER_DATA.email),
                   TextInfo(topic: 'firstname', info: config.USER_DATA.firstname),
                   TextInfo(topic: 'lastname', info: config.USER_DATA.lastname),
                 ],

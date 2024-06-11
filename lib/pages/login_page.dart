@@ -12,8 +12,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final user = TextEditingController();
-  final pass = TextEditingController();
+  final emailCtrl = TextEditingController();
+  final passCtrl = TextEditingController();
   bool enableBtn = true;
   bool isFeildFull = false;
 
@@ -21,21 +21,21 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     void setIsFull() {
-      setState(() { isFeildFull = user.text.isNotEmpty && pass.text.isNotEmpty; });
+      setState(() { isFeildFull = emailCtrl.text.isNotEmpty && passCtrl.text.isNotEmpty; });
     }
 
-    user.addListener(() { setIsFull(); });
-    pass.addListener(() { setIsFull(); });
+    emailCtrl.addListener(() { setIsFull(); });
+    passCtrl.addListener(() { setIsFull(); });
   }
 
   Future<void> login(context) async {
-    dynamic response = await UserService().callApi('login', {'username': user.text, 'password': pass.text});
+    dynamic response = await UserService().callApi('login', {'email': emailCtrl.text, 'password': passCtrl.text});
     String message = response != null ? response.message : "";
     if (message == "Login success") {
       await UserService().callApi('user', null);
       Navigator.pushNamed(context, '/homePage');
       return;
-    } else { message = "Wrong username or password."; }
+    } else { message = "Wrong email or password."; }
     ScaffoldMessenger.of(context).showSnackBar(getSnackBar(message,55,240,false));
   }
 
@@ -69,15 +69,15 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: [
                       InputTextFeild(
-                          controller: user,
-                          infoText: "Username or Email",
-                          hintText: "Enter Username or Email",
+                          controller: emailCtrl,
+                          infoText: "Email",
+                          hintText: "Enter Email",
                           obscureText: false),
                       const SizedBox(
                         height: 20,
                       ),
                       InputTextFeild(
-                          controller: pass,
+                          controller: passCtrl,
                           infoText: "Password",
                           hintText: "Enter Password",
                           obscureText: true),
@@ -90,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     SubmitButton(
-                        onTap: (user.text.isNotEmpty && pass.text.isNotEmpty) &&
+                        onTap: (emailCtrl.text.isNotEmpty && passCtrl.text.isNotEmpty) &&
                                 enableBtn
                             ? () async {
                                 setState(() {
@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                               }
                             : null,
                         btnText: "Login",
-                        type: (user.text.isNotEmpty && pass.text.isNotEmpty) &&
+                        type: (emailCtrl.text.isNotEmpty && passCtrl.text.isNotEmpty) &&
                                 enableBtn
                             ? 1
                             : 0),

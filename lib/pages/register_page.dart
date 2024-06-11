@@ -5,18 +5,18 @@ import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
-  RegisterPage({super.key});
+  const RegisterPage({super.key});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final user = TextEditingController();
-  final fname = TextEditingController();
-  final lname = TextEditingController();
-  final pass = TextEditingController();
-  final cpass = TextEditingController();
+  final emailCtrl = TextEditingController();
+  final fnameCtrl = TextEditingController();
+  final lnameCtrl = TextEditingController();
+  final passCtrl = TextEditingController();
+  final cpassCtrl = TextEditingController();
   bool enableBtn = true;
   bool isFeildFull = false;
 
@@ -25,31 +25,31 @@ class _RegisterPageState extends State<RegisterPage> {
     super.initState();
     void setIsFull() {
       setState(() {
-        isFeildFull = user.text.isNotEmpty &&
-            fname.text.isNotEmpty &&
-            lname.text.isNotEmpty &&
-            pass.text.isNotEmpty &&
-            cpass.text.isNotEmpty;
+        isFeildFull = emailCtrl.text.isNotEmpty &&
+            fnameCtrl.text.isNotEmpty &&
+            lnameCtrl.text.isNotEmpty &&
+            passCtrl.text.isNotEmpty &&
+            cpassCtrl.text.isNotEmpty;
       });
     }
 
-    user.addListener(() { setIsFull(); });
-    fname.addListener(() { setIsFull(); });
-    lname.addListener(() { setIsFull(); });
-    pass.addListener(() { setIsFull(); });
-    cpass.addListener(() { setIsFull(); });
+    emailCtrl.addListener(() { setIsFull(); });
+    fnameCtrl.addListener(() { setIsFull(); });
+    lnameCtrl.addListener(() { setIsFull(); });
+    passCtrl.addListener(() { setIsFull(); });
+    cpassCtrl.addListener(() { setIsFull(); });
   }
 
   Future<void> register(context) async {
     String message = "";
-    if (pass.text != cpass.text) {
+    if (passCtrl.text != cpassCtrl.text) {
       message = "Passwords do NOT match";
     } else {
       dynamic response = await UserService().callApi('register', {
-        'username': user.text,
-        'password': pass.text,
-        'firstname': fname.text,
-        'lastname': lname.text
+        'email': emailCtrl.text,
+        'password': passCtrl.text,
+        'firstname': fnameCtrl.text,
+        'lastname': lnameCtrl.text
       });
       message = response != null ? response.message : "no message";
     }
@@ -90,9 +90,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   children: [
                     InputTextFeild(
-                        controller: user,
-                        infoText: "Username",
-                        hintText: "Enter Username",
+                        controller: emailCtrl,
+                        infoText: "Email",
+                        hintText: "Enter Email",
                         obscureText: false),
                     const SizedBox(
                       height: 5,
@@ -101,7 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       children: [
                         Expanded(
                           child: InputTextFeild(
-                              controller: fname,
+                              controller: fnameCtrl,
                               infoText: "Firstname",
                               hintText: "Enter Firstname",
                               obscureText: false),
@@ -111,7 +111,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         Expanded(
                           child: InputTextFeild(
-                              controller: lname,
+                              controller: lnameCtrl,
                               infoText: "Lastname",
                               hintText: "Enter Lastname",
                               obscureText: false),
@@ -122,7 +122,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       height: 5,
                     ),
                     InputTextFeild(
-                      controller: pass,
+                      controller: passCtrl,
                       infoText: "Password",
                       hintText: "Enter Password",
                       obscureText: true,
@@ -131,7 +131,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       height: 5,
                     ),
                     InputTextFeild(
-                        controller: cpass,
+                        controller: cpassCtrl,
                         infoText: "Confirm Password",
                         hintText: "Confirm Password",
                         obscureText: true),
