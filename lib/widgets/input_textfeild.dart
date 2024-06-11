@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -8,24 +9,25 @@ class InputTextFeild extends StatefulWidget {
   final String hintText;
   final bool obscureText;
   bool obscure;
+  String errorText;
 
-  InputTextFeild({
-    super.key,
-    required this.controller,
-    required this.infoText,
-    required this.hintText,
-    required this.obscureText,
-    bool ? obscure
-  }) 
-  :
-    obscure = obscureText
-  ;
+  InputTextFeild(
+      {super.key,
+      required this.controller,
+      required this.infoText,
+      required this.hintText,
+      required this.obscureText,
+      bool? obscure,
+      String? errorText})
+      : obscure = obscureText,
+        errorText = errorText ?? "";
 
   @override
   State<InputTextFeild> createState() => _InputTextFeildState();
 }
 
 class _InputTextFeildState extends State<InputTextFeild> {
+  bool isValid = true;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -42,13 +44,21 @@ class _InputTextFeildState extends State<InputTextFeild> {
         ),
         SizedBox(
           height: 40,
-          child: TextField(
-            onSubmitted: (value) => {
-              
+          child: TextFormField(
+            onChanged: (value) => {
+              if (widget.infoText == "Email" && widget.errorText.isNotEmpty)
+                {
+                  setState(() {
+                    isValid = EmailValidator.validate(value);
+                  }),
+                }
             },
             controller: widget.controller,
             obscureText: widget.obscure,
             decoration: InputDecoration(
+              errorText: isValid || widget.controller.text.isEmpty
+                  ? null
+                  : widget.errorText,
               enabledBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(color: Colors.black26),
@@ -61,20 +71,21 @@ class _InputTextFeildState extends State<InputTextFeild> {
               filled: true,
               hintText: widget.hintText,
               hintStyle: const TextStyle(color: Colors.black26, fontSize: 14),
-              suffixIcon: widget.obscureText ? IconButton(
-                  icon:
-                  FaIcon(
-                    widget.obscure
-                    ? FontAwesomeIcons.eyeSlash
-                    : FontAwesomeIcons.eye
-                    ,size: 17,
-                    color: Colors.black26,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      widget.obscure = !widget.obscure;
-                    });
-                  }) : null,
+              suffixIcon: widget.obscureText
+                  ? IconButton(
+                      icon: FaIcon(
+                        widget.obscure
+                            ? FontAwesomeIcons.eyeSlash
+                            : FontAwesomeIcons.eye,
+                        size: 17,
+                        color: Colors.black26,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          widget.obscure = !widget.obscure;
+                        });
+                      })
+                  : null,
             ),
           ),
         ),

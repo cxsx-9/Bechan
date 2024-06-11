@@ -2,6 +2,7 @@ import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/services/user_service.dart';
 import 'package:bechan/widgets/submit_button.dart';
 import 'package:bechan/widgets/custom_snackbar.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -19,6 +20,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final cpassCtrl = TextEditingController();
   bool enableBtn = true;
   bool isFeildFull = false;
+  bool validEmail = false;
 
   @override
   void initState() {
@@ -30,9 +32,11 @@ class _RegisterPageState extends State<RegisterPage> {
             lnameCtrl.text.isNotEmpty &&
             passCtrl.text.isNotEmpty &&
             cpassCtrl.text.isNotEmpty;
+        if (isFeildFull) {
+          validEmail = EmailValidator.validate(emailCtrl.text);
+        }
       });
     }
-
     emailCtrl.addListener(() { setIsFull(); });
     fnameCtrl.addListener(() { setIsFull(); });
     lnameCtrl.addListener(() { setIsFull(); });
@@ -57,6 +61,7 @@ class _RegisterPageState extends State<RegisterPage> {
     ScaffoldMessenger.of(context).showSnackBar(getSnackBar(message, 55, 240, success));
     if (success) { Navigator.pop(context); }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +98,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         controller: emailCtrl,
                         infoText: "Email",
                         hintText: "Enter Email",
-                        obscureText: false),
+                        obscureText: false,
+                        errorText: "Enter a valid email address",
+                        ),
                     const SizedBox(
                       height: 5,
                     ),
@@ -147,26 +154,20 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   children: [
                     SubmitButton(
-                        onTap: isFeildFull && enableBtn
-                            ? () async {
-                                setState(() {
-                                  enableBtn = false;
-                                });
+                        onTap: isFeildFull && enableBtn && validEmail ? () async {
+                                setState(() {enableBtn = false;});
                                 await register(context);
-                                setState(() {
-                                  enableBtn = true;
-                                });
-                              }
-                            : null,
+                                setState(() {enableBtn = true;});
+                              } : null,
                         btnText: "Register",
-                        type: isFeildFull && enableBtn ? 1 : 0),
+                        type: isFeildFull && enableBtn && validEmail ? 1 : 0),
                     const SizedBox(
                       height: 20,
                     ),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           "Already have an account? ",
                           style: TextStyle(
                             color: Colors.black38,
@@ -177,7 +178,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w600,
-                            backgroundColor: Color.fromRGBO(255, 215, 64, 1),
+                            backgroundColor: Colors.amber.shade300,
                           ),
                         )
                       ],
@@ -188,7 +189,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     IconSubmitButton(
                         onTap: () {
                           Navigator.pop(context);
-                          // Navigator.pushNamed(context, '/loginPage');
                         },
                         icondata: Icons.arrow_back_rounded,
                         type: 2),

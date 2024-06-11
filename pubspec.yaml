@@ -38,6 +38,7 @@ dependencies:
   http: ^1.2.1
   flutter_launcher_icons: ^0.13.1
   font_awesome_flutter: ^10.7.0
+  email_validator: ^2.1.17
 
 flutter_icons:
   android: true

@@ -2,6 +2,7 @@ import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/widgets/submit_button.dart';
 import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:bechan/services/user_service.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -16,14 +17,19 @@ class _LoginPageState extends State<LoginPage> {
   final passCtrl = TextEditingController();
   bool enableBtn = true;
   bool isFeildFull = false;
+  bool validEmail = false;
 
   @override
   void initState() {
     super.initState();
     void setIsFull() {
-      setState(() { isFeildFull = emailCtrl.text.isNotEmpty && passCtrl.text.isNotEmpty; });
+      setState(() { 
+        isFeildFull = emailCtrl.text.isNotEmpty && passCtrl.text.isNotEmpty;
+        if (isFeildFull) {
+          validEmail = EmailValidator.validate(emailCtrl.text);
+        }
+      });
     }
-
     emailCtrl.addListener(() { setIsFull(); });
     passCtrl.addListener(() { setIsFull(); });
   }
@@ -72,7 +78,9 @@ class _LoginPageState extends State<LoginPage> {
                           controller: emailCtrl,
                           infoText: "Email",
                           hintText: "Enter Email",
-                          obscureText: false),
+                          obscureText: false,
+                          errorText: "Enter a valid email address",
+                          ),
                       const SizedBox(
                         height: 20,
                       ),
@@ -90,30 +98,20 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     SubmitButton(
-                        onTap: (emailCtrl.text.isNotEmpty && passCtrl.text.isNotEmpty) &&
-                                enableBtn
-                            ? () async {
-                                setState(() {
-                                  enableBtn = false;
-                                });
+                        onTap: isFeildFull && enableBtn && validEmail ? () async {
+                                setState(() {enableBtn = false;});
                                 await login(context);
-                                setState(() {
-                                  enableBtn = true;
-                                });
-                              }
-                            : null,
+                                setState(() {enableBtn = true;});
+                              } : null,
                         btnText: "Login",
-                        type: (emailCtrl.text.isNotEmpty && passCtrl.text.isNotEmpty) &&
-                                enableBtn
-                            ? 1
-                            : 0),
+                        type: isFeildFull && enableBtn && validEmail ? 1 : 0),
                     const SizedBox(
                       height: 20,
                     ),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           "Don't have an account? ",
                           style: TextStyle(
                             color: Colors.black38,
@@ -124,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w600,
-                            backgroundColor: Color.fromRGBO(255, 215, 64, 1),
+                            backgroundColor: Colors.amber.shade300,
                           ),
                         ),
                       ],
