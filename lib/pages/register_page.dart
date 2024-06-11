@@ -45,18 +45,18 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<void> register(context) async {
-    String message = "";
     if (passCtrl.text != cpassCtrl.text) {
-      message = "Passwords do NOT match";
-    } else {
-      dynamic response = await UserService().callApi('register', {
-        'email': emailCtrl.text,
-        'password': passCtrl.text,
-        'firstname': fnameCtrl.text,
-        'lastname': lnameCtrl.text
-      });
-      message = response != null ? response.message : "no message";
+      ScaffoldMessenger.of(context).showSnackBar(getSnackBar("Passwords do NOT match", 55, 240, false));
+      return ;
     }
+
+    dynamic response = await UserService().callApi('register', {
+      'email': emailCtrl.text,
+      'password': passCtrl.text,
+      'firstname': fnameCtrl.text,
+      'lastname': lnameCtrl.text
+    });
+    String message = response.message;
     bool success = message == "User registered successfully";
     ScaffoldMessenger.of(context).showSnackBar(getSnackBar(message, 55, 240, success));
     if (success) { Navigator.pop(context); }

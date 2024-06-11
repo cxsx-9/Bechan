@@ -40,11 +40,11 @@ class UserService {
         }
       } else {
         print("error : ${response.statusCode}");
-        return null; // Return null for non-200 status codes
+        return Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>); // Return null for non-200 status codes
       }
     } catch (e) {
       print('Error during API call: /$e');
-      return null; // Return null if an error occurs
+      return Status(status: '0', message: 'Connection error'); // Return null if an error occurs
     }
   }
 }

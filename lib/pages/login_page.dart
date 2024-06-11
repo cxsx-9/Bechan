@@ -36,12 +36,14 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> login(context) async {
     dynamic response = await UserService().callApi('login', {'email': emailCtrl.text, 'password': passCtrl.text});
-    String message = response != null ? response.message : "";
+    String message = response.message;
     if (message == "Login success") {
       await UserService().callApi('user', null);
       Navigator.pushNamed(context, '/homePage');
       return;
-    } else { message = "Wrong email or password."; }
+    } else if (response.status == 'error' ) {
+      message = "Wrong email or password."; 
+    }
     ScaffoldMessenger.of(context).showSnackBar(getSnackBar(message,55,240,false));
   }
 
