@@ -76,75 +76,75 @@ class _LoginPageState extends State<LoginPage> {
                 height: 50,
               ),
               Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 55.0),
-                  child: Column(
-                    children: [
-                      InputTextFeild(
-                          controller: emailCtrl,
-                          infoText: "Email",
-                          hintText: "Enter Email",
-                          obscureText: false,
-                          errorText: "Enter a valid email address",
-                          ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      InputTextFeild(
-                          controller: passCtrl,
-                          infoText: "Password",
-                          hintText: "Enter Password",
-                          obscureText: true),
-                    ],
-                  )),
-              const SizedBox(
-                height: 190,
-              ),
-              Expanded(
+                padding: const EdgeInsets.symmetric(horizontal: 55.0),
                 child: Column(
                   children: [
-                    SubmitButton(
-                        onTap: isFeildFull && enableBtn && validEmail ? () async {
-                                setState(() {enableBtn = false;});
-                                await login(context);
-                                setState(() {enableBtn = true;});
-                              } : null,
-                        btnText: "Login",
-                        type: isFeildFull && enableBtn && validEmail ? 1 : 0),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Don't have an account? ",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                        Text(
-                          "Register",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600,
-                            backgroundColor: Colors.amber.shade300,
-                          ),
-                        ),
-                      ],
+                    InputTextFeild(
+                      controller: emailCtrl,
+                      infoText: "Email",
+                      hintText: "Enter Email",
+                      obscureText: false,
+                      errorText: "Enter a valid email address",
                     ),
                     const SizedBox(
-                      height: 5,
+                      height: 10,
                     ),
-                    SubmitButton(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/registerPage');
-                        },
-                        btnText: "Register",
-                        type: 2),
+                    InputTextFeild(
+                      controller: passCtrl,
+                      infoText: "Password",
+                      hintText: "Enter Password",
+                      obscureText: true
+                    ),
                   ],
-                ),
+                )
               ),
-              CupertinoSwitch(value:Provider.of<ThemeProvider>(context, listen: false).isDarkMode,onChanged: (value) {Provider.of<ThemeProvider>(context, listen: false).toggleTheme();},),
+              const SizedBox(
+                height: 200,
+              ),
+              Column(
+                children: [
+                  SubmitButton(
+                    onTap: isFeildFull && enableBtn && validEmail ? () async {
+                        setState(() {enableBtn = false;});
+                        await login(context);
+                        setState(() {enableBtn = true;});
+                    } : null,
+                    btnText: "Login",
+                    type: isFeildFull && enableBtn && validEmail ? 1 : 0
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Don't have an account? ",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                      Text(
+                        "Register",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                          backgroundColor: Colors.amber.shade300,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  SubmitButton(
+                    onTap: () { Navigator.pushNamed(context, '/registerPage'); },
+                    btnText: "Register",
+                    type: 2
+                  ),
+                  CupertinoSwitch(value:Provider.of<ThemeProvider>(context, listen: false).isDarkMode,onChanged: (value) {Provider.of<ThemeProvider>(context, listen: false).toggleTheme();},),
+                ],
+              ),
             ],
           ),
         ),

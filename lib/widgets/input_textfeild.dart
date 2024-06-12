@@ -43,11 +43,10 @@ class _InputTextFeildState extends State<InputTextFeild> {
           height: 2,
         ),
         SizedBox(
-          height: 40,
+          height: 50,
           child: TextFormField(
             onChanged: (value) => {
-              if (widget.infoText == "Email" && widget.errorText.isNotEmpty)
-                {
+              if (widget.infoText == "Email" && widget.errorText.isNotEmpty) {
                   setState(() {
                     isValid = EmailValidator.validate(value);
                   }),
@@ -60,32 +59,28 @@ class _InputTextFeildState extends State<InputTextFeild> {
                   ? null
                   : widget.errorText,
               enabledBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                borderRadius: const BorderRadius.all(Radius.circular(15)),
                 borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                borderRadius: const BorderRadius.all(Radius.circular(15)),
                 borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
               ),
-              fillColor: Theme.of(context).colorScheme.surface,
-              filled: true,
               hintText: widget.hintText,
               hintStyle: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14),
               suffixIcon: widget.obscureText
-                  ? IconButton(
-                      icon: FaIcon(
-                        widget.obscure
-                            ? FontAwesomeIcons.eyeSlash
-                            : FontAwesomeIcons.eye,
-                        size: 17,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          widget.obscure = !widget.obscure;
-                        });
-                      })
-                  : null,
+                ? IconButton(
+                  icon: FaIcon(
+                    widget.obscure ? FontAwesomeIcons.eyeSlash : FontAwesomeIcons.eye,
+                    size: 17,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      widget.obscure = !widget.obscure;
+                  });
+                  })
+                : null,
             ),
           ),
         ),

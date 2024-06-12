@@ -43,13 +43,14 @@ class _SubmitButtonState extends State<SubmitButton> {
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
+        height: 50,
           padding: const EdgeInsets.all(15),
           margin: const EdgeInsets.symmetric(horizontal: 55),
           decoration: BoxDecoration(
             color: bgColor,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(30)),
             border:
-              borderLine ? null : Border.all(width: 2, color: textColor),
+              borderLine ? null : Border.all(width: 2, color: textColor, strokeAlign: BorderSide.strokeAlignOutside),
             boxShadow: widget.type == 0
                 ? null
                 : [
@@ -57,7 +58,7 @@ class _SubmitButtonState extends State<SubmitButton> {
                       color: shadow,
                       spreadRadius: 0,
                       blurRadius: 4,
-                      offset: const Offset(0, 4),
+                      offset: const Offset(0, 2),
                     ),
                   ],
           ),
@@ -72,7 +73,8 @@ class _SubmitButtonState extends State<SubmitButton> {
                 color: textColor,
                 size: 25,
               ),
-          )),
+          )
+        ),
     );
   }
 }

@@ -75,129 +75,141 @@ class _RegisterPageState extends State<RegisterPage> {
         }
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true, // Enable resizing to avoid bottom inset
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: SafeArea(
-          child: Column(
-            children: [
-              // LOGO
-              const SizedBox(
-                height: 70,
-              ),
-              Image.asset(
-                Provider.of<ThemeProvider>(context, listen: false).isDarkMode ? 'assets/Banche_logo_dark.png' : 'assets/Banche_logo_light.png',
-                height: 83,
-              ),
-              const SizedBox(
-                height: 50,
-              ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 55.0),
-                child: Column(
-                  children: [
-                    InputTextFeild(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 70,
+                ),
+                Center(
+                  child: Image.asset(
+                    Provider.of<ThemeProvider>(context, listen: false).isDarkMode ? 'assets/Banche_logo_dark.png' : 'assets/Banche_logo_light.png',
+                    height: 83,
+                  ),
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 55.0),
+                  child: Column(
+                    children: [
+                      InputTextFeild(
                         controller: emailCtrl,
                         infoText: "Email",
                         hintText: "Enter Email",
                         obscureText: false,
                         errorText: "Enter a valid email address",
-                        ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: InputTextFeild(
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: InputTextFeild(
                               controller: fnameCtrl,
                               infoText: "Firstname",
                               hintText: "Enter Firstname",
-                              obscureText: false),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: InputTextFeild(
+                              obscureText: false
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: InputTextFeild(
                               controller: lnameCtrl,
                               infoText: "Lastname",
                               hintText: "Enter Lastname",
-                              obscureText: false),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    InputTextFeild(
-                      controller: passCtrl,
-                      infoText: "Password",
-                      hintText: "Enter Password",
-                      obscureText: true,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    InputTextFeild(
+                              obscureText: false
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      InputTextFeild(
+                        controller: passCtrl,
+                        infoText: "Password",
+                        hintText: "Enter Password",
+                        obscureText: true,
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      InputTextFeild(
                         controller: cpassCtrl,
                         infoText: "Confirm Password",
                         hintText: "Confirm Password",
-                        obscureText: true),
-                  ],
+                        obscureText: true
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-
-              // Register and back
-              const SizedBox(
-                height: 80,
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    SubmitButton(
+                const SizedBox(
+                  height: 60,
+                ),
+                Center(
+                  child: Column(
+                    children: [
+                      SubmitButton(
                         onTap: isFeildFull && enableBtn && validEmail ? () async {
-                                setState(() {enableBtn = false;});
-                                await register(context);
-                                setState(() {enableBtn = true;});
-                              } : null,
+                          setState(() { enableBtn = false; });
+                          await register(context);
+                          setState(() { enableBtn = true; });
+                        } : null,
                         btnText: "Register",
-                        type: isFeildFull && enableBtn && validEmail ? 1 : 0),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Already have an account? ",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
+                        type: isFeildFull && enableBtn && validEmail ? 1 : 0
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Already have an account? ",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
                           ),
-                        ),
-                        Text(
-                          "Login",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600,
-                            backgroundColor: Colors.amber.shade300,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              "Login",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                                backgroundColor: Colors.amber.shade300,
+                              ),
+                            ),
                           ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    SubmitButton(
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      SubmitButton(
                         onTap: () {
                           Navigator.pop(context);
                         },
                         icon: Icons.arrow_back_rounded,
-                        type: 2),
-                  ],
+                        type: 2
+                      ),
+                    ],
+                  ),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
         ),
       ),
