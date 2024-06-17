@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:bechan/models/user_model.dart';
 import 'package:bechan/models/secure_storage.dart';
@@ -27,10 +25,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _fetchUserData() async {
-    log("[HOME] > Fetch Data !");
+    print("[HOME] > Fetch Data !");
     dynamic response = await UserService().callApi('user', null);
     if (response.status == "error") {
-      log("[HOME] : Logout :(");
+      print("[HOME] : Logout :(");
       logout();
       return;
     }
@@ -38,7 +36,7 @@ class _HomePageState extends State<HomePage> {
       _user = response;
     });
     await SecureStorage().saveToken(response.token);
-    log("[HOME] > Done !");
+    print("[HOME] > Done !");
   }
 
   void logout() {

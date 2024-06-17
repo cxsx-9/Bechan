@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TextInfo extends StatelessWidget{
-  final String topic;
-  final String info;
+  final topic;
+  final info;
 
   const TextInfo ({
     super.key,
