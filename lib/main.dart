@@ -1,3 +1,6 @@
+import 'package:bechan/models/secure_storage.dart';
+import 'package:bechan/pages/main_page.dart';
+import 'package:bechan/pages/setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'pages/login_page.dart';
@@ -15,7 +18,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -23,12 +25,24 @@ class MyApp extends StatelessWidget {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,DeviceOrientation.portraitDown,]); // Preferred Portrait
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const LoginPage(),
+      home: FutureBuilder<bool?>(
+        future: SecureStorage().isTokenValid(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data != null && snapshot.data == true) {
+            print("[[ MAIN ]]-> data ");
+            print(snapshot.data);
+            return const MainPage();
+          }
+          return const LoginPage();
+        },
+      ),
       theme: Provider.of<ThemeProvider>(context).themeData,
       routes: {
         '/loginPage': (context) => const LoginPage(),
         '/registerPage': (context) => const RegisterPage(),
         '/homePage': (context) => const HomePage(),
+        '/mainPage': (context) => const MainPage(),
+        '/settingPage': (context) => const SettingPage(),
       },
     );
   }

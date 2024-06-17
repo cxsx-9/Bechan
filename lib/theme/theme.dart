@@ -27,12 +27,9 @@ ThemeData lightMode = ThemeData(
     onPrimary: Colors.white,
     secondary: Colors.grey.shade400,
     onSecondary: Colors.grey.shade200,
-    surface: Colors.white,
-    // inversePrimary: Colors.grey.shade800,
-    // error: Colors.red,
-    // onSecondary: Colors.black,
-    // onSurface: Colors.black,
-    // onError: Colors.white,
+    surfaceBright: Colors.white,
+    surface: const Color(0xFFF5F5F5),
+    shadow: Colors.black12,
   )
 );
 
@@ -43,6 +40,8 @@ ThemeData darkMode = ThemeData(
     onPrimary: Colors.grey.shade900,
     secondary: Colors.grey.shade600,
     onSecondary: Colors.grey.shade800,
-    surface: const Color.fromARGB(255, 33, 33, 33),
+    surface: const Color(0xFF212121),
+    surfaceBright: Colors.black,
+    shadow: Colors.black38,
   )
 );

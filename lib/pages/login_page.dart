@@ -1,12 +1,14 @@
 import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/widgets/submit_button.dart';
 import 'package:bechan/widgets/custom_snackbar.dart';
+import 'package:bechan/widgets/text_and_highlight.dart';
 import 'package:bechan/services/user_service.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bechan/theme/theme.dart';
+import 'package:bechan/models/secure_storage.dart';
+import 'package:bechan/config.dart' as config;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -40,14 +42,19 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> login(context) async {
     dynamic response = await UserService().callApi('login', {'email': emailCtrl.text, 'password': passCtrl.text});
     String message = response.message;
-    if (message == "Login success") {
-      await UserService().callApi('user', null);
-      Navigator.pushNamed(context, '/homePage');
+    if (message == 'Login success') {
+      // *** request user information first. ***
+      // config.USER_DATA.token = config.LOGIN_STATUS.token;
+      // await UserService().callApi('user', null);
+      await SecureStorage().saveToken(response.token);
+      Navigator.pushReplacementNamed(context, '/mainPage');
       return;
-    } else if (response.status == 'error' ) {
+    } else if (response.status == 'error') {
       message = "Wrong email or password."; 
+    } else if (response.status == 'ERR_CONNECTION') {
+      message = response.message;
     }
-    ScaffoldMessenger.of(context).showSnackBar(getSnackBar(message,55,240,false));
+    ScaffoldMessenger.of(context).showSnackBar(getSnackBar(message,55,215,false));
   }
 
   @override
@@ -98,8 +105,18 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 )
               ),
+              // DEBUG
               const SizedBox(
-                height: 200,
+                height: 160,
+                // height: 200,
+              ),
+              IconButton(
+                icon: const Icon(Icons.sensor_occupied_sharp),
+                onPressed: (){
+                    emailCtrl.text = config.ADMIN_EMAIL;
+                    passCtrl.text = config.ADMIN_PASSWD;
+                    login(context);
+                 }
               ),
               Column(
                 children: [
@@ -112,37 +129,14 @@ class _LoginPageState extends State<LoginPage> {
                     btnText: "Login",
                     type: isFeildFull && enableBtn && validEmail ? 1 : 0
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Don't have an account? ",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                      ),
-                      Text(
-                        "Register",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          backgroundColor: Colors.amber.shade300,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
+                  const SizedBox(height: 20),
+                  const TextAndHighlight(text: "Don't have an account? ", highlight: "Register"),
+                  const SizedBox(height: 5),
                   SubmitButton(
                     onTap: () { Navigator.pushNamed(context, '/registerPage'); },
                     btnText: "Register",
                     type: 2
                   ),
-                  CupertinoSwitch(value:Provider.of<ThemeProvider>(context, listen: false).isDarkMode,onChanged: (value) {Provider.of<ThemeProvider>(context, listen: false).toggleTheme();},),
                 ],
               ),
             ],

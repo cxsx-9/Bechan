@@ -2,6 +2,7 @@ import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/services/user_service.dart';
 import 'package:bechan/widgets/submit_button.dart';
 import 'package:bechan/widgets/custom_snackbar.dart';
+import 'package:bechan/widgets/text_and_highlight.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -60,7 +61,7 @@ class _RegisterPageState extends State<RegisterPage> {
     });
     String message = response.message;
     bool success = message == "User registered successfully";
-    ScaffoldMessenger.of(context).showSnackBar(getSnackBar(message, 55, 240, success));
+    ScaffoldMessenger.of(context).showSnackBar(getSnackBar(message, 55, 215, success));
     if (success) { Navigator.pop(context); }
   }
 
@@ -75,22 +76,19 @@ class _RegisterPageState extends State<RegisterPage> {
         }
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: true, // Enable resizing to avoid bottom inset
+        resizeToAvoidBottomInset: true,
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: SafeArea(
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
                   height: 70,
                 ),
-                Center(
-                  child: Image.asset(
-                    Provider.of<ThemeProvider>(context, listen: false).isDarkMode ? 'assets/Banche_logo_dark.png' : 'assets/Banche_logo_light.png',
-                    height: 83,
-                  ),
+                Image.asset(
+                  Provider.of<ThemeProvider>(context, listen: false).isDarkMode ? 'assets/Banche_logo_dark.png' : 'assets/Banche_logo_light.png',
+                  height: 83,
                 ),
                 const SizedBox(
                   height: 50,
@@ -156,57 +154,26 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(
                   height: 60,
                 ),
-                Center(
-                  child: Column(
-                    children: [
-                      SubmitButton(
-                        onTap: isFeildFull && enableBtn && validEmail ? () async {
-                          setState(() { enableBtn = false; });
-                          await register(context);
-                          setState(() { enableBtn = true; });
-                        } : null,
-                        btnText: "Register",
-                        type: isFeildFull && enableBtn && validEmail ? 1 : 0
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Already have an account? ",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              "Login",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600,
-                                backgroundColor: Colors.amber.shade300,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      SubmitButton(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icons.arrow_back_rounded,
-                        type: 2
-                      ),
-                    ],
-                  ),
+                Column(
+                  children: [
+                    SubmitButton(
+                      onTap: isFeildFull && enableBtn && validEmail ? () async {
+                        setState(() { enableBtn = false; });
+                        await register(context);
+                        setState(() { enableBtn = true; });
+                      } : null,
+                      btnText: "Register",
+                      type: isFeildFull && enableBtn && validEmail ? 1 : 0
+                    ),
+                    const SizedBox(height: 20),
+                    const TextAndHighlight(text: "Already have an account? ", highlight: "Login"),
+                    const SizedBox(height: 5),
+                    SubmitButton(
+                      onTap: () { Navigator.pop(context); },
+                      icon: Icons.arrow_back_rounded,
+                      type: 2
+                    ),
+                  ],
                 ),
               ],
             ),

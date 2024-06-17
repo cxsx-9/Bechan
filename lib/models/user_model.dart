@@ -33,34 +33,44 @@ class Status {
 }
 
 class User {
+  String status;
   String email;
   String firstname;
   String lastname;
+  String token;
 
   User({
+    String ? status,
     String ? email,
     String ? firstname,
     String ? lastname,
+    String ? token,
   })
   :
+    status = status ?? "" ,
     email = email ?? "" ,
     firstname = firstname ?? "" ,
-    lastname = lastname ?? "" 
+    lastname = lastname ?? "" ,
+    token = token ?? "" 
   ;
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
+      status: json['status'] as String,
       email: json['Data']['User']['email'] as String,
       firstname: json['Data']['User']['firstname'] as String,
       lastname: json['Data']['User']['lastname'] as String,
+      token: json['token'] as String,
     );
   }
 
   Map<String, dynamic> toObject(){
     return {
+      'status' : status,
       'email' : email,
       'firstname' : firstname,
       'lastname' : lastname,
+      'token' : token,
     };
   }
 }

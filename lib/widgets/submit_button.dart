@@ -26,7 +26,7 @@ class _SubmitButtonState extends State<SubmitButton> {
   Widget build(BuildContext context) {
     Color textColor = Theme.of(context).colorScheme.onPrimary;
     Color bgColor =  Theme.of(context).colorScheme.primary;
-    Color shadow = Colors.black38;
+    Color shadow = Theme.of(context).colorScheme.shadow;
     bool borderLine = true;
     if (widget.type == 0) {
       textColor = Theme.of(context).colorScheme.onSecondary;
@@ -56,7 +56,7 @@ class _SubmitButtonState extends State<SubmitButton> {
                 : [
                     BoxShadow(
                       color: shadow,
-                      spreadRadius: 0,
+                      spreadRadius: 1,
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
