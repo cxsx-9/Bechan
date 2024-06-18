@@ -2,10 +2,8 @@ import 'package:bechan/widgets/date_card.dart';
 import 'package:bechan/widgets/long_card.dart';
 import 'package:flutter/material.dart';
 import 'package:bechan/models/user_model.dart';
-import 'package:bechan/widgets/small_card.dart';
 import 'package:bechan/widgets/small_profile_card.dart';
 import 'package:bechan/config.dart' as config;
-import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -45,6 +43,23 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 10,),
                   const LongCard(topic: 'Reminder',),
+                  const SizedBox(height: 10,),
+                  SizedBox(
+                    width: 360,
+                    height: 500,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [BoxShadow(
+                          color: Theme.of(context).colorScheme.shadow,
+                          spreadRadius: 1,
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        )]
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
