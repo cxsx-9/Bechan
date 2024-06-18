@@ -1,3 +1,4 @@
+import 'package:bechan/widgets/date_card.dart';
 import 'package:bechan/widgets/long_card.dart';
 import 'package:flutter/material.dart';
 import 'package:bechan/models/user_model.dart';
@@ -14,7 +15,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String formattedDate = DateFormat('MMMM dd, yy').format(DateTime.now());
+  // DateTime = DateFormat('MMMM dd, yy').format(DateTime.now());
+  DateTime now = DateTime.now();
   final User _user = config.USER_DATA;
 
   @override
@@ -38,7 +40,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       SmallProfileCard(firstname: _user.firstname,greeting: "Welcome back!"),
                       const SizedBox(width: 10),
-                      SmallCard(topic: "Today", data: formattedDate)
+                      DateCard(time: now)
                     ],
                   ),
                   const SizedBox(height: 10,),
