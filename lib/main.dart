@@ -29,8 +29,7 @@ class MyApp extends StatelessWidget {
         future: SecureStorage().isTokenValid(),
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data != null && snapshot.data == true) {
-            print("[[ MAIN ]]-> data ");
-            print(snapshot.data);
+            print("[[ MAIN ]]-> data : ${snapshot.data}");
             return const MainPage();
           }
           return const LoginPage();

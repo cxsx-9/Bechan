@@ -1,12 +1,12 @@
+import 'package:bechan/widgets/text_and_highlight.dart';
+import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/services/user_service.dart';
 import 'package:bechan/widgets/submit_button.dart';
-import 'package:bechan/widgets/custom_snackbar.dart';
-import 'package:bechan/widgets/text_and_highlight.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:bechan/theme/theme.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -53,7 +53,7 @@ class _RegisterPageState extends State<RegisterPage> {
       return ;
     }
 
-    dynamic response = await UserService().callApi('register', {
+    dynamic response = await UserService().register({
       'email': emailCtrl.text,
       'password': passCtrl.text,
       'firstname': fnameCtrl.text,

@@ -14,7 +14,8 @@ class SmallProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 170,
+      width: 175,
+      height: 90,
       child: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primary,

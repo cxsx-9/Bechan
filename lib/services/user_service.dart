@@ -1,64 +1,53 @@
 import 'dart:convert';
 import 'package:bechan/models/secure_storage.dart';
-
-import '../models/user_model.dart';
-import 'package:http/http.dart' as http;
+import 'package:bechan/models/user_model.dart';
+import 'package:bechan/services/api_service.dart';
 import 'package:bechan/config.dart' as config;
+import 'package:flutter/material.dart';
 
 class UserService {
-  Future<dynamic> callApi(String method, dynamic data) async {
-    print("[SERVICE] > method : " + method);
-    try {
-      dynamic response;
 
-      if (method == 'login' || method == 'register') {
-        print(data);
-        response = await http.post(
-          Uri.parse('${config.BASE_URL}/$method'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8'
-          },
-          body: jsonEncode(data),
-        );
-      } else if (method == 'user') {
-        response = await http.get(
-          Uri.parse('${config.BASE_URL}/$method'),
-          headers: <String, String>{
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Bearer ${ await SecureStorage().getToken()}',
-          },
-        );
-      }
-
-      if (response.statusCode == 200) {
-
-        print(response.body);
-        print("[SERVICE] : status " + jsonDecode(response.body)['status'] + " !");
-
-        if (method == 'login' || method == 'register') {
-
-          config.STATUS = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
-          return config.STATUS;
-
-        } else if (method == 'user') {
-
-          if (jsonDecode(response.body)['status'] == 'error'){
-            config.STATUS = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
-            return config.STATUS;
-          } else {
-            config.USER_DATA = User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
-            return config.USER_DATA;
-          }
-
-        }
-      } else {
-        print("error : ${response.statusCode}");
-        return Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>); // Return null for non-200 status codes
-      }
-    } catch (e) {
-      print('Error during API call: /$e');
-      return Status(status: 'ERR_CONNECTION', message: 'Connection error'); // Return null if an error occurs
+  Future<dynamic> login(dynamic data) async {
+    print('[USVC] : login');
+    dynamic response = await ApiService().callApi('get', 'login', data);
+    if (response == null) {
+      return errorUserService();
     }
+    config.STATUS = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    if (config.STATUS.message == 'Login Success') {
+      await SecureStorage().saveToken(config.STATUS.token);
+    }
+    return config.STATUS;
+  }
+
+  Future<dynamic> register(dynamic data) async {
+    print('[USVC] : register');
+    dynamic response = await ApiService().callApi('get', 'register', data);
+    if (response == null) {
+      return errorUserService();
+    }
+    config.STATUS = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    return config.STATUS;
+  }
+
+  Future<dynamic> fetch() async {
+    print('[USVC] : fetch');
+    dynamic response = await ApiService().callApi('post', 'user', null);
+    if (response == null) {
+      return errorUserService();
+    }
+    config.USER_DATA = User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    await SecureStorage().saveToken(config.USER_DATA.token);
+    return config.USER_DATA;
+  }
+
+  Status errorUserService() {
+    return Status(status: 'ERR_CONNECTION', message: 'Connection error');
+  }
+
+  void logout(context) {
+    print('[USVC] : logout');
+    SecureStorage().deleteToken();
+    Navigator.pushReplacementNamed(context, '/loginPage');
   }
 }

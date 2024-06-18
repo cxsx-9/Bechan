@@ -7,14 +7,17 @@ class SmallCard extends StatelessWidget {
   
   const SmallCard ({
     super.key,
-    required this.topic,
-    required this.data,
-  });
+    String ? topic,
+    String ? data,
+  }) : topic = topic ?? '?',
+    data = data ?? '00.00'
+  ;
   
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 170,
+      width: 175,
+      height: 90,
       child: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.onPrimary,

@@ -1,5 +1,8 @@
+import 'package:bechan/pages/chart_page.dart';
 import 'package:bechan/pages/home_page.dart';
+import 'package:bechan/pages/loading_page.dart';
 import 'package:bechan/pages/setting_page.dart';
+import 'package:bechan/services/user_service.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
@@ -10,34 +13,38 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 0;
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
   }
 
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  Future<void> _fetchUserData() async {
+      await UserService().fetch();
+      setState(() {
+        _isLoading = false;
+      });
+  }
+  
+  int _selectedIndex = 0;
+  void _onItemTapped(int index) {
+    setState(() { _selectedIndex = index; });
+  }
+
   static const List<Widget> _page = <Widget>[
     HomePage(),
-    SafeArea(
-      child: Scaffold(
-        body: Text(
-      'Index 1: Chart',
-      style: optionStyle,
-    ))),
-    SafeArea(
-      child: Scaffold(
-        body: Text(
-      'Index 2: Note',
-      style: optionStyle,
-    ))),
-    SettingPage()
+    ChartPage(),
+    LoadingPage(),
+    SettingPage(),
   ];
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const LoadingPage();
+    }
     return Scaffold(
       extendBody: true,
       floatingActionButton: FloatingActionButton(
@@ -47,35 +54,95 @@ class _MainPageState extends State<MainPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: _page.elementAt(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+      bottomNavigationBar: BottomAppBar(
+        padding: const EdgeInsets.all(0),
+        height: 50,
+        shape: const CircularNotchedRectangle(),
+        color: Theme.of(context).colorScheme.surfaceBright,
+        notchMargin: 10,
+        shadowColor: Theme.of(context).colorScheme.shadow,
+        child: Container(
+          // color: Colors.black12,
+          margin: const EdgeInsets.only(left: 12.0, right: 12.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              TextButton(
+                child: Icon(
+                  Icons.home, 
+                  size: 30,
+                  color: _selectedIndex == 0 ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary
+                ),
+                onPressed: () {_onItemTapped(0);},
+              ),
+              TextButton(
+                child: Icon(
+                  Icons.bar_chart_rounded, 
+                  size: 30,
+                  color: _selectedIndex == 1 ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary
+                ),
+                onPressed: () {_onItemTapped(1);},
+              ),
+
+              const SizedBox(width: 50,),
+              TextButton(
+                child: Icon(
+                  Icons.note_alt_outlined, 
+                  size: 30,
+                  color: _selectedIndex == 2 ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary
+                ),
+                onPressed: () {_onItemTapped(2);},
+              ),
+              TextButton(
+                child: Icon(
+                  Icons.settings, 
+                  size: 30,
+                  color: _selectedIndex == 3 ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary
+                ),
+                onPressed: () {_onItemTapped(3);},
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart_rounded),
-            label: 'Chart',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.note_alt_outlined),
-            label: 'Note',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Setting',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).colorScheme.primary,
-        unselectedItemColor: Theme.of(context).colorScheme.secondary,
-        selectedIconTheme: const IconThemeData(size: 25),
-        unselectedIconTheme: const IconThemeData(size: 20),
-        selectedFontSize: 14,
-        unselectedFontSize: 12,
-        onTap: _onItemTapped,
+        ),
       ),
+
+
+
+
+      // bottomNavigationBar: BottomNavigationBar(
+      //   type: BottomNavigationBarType.fixed,
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home),
+      //       label: 'Home',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.bar_chart_rounded),
+      //       label: 'Chart',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.circle),
+      //       label: ''
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.note_alt_outlined),
+      //       label: 'Note',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.settings),
+      //       label: 'Setting',
+      //     ),
+      //   ],
+      //   currentIndex: _selectedIndex,
+      //   selectedItemColor: Theme.of(context).colorScheme.primary,
+      //   unselectedItemColor: Theme.of(context).colorScheme.secondary,
+      //   selectedIconTheme: const IconThemeData(size: 30),
+      //   unselectedIconTheme: const IconThemeData(size: 28),
+      //   selectedFontSize: 14,
+      //   unselectedFontSize: 12,
+      //   onTap: _onItemTapped,
+      // ),
     );
   }
 }

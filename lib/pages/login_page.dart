@@ -7,7 +7,6 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bechan/theme/theme.dart';
-import 'package:bechan/models/secure_storage.dart';
 import 'package:bechan/config.dart' as config;
 
 class LoginPage extends StatefulWidget {
@@ -40,13 +39,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> login(context) async {
-    dynamic response = await UserService().callApi('login', {'email': emailCtrl.text, 'password': passCtrl.text});
+    dynamic response = await UserService().login({'email': emailCtrl.text, 'password': passCtrl.text});
     String message = response.message;
-    if (message == 'Login success') {
-      // *** request user information first. ***
-      // config.USER_DATA.token = config.LOGIN_STATUS.token;
-      // await UserService().callApi('user', null);
-      await SecureStorage().saveToken(response.token);
+    print(message);
+    if (message == 'Login Success') {
       Navigator.pushReplacementNamed(context, '/mainPage');
       return;
     } else if (response.status == 'error') {
