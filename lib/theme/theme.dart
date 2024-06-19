@@ -37,7 +37,7 @@ ThemeData darkMode = ThemeData(
   brightness: Brightness.dark,
   colorScheme: ColorScheme.dark(
     primary: Colors.grey.shade200,
-    onPrimary: Colors.grey.shade900,
+    onPrimary: Colors.black,
     secondary: Colors.grey.shade600,
     onSecondary: Colors.grey.shade800,
     surface: const Color(0xFF212121),

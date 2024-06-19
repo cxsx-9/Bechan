@@ -102,17 +102,21 @@ class _LoginPageState extends State<LoginPage> {
                 )
               ),
               // DEBUG
-              const SizedBox(
-                height: 160,
-                // height: 200,
-              ),
-              IconButton(
-                icon: const Icon(Icons.sensor_occupied_sharp),
-                onPressed: (){
-                    emailCtrl.text = config.ADMIN_EMAIL;
-                    passCtrl.text = config.ADMIN_PASSWD;
-                    login(context);
-                 }
+              const SizedBox(height: 100,),
+               SizedBox(
+                height: 100,
+                width: 100,
+                child:TextButton(
+                  onPressed: (){},
+                  onLongPress: enableBtn ? () async {
+                      emailCtrl.text = config.ADMIN_EMAIL;
+                      passCtrl.text = config.ADMIN_PASSWD;
+                      setState(() {enableBtn = false;});
+                      await login(context);
+                      setState(() {enableBtn = true;});
+                  } : null,
+                  child: const Icon(Icons.fingerprint, size: 40,)
+                ),
               ),
               Column(
                 children: [

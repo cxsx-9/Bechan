@@ -9,9 +9,9 @@ class UserService {
 
   Future<dynamic> login(dynamic data) async {
     print('[USVC] : login');
-    dynamic response = await ApiService().callApi('get', 'login', data);
+    dynamic response = await ApiService().callApi('post', 'login', data);
     if (response == null) {
-      return errorUserService();
+      return errorApiService();
     }
     config.STATUS = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
     if (config.STATUS.message == 'Login Success') {
@@ -22,9 +22,9 @@ class UserService {
 
   Future<dynamic> register(dynamic data) async {
     print('[USVC] : register');
-    dynamic response = await ApiService().callApi('get', 'register', data);
+    dynamic response = await ApiService().callApi('post', 'register', data);
     if (response == null) {
-      return errorUserService();
+      return errorApiService();
     }
     config.STATUS = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
     return config.STATUS;
@@ -32,17 +32,13 @@ class UserService {
 
   Future<dynamic> fetch() async {
     print('[USVC] : fetch');
-    dynamic response = await ApiService().callApi('post', 'user', null);
+    dynamic response = await ApiService().callApi('get', 'user', '');
     if (response == null) {
-      return errorUserService();
+      return errorApiService();
     }
     config.USER_DATA = User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
     await SecureStorage().saveToken(config.USER_DATA.token);
     return config.USER_DATA;
-  }
-
-  Status errorUserService() {
-    return Status(status: 'ERR_CONNECTION', message: 'Connection error');
   }
 
   void logout(context) {

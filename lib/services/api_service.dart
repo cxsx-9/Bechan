@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:bechan/models/secure_storage.dart';
+import 'package:bechan/models/user_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:bechan/config.dart' as config;
 
@@ -12,12 +13,14 @@ class ApiService {
       if (method == 'get') {
         response = await _get(endPoint, data);
       } else if (method == 'post') {
-        response = await _post(endPoint);
+        response = await _post(endPoint, data);
       } else {
         print('[API] : unknown type : $method');
       }
 
       if (response.statusCode != 200) {
+        print('[API] : status Error');
+        print(response.statusCode);
         return null;
       }
       return response;
@@ -27,7 +30,7 @@ class ApiService {
     }
   }
 
-  Future<http.Response> _get(String endPoint, dynamic data) async {
+  Future<http.Response> _post(String endPoint, dynamic data) async {
     dynamic response = await http.post(
         Uri.parse('${config.BASE_URL}/$endPoint'),
         headers: <String, String>{
@@ -38,9 +41,9 @@ class ApiService {
     return response;
   }
 
-  Future<http.Response> _post(String endPoint) async {
+  Future<http.Response> _get(String endPoint, dynamic data) async {
     dynamic response = await http.get(
-      Uri.parse('${config.BASE_URL}/$endPoint'),
+      Uri.parse('${config.BASE_URL}/$endPoint$data'),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -50,4 +53,8 @@ class ApiService {
     return response;
   }
 
+}
+
+Status errorApiService() {
+  return Status(status: 'ERR_CONNECTION', message: 'Connection error');
 }

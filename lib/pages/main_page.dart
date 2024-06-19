@@ -106,43 +106,6 @@ class _MainPageState extends State<MainPage> {
           ),
         ),
       ),
-
-
-
-
-      // bottomNavigationBar: BottomNavigationBar(
-      //   type: BottomNavigationBarType.fixed,
-      //   items: const <BottomNavigationBarItem>[
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home),
-      //       label: 'Home',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.bar_chart_rounded),
-      //       label: 'Chart',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.circle),
-      //       label: ''
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.note_alt_outlined),
-      //       label: 'Note',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.settings),
-      //       label: 'Setting',
-      //     ),
-      //   ],
-      //   currentIndex: _selectedIndex,
-      //   selectedItemColor: Theme.of(context).colorScheme.primary,
-      //   unselectedItemColor: Theme.of(context).colorScheme.secondary,
-      //   selectedIconTheme: const IconThemeData(size: 30),
-      //   unselectedIconTheme: const IconThemeData(size: 28),
-      //   selectedFontSize: 14,
-      //   unselectedFontSize: 12,
-      //   onTap: _onItemTapped,
-      // ),
     );
   }
 }

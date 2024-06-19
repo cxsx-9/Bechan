@@ -20,9 +20,8 @@ class LoadingPage extends StatelessWidget {
                     : 'assets/Banche_logo_light.png',
                 height: 83,
               ),
-              const SizedBox(height: 50,),
+              const SizedBox(height: 350,),
               const CircularProgressIndicator(),
-              // const LinearProgressIndicator(),
               // const RefreshProgressIndicator(),
             ]
           ),

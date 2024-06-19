@@ -3,15 +3,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class DateCard extends StatelessWidget {
-  DateTime time;
+  final DateTime time;
   DateCard ({
     super.key,
     required this.time
   });
 
-  String date = DateFormat('dd').format(DateTime.now());
-  String month = DateFormat('MMMM').format(DateTime.now());
-  String year = DateFormat('yyyy').format(DateTime.now());
+  final String date = DateFormat('dd').format(DateTime.now());
+  final String month = DateFormat('MMMM').format(DateTime.now());
+  final String year = DateFormat('yyyy').format(DateTime.now());
 
   @override
   Widget build(BuildContext context) {
