@@ -49,7 +49,7 @@ class _MainPageState extends State<MainPage> {
       extendBody: true,
       floatingActionButton: FloatingActionButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-        onPressed: () {},
+        onPressed: () {Navigator.pushNamed(context, '/addRecord');},
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -62,7 +62,6 @@ class _MainPageState extends State<MainPage> {
         notchMargin: 10,
         shadowColor: Theme.of(context).colorScheme.shadow,
         child: Container(
-          // color: Colors.black12,
           margin: const EdgeInsets.only(left: 12.0, right: 12.0),
           child: Row(
             mainAxisSize: MainAxisSize.max,

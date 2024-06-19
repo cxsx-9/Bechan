@@ -36,7 +36,7 @@ class SecureStorage {
       print("[_DB_] : ----(end)");
       return false;
     }
-    print("[_DB_] : token is NOT EMPTY");
+    print("[_DB_] : token is EXIST");
     dynamic response = await UserService().fetch();
     print("[_DB_] : response STATUS");
     if (response.status == "error" || response.status == "ERR_CONNECTION") { 

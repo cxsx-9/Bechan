@@ -45,7 +45,6 @@ class _SettingPageState extends State<SettingPage> {
                   TextInfo(topic: 'email', info: _user.email),
                   TextInfo(topic: 'firstname', info: _user.firstname),
                   TextInfo(topic: 'lastname', info: _user.lastname),
-                  TextInfo(topic: 'exp', info: DateTime.fromMillisecondsSinceEpoch(_user.exp * 1000).toString()),
                 ],
               ),
             ),

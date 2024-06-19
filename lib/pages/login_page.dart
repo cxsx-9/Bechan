@@ -101,13 +101,14 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 )
               ),
-              // DEBUG
               const SizedBox(height: 100,),
                SizedBox(
                 height: 100,
                 width: 100,
                 child:TextButton(
-                  onPressed: (){},
+                  onPressed: (){
+                      Navigator.pushNamed(context, '/addRecord');
+                  },
                   onLongPress: enableBtn ? () async {
                       emailCtrl.text = config.ADMIN_EMAIL;
                       passCtrl.text = config.ADMIN_PASSWD;

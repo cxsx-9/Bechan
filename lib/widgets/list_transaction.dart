@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 class ListTransaction extends StatelessWidget {
   final String total;
   final String topic;
-  final data;
+  final dynamic data;
 
   const ListTransaction({super.key, required this.topic, required this.total, required this.data});
 

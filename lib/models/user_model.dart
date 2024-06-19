@@ -40,7 +40,7 @@ class User {
   String firstname;
   String lastname;
   String token;
-  int exp;
+  // int exp;
 
   User({
     String ? status,
@@ -50,7 +50,7 @@ class User {
     String ? firstname,
     String ? lastname,
     String ? token,
-    int ? exp,
+    // int ? exp,
   })
   :
     status = status ?? "" ,
@@ -59,8 +59,8 @@ class User {
     email = email ?? "" ,
     firstname = firstname ?? "" ,
     lastname = lastname ?? "" ,
-    token = token ?? "" ,
-    exp = exp ?? 0
+    token = token ?? ""
+    // exp = exp ?? 0
   ;
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -71,7 +71,7 @@ class User {
       email: json['data'] != null ? (json['data']['user']['email'] as String) : "",
       firstname: json['data'] != null ? (json['data']['user']['firstname'] as String) : "",
       lastname: json['data'] != null ? (json['data']['user']['lastname'] as String) : "",
-      exp: json['data'] != null ? (json['data']['user']['exp'] as int) : 0,
+      // exp: json['data'] != null ? (json['data']['user'] != null ? (json['data']['user']['exp'] != null ? json['data']['user']['exp'] as int : 0): 0) : 0,
       token: json['data'] != null ? (json['data']['token'] as String) : "",
     );
   }
@@ -84,7 +84,7 @@ class User {
       'firstname' : firstname,
       'lastname' : lastname,
       'token' : token,
-      'exp' : exp,
+      // 'exp' : exp,
     };
   }
 }
