@@ -1,3 +1,4 @@
+import 'package:bechan/widgets/card_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -19,16 +20,7 @@ class LongCard extends StatelessWidget {
       width: 360,
       height: 60,
       child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onPrimary,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [BoxShadow(
-            color: Theme.of(context).colorScheme.shadow,
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          )]
-        ),
+        decoration: CardDecoration(context),
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 30),
           child: Row(

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:bechan/models/secure_storage.dart';
 import 'package:bechan/models/user_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:bechan/config.dart' as config;
@@ -34,7 +33,9 @@ class ApiService {
     dynamic response = await http.post(
         Uri.parse('${config.BASE_URL}/$endPoint'),
         headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${config.USER_DATA.token}',
         },
         body: jsonEncode(data),
       );
@@ -47,7 +48,7 @@ class ApiService {
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${ await SecureStorage().getToken()}',
+        'Authorization': 'Bearer ${config.USER_DATA.token}',
       },
     );
     return response;

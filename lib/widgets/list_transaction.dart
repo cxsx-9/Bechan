@@ -1,64 +1,21 @@
 import 'package:bechan/widgets/transaction_card.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ListTransaction extends StatelessWidget {
-  final String total;
   final String topic;
   final dynamic data;
 
-  const ListTransaction({super.key, required this.topic, required this.total, required this.data});
+  const ListTransaction({super.key, required this.topic, required this.data});
 
   @override
   Widget build(BuildContext context) {
+    final formatter = NumberFormat('#,###');
     return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const SizedBox(height: 10,),
-          // SizedBox(
-          //   height: 70,
-          //   child: Padding(
-          //     padding: const EdgeInsets.only(left: 20, right: 30),
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //       children: [
-          //         Text(
-          //           topic,
-          //           style: GoogleFonts.inter( 
-          //             fontSize: 20,
-          //             fontWeight: FontWeight.bold,
-          //             color: Theme.of(context).colorScheme.primary,
-          //           ),
-          //         ),
-          //         Container(
-          //           color: Colors.amber.shade400,
-          //           child: Padding(
-          //             padding: const EdgeInsets.only(left: 10, right: 10),
-          //             child: Row(
-          //               children: [
-          //                 Text(
-          //                   'Total',
-          //                   style: GoogleFonts.inter( 
-          //                     fontSize: 16,
-          //                     color: Colors.black,
-          //                   ),
-          //                 ),
-          //                 const SizedBox(width: 10,),
-          //                 Text(
-          //                   total,
-          //                   style: GoogleFonts.inter( 
-          //                     fontSize: 16,
-          //                     color: Colors.black,
-          //                   ),
-          //                 )
-          //               ],
-          //             ),
-          //           ),
-          //         )
-          //       ],
-          //     ),
-          //   ),
-          // ),
           Expanded(
             child: ListView.builder(
             itemCount: data!.transactions.length,
@@ -67,9 +24,10 @@ class ListTransaction extends StatelessWidget {
               return Column(
                 children: [
                   TransactionCard(
-                    amount: transaction.amount.toString(),
+                    amount: formatter.format(transaction.amount),
                     note: transaction.note,
                     type: transaction.categorieType,
+                    date: DateFormat('dd MMMM yyyy').format(transaction.transactionDatetime!),
                   ),
                   const SizedBox(height: 10,)
                 ],

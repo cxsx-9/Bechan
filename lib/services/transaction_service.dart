@@ -9,11 +9,11 @@ class TransactionService {
     dynamic response = await ApiService().callApi('get', 'summaryday', '?selected_date_start=$startDate&selected_date_end=$endDate');
     final jsonResponse = json.decode(response.body);
     if (response == null || jsonResponse['status'] == "error") {
-      print('[TSVC] : Error');
+      print('[TSVC] : transaction Error');
       return null;
       // return errorApiService();
     }
-    print(response.body);
+    // print(response.body);
     print('[TSVC] : transaction ok!');
     return TscnResponse.fromJson(jsonDecode(response.body));
   }  

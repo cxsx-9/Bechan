@@ -1,26 +1,40 @@
-import 'package:bechan/widgets/card_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SmallCard extends StatelessWidget {
+class TinyCards extends StatelessWidget {
   final String topic;
   final String data;
+  final Color color;
+  final Color backgroundColor;
   
-  const SmallCard ({
+  const TinyCards ({
     super.key,
     String ? topic,
     String ? data,
+    Color ? color,
+    Color ? backgroundColor
   }) : topic = topic ?? '?',
-    data = data ?? '00.00'
+    data = data ?? '00.00',
+    color = color ?? Colors.black,
+    backgroundColor = backgroundColor ?? Colors.white
   ;
   
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 175,
+      width: 110,
       height: 90,
       child: Container(
-        decoration: CardDecoration(context),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [BoxShadow(
+            color: Theme.of(context).colorScheme.shadow,
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          )]
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -28,16 +42,16 @@ class SmallCard extends StatelessWidget {
             Text(
               topic,
               style: GoogleFonts.inter(
-                fontSize: 20,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.primary,
+                color: color,
               )
             ),
             Text(
               data,
               style: GoogleFonts.inter(
-                fontSize: 20,
-                color: Theme.of(context).colorScheme.primary,
+                fontSize: 18,
+                color: color,
               ),
             )
           ],

@@ -49,7 +49,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> register(context) async {
     if (passCtrl.text != cpassCtrl.text) {
-      ScaffoldMessenger.of(context).showSnackBar(getSnackBar("Passwords do NOT match", 55, 240, false));
+      ScaffoldMessenger.of(context).showSnackBar(getSnackBar("Passwords do NOT match", 55, 220, false));
       return ;
     }
 
@@ -60,7 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
       'lastname': lnameCtrl.text
     });
     String message = response.message;
-    bool success = message == "User registered successfully";
+    bool success = message == "User registered successfully\nPlease verify you email";
     ScaffoldMessenger.of(context).showSnackBar(getSnackBar(message, 55, 215, success));
     if (success) { Navigator.pop(context); }
   }

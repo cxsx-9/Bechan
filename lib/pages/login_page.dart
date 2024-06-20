@@ -46,11 +46,14 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pushReplacementNamed(context, '/mainPage');
       return;
     } else if (response.status == 'error') {
-      message = "Wrong email or password."; 
+      message = response.message; 
+      if (response.message != 'Please verify your email before logging in.'){
+        message = "Wrong email or password";
+      }
     } else if (response.status == 'ERR_CONNECTION') {
       message = response.message;
     }
-    ScaffoldMessenger.of(context).showSnackBar(getSnackBar(message,55,215,false));
+    ScaffoldMessenger.of(context).showSnackBar(getSnackBar(message,55,230,false));
   }
 
   @override

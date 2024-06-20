@@ -1,5 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:bechan/services/user_service.dart';
+import 'package:bechan/config.dart' as config;
 
 class SecureStorage {
 
@@ -12,6 +13,7 @@ class SecureStorage {
       print("[_DB_] : new token :)");
     }
     print("[_DB_] : ----(end)");
+    config.USER_DATA.token = token;
     await _secureStorage.write(key: 'auth_token', value: token);
   }
 
@@ -38,6 +40,7 @@ class SecureStorage {
       return false;
     }
     print("[_DB_] : token is EXIST");
+    config.USER_DATA.token = (await _secureStorage.read(key: 'auth_token'))!;
     dynamic response = await UserService().fetch();
     print("[_DB_] : response STATUS");
     if (response.status == "error" || response.status == "ERR_CONNECTION") { 

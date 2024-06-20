@@ -4,14 +4,17 @@ import 'package:google_fonts/google_fonts.dart';
 class TransactionCard extends StatelessWidget {
   final String amount;
   final String note;
+  final String date;
   final String type;
   const TransactionCard({
     super.key,
     String ? amount,
     String ? note,
+    String ? date,
     String ? type,
   }) : amount = amount ?? '00.00',
     note = note ?? 'nothing',
+    date = date ?? '',
     type = type ?? 'none'
   ;
 
@@ -43,12 +46,25 @@ class TransactionCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 20,),
-                  Text(
-                    note,
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: Theme.of(context).colorScheme.primary,
-                    )
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        note,
+                        style: GoogleFonts.inter(
+                          fontSize: 16,
+                          color: Theme.of(context).colorScheme.primary,
+                        )
+                      ),
+                      Text(
+                        date,
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.secondary,
+                        )
+                      ),
+                    ],
                   ),
                 ],
               ),

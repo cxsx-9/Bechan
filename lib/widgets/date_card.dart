@@ -1,3 +1,4 @@
+import 'package:bechan/widgets/card_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -19,16 +20,7 @@ class DateCard extends StatelessWidget {
       width: 175,
       height: 90,
       child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onPrimary,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [BoxShadow(
-            color: Theme.of(context).colorScheme.shadow,
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          )]
-        ),
+        decoration: CardDecoration(context),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5),
           child: Row(
