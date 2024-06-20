@@ -10,10 +10,9 @@ class SubmitButton extends StatefulWidget {
       {super.key,
       required this.onTap,
       required this.type,
+      this.icon,
       String? btnText,
-      IconData? icon
       }) : 
-      icon = icon ?? null,
       btnText = btnText ?? ""
       ;
 

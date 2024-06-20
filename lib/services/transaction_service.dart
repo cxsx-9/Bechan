@@ -4,9 +4,9 @@ import 'package:bechan/services/api_service.dart';
 
 
 class TransactionService {
-  Future<dynamic> fethcDate(String date) async {
+  Future<dynamic> fethcDate(String startDate, String endDate) async {
     print('[TSVC] : transaction calling');
-    dynamic response = await ApiService().callApi('get', 'summaryday', '?selected_date=$date');
+    dynamic response = await ApiService().callApi('get', 'summaryday', '?selected_date_start=$startDate&selected_date_end=$endDate');
     final jsonResponse = json.decode(response.body);
     if (response == null || jsonResponse['status'] == "error") {
       print('[TSVC] : Error');

@@ -8,8 +8,9 @@ class SecureStorage {
   Future<void> saveToken(String token) async {
     print("[_DB_] : ----(start) [Save]");
     print("[_DB_] : Saved!");
-    if (token != await _secureStorage.read(key: 'auth_token'))
+    if (token != await _secureStorage.read(key: 'auth_token')) {
       print("[_DB_] : new token :)");
+    }
     print("[_DB_] : ----(end)");
     await _secureStorage.write(key: 'auth_token', value: token);
   }
@@ -40,7 +41,7 @@ class SecureStorage {
     dynamic response = await UserService().fetch();
     print("[_DB_] : response STATUS");
     if (response.status == "error" || response.status == "ERR_CONNECTION") { 
-      print("[_DB_] : " + response.status + " : " + response.message);
+      print("[_DB_] : ${response.status} : ${response.message}");
       print("[_DB_] : ----(end)");
       return false;
     }
