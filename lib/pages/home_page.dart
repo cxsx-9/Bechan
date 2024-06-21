@@ -23,7 +23,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final User _user = config.USER_DATA;
-  late Future<dynamic> apiResponse;
+  static late Future<dynamic> apiResponse;
   final DateTime now = DateTime.now();
   String date = DateFormat('MMMM-dd-yy').format(DateTime.now());
 

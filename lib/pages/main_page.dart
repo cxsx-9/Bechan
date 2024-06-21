@@ -1,3 +1,4 @@
+import 'package:bechan/pages/add_record.dart';
 import 'package:bechan/pages/chart_page.dart';
 import 'package:bechan/pages/home_page.dart';
 import 'package:bechan/pages/loading_page.dart';
@@ -33,11 +34,11 @@ class _MainPageState extends State<MainPage> {
     setState(() { _selectedIndex = index; });
   }
 
-  static const List<Widget> _page = <Widget>[
-    HomePage(),
-    ChartPage(),
-    LoadingPage(),
-    SettingPage(),
+  final List<Widget> _page = <Widget>[
+    const HomePage(),
+    const ChartPage(),
+    const LoadingPage(),
+    const SettingPage(),
   ];
 
   @override
@@ -50,8 +51,14 @@ class _MainPageState extends State<MainPage> {
       floatingActionButton: FloatingActionButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
         onPressed: () async {
-          final res = await Navigator.pushNamed(context, '/addRecord');
-          if (res == true) {
+          final isReload = await showModalBottomSheet(
+            isScrollControlled: true,
+            context: context,
+            builder: (BuildContext context) {
+              return const AddRecord();
+            }
+          );
+          if (isReload == true && _selectedIndex == 0) {
             _page[0] = const HomePage(isReload: true,);
             _onItemTapped(0);
           }

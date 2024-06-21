@@ -105,6 +105,7 @@ class _AddRecordState extends State<AddRecord> {
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
+          toolbarHeight: 80,
           elevation: 0,
           backgroundColor: Colors.transparent,
         ),

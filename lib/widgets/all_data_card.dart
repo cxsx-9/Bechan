@@ -2,6 +2,7 @@ import 'package:bechan/widgets/card_decoration.dart';
 import 'package:bechan/widgets/list_transaction.dart';
 import 'package:bechan/widgets/tiny_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 class AllDataCard extends StatelessWidget {
@@ -33,25 +34,35 @@ class AllDataCard extends StatelessWidget {
           child: Container(
             decoration: CardDecoration(context),
             child: data == null ? 
-            const Padding(
+             Padding(
               padding: EdgeInsets.all(20.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
+                  Image.asset(
+                    'assets/dance.webp',
+                    height: 120,
+                  ),
+                  const Text(
                     "No transactions today?",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 16,
                     ),
                   ),
-                  SizedBox(height: 5,),
-                  Text(
+                  const SizedBox(height: 5,),
+                  const Text(
+                    style: TextStyle(
+                      fontWeight: FontWeight.w300,
+                      fontSize: 12,
+                      // color: Theme.of(context).colorScheme.secondary
+                    ),
                     textAlign: TextAlign.center,
-                    "That's awesome!\nMaybe you're saving like a pro!"
+                    "That's awesome!\nMaybe you're saving like a pro!",
                   ),
+                  const SizedBox(height: 50),
                 ],
               ),
             )
