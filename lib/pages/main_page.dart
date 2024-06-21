@@ -49,7 +49,13 @@ class _MainPageState extends State<MainPage> {
       extendBody: true,
       floatingActionButton: FloatingActionButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-        onPressed: () {Navigator.pushNamed(context, '/addRecord');},
+        onPressed: () async {
+          final res = await Navigator.pushNamed(context, '/addRecord');
+          if (res == true) {
+            _page[0] = const HomePage(isReload: true,);
+            _onItemTapped(0);
+          }
+        },
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

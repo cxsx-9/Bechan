@@ -10,7 +10,12 @@ import 'package:bechan/config.dart' as config;
 import 'package:bechan/services/transaction_service.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({
+    super.key,
+    this.isReload = false
+  });
+
+  final bool isReload;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -37,6 +42,7 @@ class _HomePageState extends State<HomePage> {
   void _fetchData() {
     print("Fetch Transaction");
     apiResponse = TransactionService().fetchDate(_startDate, _endDate);
+    setState(() {});
   }
 
   void _onSubmit(Object value) {
@@ -108,6 +114,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    widget.isReload ? _fetchData() : null;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
