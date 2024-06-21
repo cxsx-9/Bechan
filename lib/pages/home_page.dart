@@ -1,13 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:bechan/models/user_model.dart';
 import 'package:bechan/widgets/all_data_card.dart';
 import 'package:bechan/widgets/card_decoration.dart';
 import 'package:bechan/widgets/date_card.dart';
-import 'package:flutter/material.dart';
-import 'package:bechan/models/user_model.dart';
 import 'package:bechan/widgets/small_profile_card.dart';
 import 'package:bechan/config.dart' as config;
 import 'package:bechan/services/transaction_service.dart';
-import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,40 +18,43 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final User _user = config.USER_DATA;
-  late Future<dynamic> futureApiResponse;
+  late Future<dynamic> apiResponse;
   final DateTime now = DateTime.now();
   String date = DateFormat('MMMM-dd-yy').format(DateTime.now());
 
   String _range = DateFormat('dd MMMM yyyy').format(DateTime.now());
-  String _startDate = '';
-  String _endDate = '';
-  DateTime ? _start;
-  DateTime ? _end;
+  String _startDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  String _endDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  DateTime? _start;
+  DateTime? _end;
 
   @override
   void initState() {
     super.initState();
-    futureApiResponse = TransactionService().fethcDate(_startDate, _endDate);
+    _fetchData();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  void _fetchData() {
+    print("Fetch Transaction");
+    apiResponse = TransactionService().fetchDate(_startDate, _endDate);
+  }
 
-    void _onSubmit(Object value) {
-      setState(() {
-        print(value);
-        if (value is PickerDateRange) {
-          _range = value.endDate == null ? DateFormat('dd MMMM yyyy').format(value.startDate!) 
-          : '${DateFormat('dd MMMM yyyy').format(value.startDate!)} - ${DateFormat('dd MMMM yyyy').format(value.endDate ?? value.startDate!)}';
-          _startDate = DateFormat('yyyy-MM-dd').format(value.startDate!);
-          _start = value.startDate;
-          _endDate = DateFormat('yyyy-MM-dd').format(value.endDate ?? value.startDate!);
-          _end = value.endDate;
-        }
-      });
-      futureApiResponse = TransactionService().fethcDate(_startDate, _endDate);
-      Navigator.of(context).pop();
-    }
+  void _onSubmit(Object value) {
+    setState(() {
+      print(value);
+      if (value is PickerDateRange) {
+        _range = value.endDate == null
+            ? DateFormat('dd MMMM yyyy').format(value.startDate!)
+            : '${DateFormat('dd MMMM yyyy').format(value.startDate!)} - ${DateFormat('dd MMMM yyyy').format(value.endDate ?? value.startDate!)}';
+        _startDate = DateFormat('yyyy-MM-dd').format(value.startDate!);
+        _start = value.startDate;
+        _endDate = DateFormat('yyyy-MM-dd').format(value.endDate ?? value.startDate!);
+        _end = value.endDate;
+      }
+    });
+    _fetchData();
+    Navigator.of(context).pop();
+  }
 
   void showDatePicker(context) {
     showDialog(
@@ -76,21 +79,21 @@ class _HomePageState extends State<HomePage> {
                   child: SfDateRangePicker(
                     backgroundColor: Theme.of(context).colorScheme.onPrimary,
                     headerStyle: DateRangePickerHeaderStyle(
-                      backgroundColor: Theme.of(context).colorScheme.onPrimary,
-                      textAlign: TextAlign.center,
-                      textStyle: TextStyle(
-                        fontStyle: FontStyle.normal,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary,
-                      )
-                    ),
-                    onCancel: (){ Navigator.of(context).pop(); },
-                    // showTodayButton: true,
+                        backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                        textAlign: TextAlign.center,
+                        textStyle: TextStyle(
+                          fontStyle: FontStyle.normal,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary,
+                        )),
+                    onCancel: () {
+                      Navigator.of(context).pop();
+                    },
                     showActionButtons: true,
-                    // cancelText: 'Cancel',
-                    // confirmText: 'Done',
-                    onSubmit:(value) {_onSubmit(value!);},
+                    onSubmit: (value) {
+                      _onSubmit(value!);
+                    },
                     selectionMode: DateRangePickerSelectionMode.range,
                     initialSelectedRange: PickerDateRange(_start, _end),
                   ),
@@ -103,6 +106,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
@@ -121,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SmallProfileCard(firstname: _user.firstname,greeting: "Welcome back!"),
+                        SmallProfileCard(firstname: _user.firstname, greeting: "Welcome back!"),
                         const SizedBox(width: 10),
                         DateCard(time: now)
                       ],
@@ -133,20 +138,22 @@ class _HomePageState extends State<HomePage> {
                       child: Container(
                         decoration: CardDecoration(context),
                         child: TextButton(
-                          onPressed: () { showDatePicker(context); },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(_range),
-                                const Icon(Icons.arrow_drop_down_rounded),
-                              ],
-                            ),
+                          onPressed: () {
+                            showDatePicker(context);
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(_range),
+                              const Icon(Icons.arrow_drop_down_rounded),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                     const SizedBox(height: 10,),
                     FutureBuilder<dynamic>(
-                    future: futureApiResponse,
+                      future: apiResponse,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return AllDataCard(data: snapshot.data, waiting: true,);

@@ -29,7 +29,7 @@ class AllDataCard extends StatelessWidget {
         const SizedBox(height: 10,),
         SizedBox(
           width: 360,
-          height: 420,
+          height: 415,
           child: Container(
             decoration: CardDecoration(context),
             child: data == null ? 

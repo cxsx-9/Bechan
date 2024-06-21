@@ -12,18 +12,24 @@ import 'theme/theme.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(create: (context) => ThemeProvider(),
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
       child: const MyApp(),
-    ));
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized(); // Required by FlutterConfig
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,DeviceOrientation.portraitDown,]); // Preferred Portrait
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]); // Preferred Portrait
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: FutureBuilder<bool?>(
@@ -48,4 +54,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

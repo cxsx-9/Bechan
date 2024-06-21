@@ -1,6 +1,9 @@
+import 'package:bechan/services/transaction_service.dart';
 import 'package:bechan/widgets/input_number.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 const List<Widget> transactionType = <Widget>[
   Text('income'),
@@ -19,7 +22,8 @@ class _AddRecordState extends State<AddRecord> {
   final amountCtrl = TextEditingController();
   final noteCtrl = TextEditingController();
   bool isFeildFull = false;
-
+  String _selectedDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
+  String ? _sendDate;
   @override
   void initState() {
     super.initState();
@@ -28,10 +32,67 @@ class _AddRecordState extends State<AddRecord> {
         isFeildFull = amountCtrl.text.isNotEmpty && noteCtrl.text.isNotEmpty;
       });
     }
+    _sendDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
     amountCtrl.addListener(() { setIsFull();});
     noteCtrl.addListener(() { setIsFull();});
   }
   
+  void showDatePicker(context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Date Range',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: SizedBox(
+            height: 300, // Adjust as needed
+            width: double.maxFinite,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  child: SfDateRangePicker(
+                    backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                    headerStyle: DateRangePickerHeaderStyle(
+                      backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                      textAlign: TextAlign.center,
+                      textStyle: TextStyle(
+                        fontStyle: FontStyle.normal,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      )
+                    ),
+                    onCancel: (){ Navigator.of(context).pop(); },
+                    showActionButtons: true,
+                    onSubmit:(value) {_onSubmit(value!);},
+                    selectionMode: DateRangePickerSelectionMode.single,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _onSubmit(Object value) {
+    setState(() {
+      if (value is DateTime) {
+        _selectedDate = DateFormat('dd MMMM yyyy').format(value);
+        _sendDate = DateFormat("yyyy-MM-dd HH:mm:ss").format(value);
+      }
+    });
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -82,6 +143,23 @@ class _AddRecordState extends State<AddRecord> {
                 InputTextFeild(controller: noteCtrl, infoText: "Name", hintText: "name", obscureText: false),
                 const SizedBox(height: 30,),
                 InputNumber(controller: amountCtrl, hintText: '00.00', infoText: 'Amount',),
+                const SizedBox(height: 30,),
+                TextButton(
+                  onPressed: () {showDatePicker(context);},
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.date_range_rounded),
+                      Text(
+                        _selectedDate,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -91,7 +169,15 @@ class _AddRecordState extends State<AddRecord> {
           backgroundColor: isFeildFull ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
           onPressed: isFeildFull ? () {
-            Navigator.pop(context);
+            TransactionService().addData({
+              "categorie_id": _selectedType[0] ? 1 : 6,
+              "amount": double.parse(amountCtrl.text),
+              "note": noteCtrl.text,
+              "transaction_datetime" : _sendDate,
+              "fav": 0
+              }
+            );
+            Navigator.pop(context, true);
           } : null,
           icon: const Icon(Icons.add),
           label: const Text('Create'),
