@@ -7,6 +7,7 @@ class InputTextFeild extends StatefulWidget {
   final dynamic controller;
   final String infoText;
   final String hintText;
+  final String initialValue;
   final bool obscureText;
   bool obscure;
   String errorText;
@@ -18,8 +19,11 @@ class InputTextFeild extends StatefulWidget {
       required this.hintText,
       required this.obscureText,
       bool? obscure,
-      String? errorText})
+      String? errorText,
+      String ? initialValue
+      })
       : obscure = obscureText,
+        initialValue = initialValue ?? "",
         errorText = errorText ?? "";
 
   @override
@@ -28,6 +32,15 @@ class InputTextFeild extends StatefulWidget {
 
 class _InputTextFeildState extends State<InputTextFeild> {
   bool isValid = true;
+
+  @override
+  void initState() {
+    if (widget.initialValue != '') {
+      widget.controller.text = widget.initialValue;
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(

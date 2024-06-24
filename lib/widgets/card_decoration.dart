@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-BoxDecoration CardDecoration(BuildContext context) {
+BoxDecoration cardDecoration(BuildContext context) {
   return BoxDecoration(
     color: Theme.of(context).colorScheme.onPrimary,
     borderRadius: BorderRadius.circular(15),

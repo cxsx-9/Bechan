@@ -40,16 +40,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _fetchData() {
-    print("Fetch Transaction");
+    print("[HOME] : <Fetch> -------------------------------- Transaction");
     apiResponse = TransactionService().fetchDate(_startDate, _endDate);
     setState(() {});
   }
 
   void _onSubmit(Object value) {
     setState(() {
-      print(value);
       if (value is PickerDateRange) {
-        _range = value.endDate == null
+        _range = value.endDate == null || value.endDate == value.startDate
             ? DateFormat('dd MMMM yyyy').format(value.startDate!)
             : '${DateFormat('dd MMMM yyyy').format(value.startDate!)} - ${DateFormat('dd MMMM yyyy').format(value.endDate ?? value.startDate!)}';
         _startDate = DateFormat('yyyy-MM-dd').format(value.startDate!);
@@ -114,7 +113,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    widget.isReload ? _fetchData() : null;
+    if (widget.isReload) {
+      _fetchData();
+    }
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
@@ -143,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                       width: 360,
                       height: 50,
                       child: Container(
-                        decoration: CardDecoration(context),
+                        decoration: cardDecoration(context),
                         child: TextButton(
                           onPressed: () {
                             showDatePicker(context);
@@ -162,12 +163,15 @@ class _HomePageState extends State<HomePage> {
                     FutureBuilder<dynamic>(
                       future: apiResponse,
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return AllDataCard(data: snapshot.data, waiting: true,);
-                        } else if (snapshot.hasError) {
+                        // if (snapshot.connectionState == ConnectionState.waiting) {
+                        //   return AllDataCard(data: snapshot.data, waiting: true, onDataChanged: _fetchData,);
+                        if (snapshot.hasError) {
                           return Center(child: Text('Error: ${snapshot.error}'));
                         } else {
-                          return AllDataCard(data: snapshot.data);
+                          return AllDataCard(
+                            data: snapshot.data,
+                            onDataChanged: _fetchData,
+                          );
                         }
                       },
                     )

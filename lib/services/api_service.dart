@@ -13,6 +13,10 @@ class ApiService {
         response = await _get(endPoint, data);
       } else if (method == 'post') {
         response = await _post(endPoint, data);
+      } else if (method == 'put') {
+        response = await _put(endPoint, data);
+      } else if (method == 'delete') {
+        response = await _delete(endPoint, data);
       } else {
         print('[API] : unknown type : $method');
       }
@@ -50,6 +54,33 @@ class ApiService {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${config.USER_DATA.token}',
       },
+    );
+    return response;
+  }
+
+  Future<http.Response> _put(String endPoint, dynamic data) async {
+    print("PUT PUT PUT PUT $endPoint, $data");
+    dynamic response = await http.put(
+      Uri.parse('${config.BASE_URL}/$endPoint'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${config.USER_DATA.token}',
+      },
+      body: jsonEncode(data),
+    );
+    return response;
+  }
+
+  Future<http.Response> _delete(String endPoint, dynamic data) async {
+    dynamic response = await http.delete(
+      Uri.parse('${config.BASE_URL}/$endPoint'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${config.USER_DATA.token}',
+      },
+      body: jsonEncode(data),
     );
     return response;
   }

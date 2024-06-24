@@ -21,7 +21,7 @@ class Transaction {
       transactionsId: json['transactions_id'],
       amount: json['amount'],
       note: json['note'],
-      transactionDatetime: DateTime.parse(json['transaction_datetime']),
+      transactionDatetime: DateTime.parse(json['transaction_datetime']).add(const Duration(hours: 7)),
       categorieName: json['categorie_name'],
       categorieType: json['categorie_type'],
     );

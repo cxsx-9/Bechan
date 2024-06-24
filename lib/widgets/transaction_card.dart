@@ -25,10 +25,10 @@ class TransactionCard extends StatelessWidget {
       height: 60,
       child: Container(
         decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.onPrimary,
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(width: 0.5, color: Theme.of(context).colorScheme.secondary),
-          ),
+          color: Theme.of(context).colorScheme.onPrimary,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(width: 0.5, color: Theme.of(context).colorScheme.secondary),
+        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
@@ -41,7 +41,7 @@ class TransactionCard extends StatelessWidget {
                     width: 15,
                     height: 15,
                     decoration: BoxDecoration(
-                      color: type == 'none' ? Colors.grey.shade300 : type != 'income' ? Colors.pink.shade200 : Colors.green.shade200,
+                      color: type == 'none' ? Colors.grey.shade300 : type != 'income' ? Colors.pink.shade100 : Colors.green.shade200,
                       borderRadius: BorderRadius.circular(15)
                     ),
                   ),

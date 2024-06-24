@@ -20,7 +20,7 @@ class DateCard extends StatelessWidget {
       width: 175,
       height: 90,
       child: Container(
-        decoration: CardDecoration(context),
+        decoration: cardDecoration(context),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5),
           child: Row(

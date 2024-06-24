@@ -2,13 +2,13 @@ import 'package:bechan/widgets/card_decoration.dart';
 import 'package:bechan/widgets/list_transaction.dart';
 import 'package:bechan/widgets/tiny_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 class AllDataCard extends StatelessWidget {
   final dynamic data;
   final bool waiting;
-  const AllDataCard({super.key, required this.data, bool ? waiting}) : waiting = waiting ?? false;
+  final VoidCallback onDataChanged;
+  const AllDataCard({super.key, required this.data, bool ? waiting, required this.onDataChanged}) : waiting = waiting ?? false;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class AllDataCard extends StatelessWidget {
             const SizedBox(width: 10,),
             TinyCards(topic: 'Expense', data: formatter.format(expense)),
             const SizedBox(width: 10,),
-            TinyCards(topic: 'Balance', color: Colors.white,backgroundColor: Colors.blue , data: formatter.format(balance)),
+            TinyCards(topic: 'Balance', color: Colors.white, backgroundColor: Colors.blue, data: formatter.format(balance)),
           ],
         ),
         const SizedBox(height: 10,),
@@ -32,10 +32,10 @@ class AllDataCard extends StatelessWidget {
           width: 360,
           height: 415,
           child: Container(
-            decoration: CardDecoration(context),
+            decoration: cardDecoration(context),
             child: data == null ? 
              Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -68,8 +68,8 @@ class AllDataCard extends StatelessWidget {
             )
             : ( waiting == false ? 
             ListTransaction(
-              topic: 'Activity Feed',
-              data: data
+              data: data,
+              onDataChanged: onDataChanged,
             )
             : const Center(child: CircularProgressIndicator())
             ),

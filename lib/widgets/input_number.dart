@@ -1,20 +1,35 @@
 import 'package:flutter/material.dart';
 
-class InputNumber extends StatelessWidget{
+class InputNumber extends StatefulWidget{
   final dynamic controller;
   final String hintText;
   final String infoText;
+  final String initialValue;
 
-  const InputNumber({super.key, required this.controller, String ? hintText, String ? infoText}) 
-  : hintText = hintText ?? "", infoText = infoText ?? "";
+  const InputNumber({super.key, required this.controller, String ? hintText, String ? infoText, String ? initialValue}) 
+  : hintText = hintText ?? "", infoText = infoText ?? "", initialValue = initialValue ?? "";
 
   @override
+  State<InputNumber> createState() => _InputNumberState();
+}
+
+class _InputNumberState extends State<InputNumber> {
+  @override
+  void initState() {
+    if (widget.initialValue != '') {
+      widget.controller.text = widget.initialValue;
+    }
+    super.initState();
+  }
+  
+  @override
   Widget build(BuildContext context) {
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          infoText,
+          widget.infoText,
           style: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
@@ -29,7 +44,7 @@ class InputNumber extends StatelessWidget{
             textAlignVertical: TextAlignVertical.center,
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 30),
-            controller: controller,
+            controller: widget.controller,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
@@ -40,7 +55,7 @@ class InputNumber extends StatelessWidget{
                 borderRadius: const BorderRadius.all(Radius.circular(15)),
                 borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
               ),
-              hintText: hintText,
+              hintText: widget.hintText,
               hintStyle: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 30, fontWeight: FontWeight.w200),
             ),
           ),

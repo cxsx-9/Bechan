@@ -31,4 +31,26 @@ class TransactionService {
     print('[TSVC] : Add Data success!');
     return response;
   }
+
+  Future<dynamic> editData(Object data) async {
+    print('[TSVC] : transaction Edit Data');
+    dynamic response = await ApiService().callApi('put', 'edit-transaction', data);
+    if (response == null) {
+      return errorApiService();
+    }
+    Status res = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    print(res.message);
+    print('[TSVC] : Edit Data success!');
+    return response;
+  }
+
+  Future<dynamic> deleteData(Object data) async {
+    dynamic response = await ApiService().callApi('delete', 'delete-transaction', data);
+    if (response == null) {
+      return errorApiService();
+    }
+    // Status res = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    // print(res.message);
+    return response;
+  }
 }

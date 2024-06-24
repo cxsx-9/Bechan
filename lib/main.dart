@@ -1,5 +1,4 @@
 import 'package:bechan/models/secure_storage.dart';
-import 'package:bechan/pages/add_record.dart';
 import 'package:bechan/pages/main_page.dart';
 import 'package:bechan/pages/setting_page.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +48,6 @@ class MyApp extends StatelessWidget {
         '/homePage': (context) => const HomePage(),
         '/mainPage': (context) => const MainPage(),
         '/settingPage': (context) => const SettingPage(),
-        '/addRecord': (context) => const AddRecord(),
       },
     );
   }

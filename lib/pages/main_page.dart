@@ -31,6 +31,7 @@ class _MainPageState extends State<MainPage> {
   
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
+    print("Changing Page Index ! ! ! ");
     setState(() { _selectedIndex = index; });
   }
 
@@ -55,11 +56,12 @@ class _MainPageState extends State<MainPage> {
             isScrollControlled: true,
             context: context,
             builder: (BuildContext context) {
-              return const AddRecord();
+              return AddRecord(date : DateTime.now());
             }
           );
           if (isReload == true && _selectedIndex == 0) {
             _page[0] = const HomePage(isReload: true,);
+            setState(() {});
             _onItemTapped(0);
           }
         },

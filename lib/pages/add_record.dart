@@ -11,32 +11,54 @@ const List<Widget> transactionType = <Widget>[
 ];
 
 class AddRecord extends StatefulWidget {
-  const AddRecord({super.key});
+  final bool isEdit;
+  final int transactionsId;
+  final String amount;
+  final String note;
+  final String type;
+  final DateTime date;
 
+  const AddRecord({
+    super.key,
+    bool ? isEdit,
+    int ? transactionsId,
+    String ? amount,
+    String ? note,
+    String ? type,
+    required this.date,
+  }) : amount = amount ?? '',
+    isEdit = isEdit ?? false,
+    note = note ?? '',
+    type = type ?? 'expense',
+    transactionsId = transactionsId ?? 0
+  ;
   @override
   State<AddRecord> createState() => _AddRecordState();
 }
 
 class _AddRecordState extends State<AddRecord> {
-  final List<bool> _selectedType = <bool>[false, true];
-  final amountCtrl = TextEditingController();
-  final noteCtrl = TextEditingController();
+  List<bool> _selectedType = <bool>[false, true];
+  TextEditingController amountCtrl = TextEditingController();
+  TextEditingController noteCtrl = TextEditingController();
   bool isFeildFull = false;
   String _selectedDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
   String ? _sendDate;
+
   @override
   void initState() {
     super.initState();
     void setIsFull() {
-      setState(() { 
-        isFeildFull = amountCtrl.text.isNotEmpty && noteCtrl.text.isNotEmpty;
-      });
+      isFeildFull = amountCtrl.text.isNotEmpty && noteCtrl.text.isNotEmpty;
     }
-    _sendDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+    _sendDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(widget.date);
+    _selectedDate = DateFormat('dd MMMM yyyy').format(widget.date);
     amountCtrl.addListener(() { setIsFull();});
     noteCtrl.addListener(() { setIsFull();});
+    if (widget.type == 'income') {
+      _selectedType = [true, false];
+    }
   }
-  
+
   void showDatePicker(context) {
     showDialog(
       context: context,
@@ -51,7 +73,7 @@ class _AddRecordState extends State<AddRecord> {
             ),
           ),
           content: SizedBox(
-            height: 300, // Adjust as needed
+            height: 300,
             width: double.maxFinite,
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -141,9 +163,20 @@ class _AddRecordState extends State<AddRecord> {
                   ),
                 ),
                 const SizedBox(height: 30,),
-                InputTextFeild(controller: noteCtrl, infoText: "Name", hintText: "name", obscureText: false),
+                InputTextFeild(
+                  initialValue: widget.note,
+                  controller: noteCtrl,
+                  infoText: "Name",
+                  hintText: "name",
+                  obscureText: false
+                ),
                 const SizedBox(height: 30,),
-                InputNumber(controller: amountCtrl, hintText: '00.00', infoText: 'Amount',),
+                InputNumber(
+                  initialValue: widget.amount,
+                  controller: amountCtrl,
+                  hintText: '00.00',
+                  infoText: 'Amount',
+                ),
                 const SizedBox(height: 30,),
                 TextButton(
                   onPressed: () {showDatePicker(context);},
@@ -170,18 +203,32 @@ class _AddRecordState extends State<AddRecord> {
           backgroundColor: isFeildFull ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
           onPressed: isFeildFull ? () {
-            TransactionService().addData({
+            widget.isEdit
+            ? TransactionService().editData({
+              "transactions_id": widget.transactionsId,
               "categorie_id": _selectedType[0] ? 1 : 6,
               "amount": double.parse(amountCtrl.text),
               "note": noteCtrl.text,
               "transaction_datetime" : _sendDate,
-              "fav": 0
+              "fav": '0',
+              }
+            )
+            : TransactionService().addData({
+              "categorie_id": _selectedType[0] ? 1 : 6,
+              "amount": double.parse(amountCtrl.text),
+              "note": noteCtrl.text,
+              "transaction_datetime" : _sendDate,
+              "fav": 0,
               }
             );
             Navigator.pop(context, true);
           } : null,
           icon: const Icon(Icons.add),
-          label: const Text('Create'),
+          label: Text(
+            widget.isEdit
+            ? 'Edit'
+            : 'Create'
+          ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: const BottomAppBar(

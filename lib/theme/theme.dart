@@ -29,7 +29,7 @@ ThemeData lightMode = ThemeData(
     onSecondary: Colors.grey.shade200,
     surfaceBright: Colors.white,
     surface: const Color(0xFFF5F5F5),
-    shadow: Colors.black12,
+    shadow: const Color.fromARGB(12, 0, 0, 0),
   )
 );
 

@@ -20,7 +20,7 @@ class SmallCard extends StatelessWidget {
       width: 175,
       height: 90,
       child: Container(
-        decoration: CardDecoration(context),
+        decoration: cardDecoration(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

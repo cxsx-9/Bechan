@@ -31,15 +31,10 @@ class SmallProfileCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Row(
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/default_profile_image.png',
-                    height: 48,
-                    width: 48,
-                  ),
-                ],
+              Image.asset(
+                'assets/default_profile_image.png',
+                height: 48,
+                width: 48,
               ),
               const SizedBox(width: 5,),
               Expanded(
