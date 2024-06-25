@@ -188,6 +188,7 @@ class _HomePageState extends State<HomePage> {
                           } else {
                             return AllDataCard(
                               data: snapshot.data,
+                              start: _start ?? _now,
                               waiting: (snapshot.connectionState == ConnectionState.waiting) && _isLoading,
                               onDataChanged: _reload,
                             );
