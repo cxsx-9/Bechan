@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:bechan/models/user_model.dart';
 import 'package:bechan/widgets/all_data_card.dart';
@@ -32,6 +33,8 @@ class _HomePageState extends State<HomePage> {
   bool _isLoading = true;
   late Future<dynamic> _data = Future.value(TransactionService().fetchDate(_startDate, _endDate));
 
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
+
   @override
   void initState() {
     super.initState();
@@ -44,8 +47,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _reload() async {
+    print("-- ---  -----   -------    RELOAD");
     setState(() {_isLoading = false;});
     _data = await Future.value(TransactionService().fetchDate(_startDate, _endDate));
+    _refreshController.refreshCompleted();
     setState(() {});
   }
 
@@ -126,67 +131,74 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 25,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                // Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SmallProfileCard(firstname: _user.firstname, greeting: "Welcome back!"),
-                        const SizedBox(width: 10),
-                        DateCard(time: _now)
-                      ],
-                    ),
-                    const SizedBox(height: 10,),
-                    SizedBox(
-                      width: 360,
-                      height: 50,
-                      child: Container(
-                        decoration: cardDecoration(context),
-                        child: TextButton(
-                          onPressed: () {
-                            showDatePicker(context);
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.calendar_month_rounded),
-                              const SizedBox(width: 10,),
-                              Text(_range),
-                              const Icon(Icons.arrow_drop_down_rounded),
-                            ],
+        child: SmartRefresher(
+          controller: _refreshController,
+          onRefresh: _reload,
+          enablePullDown: true,
+          enablePullUp: false,
+          enableTwoLevel: false,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 25,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  // Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SmallProfileCard(firstname: _user.firstname, greeting: "Welcome back!"),
+                          const SizedBox(width: 10),
+                          DateCard(time: _now)
+                        ],
+                      ),
+                      const SizedBox(height: 10,),
+                      SizedBox(
+                        width: 360,
+                        height: 50,
+                        child: Container(
+                          decoration: cardDecoration(context),
+                          child: TextButton(
+                            onPressed: () {
+                              showDatePicker(context);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.calendar_month_rounded),
+                                const SizedBox(width: 10,),
+                                Text(_range),
+                                const Icon(Icons.arrow_drop_down_rounded),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 10,),
-                    FutureBuilder<dynamic>(
-                      future: _data,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return Center(child: Text('Error: ${snapshot.error}'));
-                        } else {
-                          return AllDataCard(
-                            data: snapshot.data,
-                            waiting: (snapshot.connectionState == ConnectionState.waiting) && _isLoading,
-                            onDataChanged: _reload,
-                          );
-                        }
-                      },
-                    )
-                  ],
+                      const SizedBox(height: 10,),
+                      FutureBuilder<dynamic>(
+                        future: _data,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Center(child: Text('Error: ${snapshot.error}'));
+                          } else {
+                            return AllDataCard(
+                              data: snapshot.data,
+                              waiting: (snapshot.connectionState == ConnectionState.waiting) && _isLoading,
+                              onDataChanged: _reload,
+                            );
+                          }
+                        },
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:bechan/pages/add_record.dart';
 import 'package:bechan/services/transaction_service.dart';
 import 'package:bechan/widgets/transaction_card.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:bechan/config.dart' as config;
@@ -18,9 +19,35 @@ class ListTransaction extends StatefulWidget {
 
 class _ListTransactionState extends State<ListTransaction> {
 
-  _delete(dynamic id) async {
-    await TransactionService().deleteData({'transactions_id': id});
-    widget.onDataChanged();
+  _delete(dynamic id, int index) async {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        content: const Text('Are you sure want to delete \nthis data?'),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: Colors.blue),
+            ),
+          ),
+          CupertinoDialogAction(
+            isDestructiveAction: true,
+            onPressed: () async {
+              Navigator.pop(context);
+              await TransactionService().deleteData({'transactions_id': id});
+              setState(() {widget.data!.transactions.removeAt(index);});
+              widget.onDataChanged();
+            },
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
+    );
   }
 
   _duplicate(transaction) async {
@@ -75,7 +102,7 @@ class _ListTransactionState extends State<ListTransaction> {
                       onPressed: (_) {
                         _duplicate(transaction);
                       },
-                      backgroundColor: Colors.lightGreen,
+                      backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,
                       icon: Icons.control_point_duplicate_rounded,
                     ),
@@ -85,10 +112,7 @@ class _ListTransactionState extends State<ListTransaction> {
                   motion: const ScrollMotion(),
                   dismissible: DismissiblePane(
                     onDismissed: () {
-                      setState(() {
-                        widget.data!.transactions.removeAt(index);
-                      });
-                      _delete(transaction.transactionsId);
+                      _delete(transaction.transactionsId, index);
                     },
                   ),
                   children: [
@@ -97,19 +121,16 @@ class _ListTransactionState extends State<ListTransaction> {
                       onPressed: (_) {
                         _edit(transaction);
                       },
-                      backgroundColor: Colors.blue,
+                      backgroundColor: Colors.black,
                       foregroundColor: Colors.white,
                       icon: Icons.edit,
                     ),
                     SlidableAction(
                       borderRadius: const BorderRadius.horizontal(right: Radius.circular(15)),
                       onPressed: (_) {
-                        setState(() {
-                          widget.data!.transactions.removeAt(index);
-                        });
-                        _delete(transaction.transactionsId);
+                        _delete(transaction.transactionsId, index);
                       },
-                      backgroundColor: Colors.black,
+                      backgroundColor: Colors.red,
                       foregroundColor: Colors.white,
                       icon: Icons.delete_forever_rounded,
                     ),

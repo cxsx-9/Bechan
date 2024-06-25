@@ -42,6 +42,7 @@ class _AddRecordState extends State<AddRecord> {
   TextEditingController amountCtrl = TextEditingController();
   TextEditingController noteCtrl = TextEditingController();
   bool isFeildFull = false;
+  bool isSending = false;
   String _selectedDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
   String ? _sendDate;
 
@@ -55,7 +56,7 @@ class _AddRecordState extends State<AddRecord> {
     _selectedDate = DateFormat('dd MMMM yyyy').format(widget.date);
     amountCtrl.addListener(() { setIsFull();});
     noteCtrl.addListener(() { setIsFull();});
-    if (widget.type == 'Income') {
+    if (widget.type == 'income') {
       _selectedType = [true, false];
     }
   }
@@ -96,7 +97,6 @@ class _AddRecordState extends State<AddRecord> {
                     showActionButtons: true,
                     onSubmit:(value) {
                       if (value != null) { _onSubmit(value); }
-                      Navigator.of(context).pop();
                     },
                     selectionMode: DateRangePickerSelectionMode.single,
                   ),
@@ -109,8 +109,9 @@ class _AddRecordState extends State<AddRecord> {
     );
   }
 
-  void _edit() {
-    TransactionService().editData({
+  Future<void> _edit() async {
+    setState(() {isSending = true;});
+    await TransactionService().editData({
       "transactions_id": widget.transactionsId,
       "categorie_id": _selectedType[0] ? 1 : 6,
       "amount": double.parse(amountCtrl.text),
@@ -119,10 +120,12 @@ class _AddRecordState extends State<AddRecord> {
       "fav": '0',
       }
     );
+    setState(() {isSending = false;});
   }
 
-  void _create() {
-    TransactionService().addData({
+  Future<void> _create() async {
+    setState(() {isSending = true;});
+    await TransactionService().addData({
       "categorie_id": _selectedType[0] ? 1 : 6,
       "amount": double.parse(amountCtrl.text),
       "note": noteCtrl.text,
@@ -130,6 +133,7 @@ class _AddRecordState extends State<AddRecord> {
       "fav": 0,
       }
     );
+    setState(() {isSending = false;});
   }
 
   void _onSubmit(Object value) {
@@ -139,6 +143,7 @@ class _AddRecordState extends State<AddRecord> {
           _sendDate = DateFormat("yyyy-MM-dd HH:mm:ss").format(value);
       });
     }
+    Navigator.of(context).pop();
   }
 
   @override
@@ -151,6 +156,7 @@ class _AddRecordState extends State<AddRecord> {
         }
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
           toolbarHeight: 150,
@@ -203,7 +209,7 @@ class _AddRecordState extends State<AddRecord> {
                             _selectedDate,
                             style: const TextStyle(
                               fontSize: 18,
-                              fontWeight: FontWeight.w300,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ],
@@ -232,9 +238,9 @@ class _AddRecordState extends State<AddRecord> {
                 btnText: widget.isEdit
                   ? 'Edit'
                   : 'Create',
-                type: isFeildFull ? 1 : 0,
-                onTap: isFeildFull ? () {
-                  widget.isEdit ? _edit() : _create();
+                type: isFeildFull && noteCtrl.text.length < 26 && !isSending ? 1 : 0,
+                onTap: isFeildFull && noteCtrl.text.length < 26 && !isSending ? () async {
+                  widget.isEdit ? await _edit() : await _create();
                   Navigator.pop(context, true);
                 } : null,
               ),

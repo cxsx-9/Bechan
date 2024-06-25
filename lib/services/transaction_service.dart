@@ -54,3 +54,7 @@ class TransactionService {
     return response;
   }
 }
+
+class TagsService {
+  
+}

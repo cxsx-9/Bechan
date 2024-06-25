@@ -16,8 +16,6 @@ class AllDataCard extends StatelessWidget {
     double expense = data != null ? data.summary.totalExpense : 0.00;
     double income = data != null ? data.summary.totalIncome : 0.00;
     double balance = income - expense;
-    // bool dataN = data != null;
-    // print("Data is Comming ->  Loding status $waiting  /  data $dataN");
     return Column(
       children: [
         Row(
