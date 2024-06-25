@@ -18,34 +18,38 @@ class ListTransaction extends StatefulWidget {
 }
 
 class _ListTransactionState extends State<ListTransaction> {
-
   _delete(dynamic id, int index) async {
-    showCupertinoModalPopup<void>(
+    showDialog<void>(
       context: context,
-      builder: (BuildContext context) => CupertinoAlertDialog(
-        content: const Text('Are you sure want to delete \nthis data?'),
-        actions: <CupertinoDialogAction>[
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: Colors.blue),
+      builder: (BuildContext context) => _SoftAppearDialog(
+        child: CupertinoAlertDialog(
+          content: const Text('Are you sure want to delete \nthis data?'),
+          actions: <CupertinoDialogAction>[
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.blue),
+              ),
             ),
-          ),
-          CupertinoDialogAction(
-            isDestructiveAction: true,
-            onPressed: () async {
-              Navigator.pop(context);
-              await TransactionService().deleteData({'transactions_id': id});
-              setState(() {widget.data!.transactions.removeAt(index);});
-              widget.onDataChanged();
-            },
-            child: const Text('Yes'),
-          ),
-        ],
+            CupertinoDialogAction(
+              isDestructiveAction: false,
+              onPressed: () async {
+                Navigator.pop(context);
+                await TransactionService().deleteData({'transactions_id': id});
+                setState(() {widget.data!.transactions.removeAt(index);});
+                widget.onDataChanged();
+              },
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -57,7 +61,7 @@ class _ListTransactionState extends State<ListTransaction> {
       "note": transaction.note,
       "transaction_datetime" : DateFormat('yyyy-MM-dd HH:mm:ss').format(transaction.transactionDatetime),
       "fav": 0,
-      });
+    });
     widget.onDataChanged();
   }
 
@@ -81,7 +85,6 @@ class _ListTransactionState extends State<ListTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    // print(widget.data!.transaction.amount.toString());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -90,7 +93,9 @@ class _ListTransactionState extends State<ListTransaction> {
         Expanded(
           child: ListView.builder(
             itemCount: widget.data!.transactions.length,
-            itemBuilder: (context, index) {
+            itemBuilder: (context, revIndex) {
+              int itemCount = widget.data!.transactions.length ?? 0;
+              int index = itemCount - 1 - revIndex;
               final transaction = widget.data!.transactions[index];
               return Slidable(
                 key: ValueKey(transaction.transactionsId),
@@ -110,11 +115,6 @@ class _ListTransactionState extends State<ListTransaction> {
                 ),
                 endActionPane: ActionPane(
                   motion: const ScrollMotion(),
-                  dismissible: DismissiblePane(
-                    onDismissed: () {
-                      _delete(transaction.transactionsId, index);
-                    },
-                  ),
                   children: [
                     SlidableAction(
                       borderRadius: const BorderRadius.horizontal(left: Radius.circular(15)),
@@ -143,7 +143,6 @@ class _ListTransactionState extends State<ListTransaction> {
                       amount: config.NUM_FORMAT.format(transaction.amount),
                       note: transaction.note,
                       type: transaction.categorieType,
-                      // date: DateFormat('yyyy-MM-dd HH:mm:ss').format(transaction.transactionDatetime!),
                       date: DateFormat('dd MMMM yyyy').format(transaction.transactionDatetime!),
                     ),
                   ),
@@ -153,6 +152,26 @@ class _ListTransactionState extends State<ListTransaction> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _SoftAppearDialog extends StatelessWidget {
+  final Widget child;
+
+  const _SoftAppearDialog({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      child: FadeTransition(
+        opacity: CurvedAnimation(
+          parent: ModalRoute.of(context)!.animation!,
+          curve: Curves.easeInOut,
+        ),
+        child: child,
+      ),
     );
   }
 }
