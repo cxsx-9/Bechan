@@ -1,8 +1,9 @@
 import 'package:bechan/widgets/card_decoration.dart';
 import 'package:bechan/widgets/list_transaction.dart';
+import 'package:bechan/widgets/no_transaction.dart';
 import 'package:bechan/widgets/tiny_card.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:bechan/config.dart' as config;
 
 class AllDataCard extends StatelessWidget {
   final dynamic data;
@@ -12,19 +13,20 @@ class AllDataCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int expense = data != null ? data.summary.totalExpense : 0;
-    int income = data != null ? data.summary.totalIncome : 0;
-    int balance = income - expense;
-    final formatter = NumberFormat('#,###');
+    double expense = data != null ? data.summary.totalExpense : 0.00;
+    double income = data != null ? data.summary.totalIncome : 0.00;
+    double balance = income - expense;
+    // bool dataN = data != null;
+    // print("Data is Comming ->  Loding status $waiting  /  data $dataN");
     return Column(
       children: [
         Row(
           children: [
-            TinyCards(topic: 'Income', data: formatter.format(income)),
+            TinyCards(topic: 'Income', data: config.NUM_FORMAT.format(income)),
             const SizedBox(width: 10,),
-            TinyCards(topic: 'Expense', data: formatter.format(expense)),
+            TinyCards(topic: 'Expense', data: config.NUM_FORMAT.format(expense)),
             const SizedBox(width: 10,),
-            TinyCards(topic: 'Balance', color: Colors.white, backgroundColor: Colors.blue, data: formatter.format(balance)),
+            TinyCards(topic: 'Balance', color: Colors.white, backgroundColor: Colors.blue, data: config.NUM_FORMAT.format(balance)),
           ],
         ),
         const SizedBox(height: 10,),
@@ -33,46 +35,11 @@ class AllDataCard extends StatelessWidget {
           height: 415,
           child: Container(
             decoration: cardDecoration(context),
-            child: data == null ? 
-             Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/dance.webp',
-                    height: 120,
-                  ),
-                  const Text(
-                    "No transactions today?",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 5,),
-                  const Text(
-                    style: TextStyle(
-                      fontWeight: FontWeight.w300,
-                      fontSize: 12,
-                      // color: Theme.of(context).colorScheme.secondary
-                    ),
-                    textAlign: TextAlign.center,
-                    "That's awesome!\nMaybe you're saving like a pro!",
-                  ),
-                  const SizedBox(height: 50),
-                ],
-              ),
-            )
-            : ( waiting == false ? 
-            ListTransaction(
-              data: data,
-              onDataChanged: onDataChanged,
-            )
-            : const Center(child: CircularProgressIndicator())
-            ),
+            child: waiting
+            ? const Center(child: CircularProgressIndicator())
+            : data != null
+            ? ListTransaction(data: data, onDataChanged: onDataChanged)
+            : const NoTransaction()
           ),
         ),
       ],

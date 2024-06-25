@@ -31,12 +31,11 @@ class _MainPageState extends State<MainPage> {
   
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
-    print("Changing Page Index ! ! ! ");
     setState(() { _selectedIndex = index; });
   }
 
   final List<Widget> _page = <Widget>[
-    const HomePage(),
+    HomePage(),
     const ChartPage(),
     const LoadingPage(),
     const SettingPage(),
@@ -60,7 +59,7 @@ class _MainPageState extends State<MainPage> {
             }
           );
           if (isReload == true && _selectedIndex == 0) {
-            _page[0] = const HomePage(isReload: true,);
+            _page[0] = HomePage(isReload: true,);
             setState(() {});
             _onItemTapped(0);
           }

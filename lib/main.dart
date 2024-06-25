@@ -35,7 +35,6 @@ class MyApp extends StatelessWidget {
         future: SecureStorage().isTokenValid(),
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data != null && snapshot.data == true) {
-            print("[[ MAIN ]]-> data : ${snapshot.data}");
             return const MainPage();
           }
           return const LoginPage();
@@ -45,7 +44,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/loginPage': (context) => const LoginPage(),
         '/registerPage': (context) => const RegisterPage(),
-        '/homePage': (context) => const HomePage(),
+        '/homePage': (context) => HomePage(),
         '/mainPage': (context) => const MainPage(),
         '/settingPage': (context) => const SettingPage(),
       },

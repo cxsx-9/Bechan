@@ -10,12 +10,12 @@ import 'package:bechan/config.dart' as config;
 import 'package:bechan/services/transaction_service.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({
+  HomePage({
     super.key,
     this.isReload = false
   });
 
-  final bool isReload;
+  bool isReload;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -23,25 +23,29 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final User _user = config.USER_DATA;
-  static late Future<dynamic> apiResponse;
-  final DateTime now = DateTime.now();
-  String date = DateFormat('MMMM-dd-yy').format(DateTime.now());
-
+  final DateTime _now = DateTime.now();
   String _range = DateFormat('dd MMMM yyyy').format(DateTime.now());
   String _startDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
   String _endDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
   DateTime? _start;
   DateTime? _end;
+  bool _isLoading = true;
+  late Future<dynamic> _data = Future.value(TransactionService().fetchDate(_startDate, _endDate));
 
   @override
   void initState() {
     super.initState();
-    _fetchData();
   }
 
-  void _fetchData() {
-    print("[HOME] : <Fetch> -------------------------------- Transaction");
-    apiResponse = TransactionService().fetchDate(_startDate, _endDate);
+  Future<void> _fetchData() async {
+    setState(() {_isLoading = true;});
+    _data = await Future.value(TransactionService().fetchDate(_startDate, _endDate));
+    setState(() {});
+  }
+
+  Future<void> _reload() async {
+    setState(() {_isLoading = false;});
+    _data = await Future.value(TransactionService().fetchDate(_startDate, _endDate));
     setState(() {});
   }
 
@@ -114,7 +118,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (widget.isReload) {
-      _fetchData();
+      setState(() {
+        _fetchData();
+        widget.isReload = false;
+      });
     }
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -136,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         SmallProfileCard(firstname: _user.firstname, greeting: "Welcome back!"),
                         const SizedBox(width: 10),
-                        DateCard(time: now)
+                        DateCard(time: _now)
                       ],
                     ),
                     const SizedBox(height: 10,),
@@ -152,6 +159,8 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              const Icon(Icons.calendar_month_rounded),
+                              const SizedBox(width: 10,),
                               Text(_range),
                               const Icon(Icons.arrow_drop_down_rounded),
                             ],
@@ -161,16 +170,15 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(height: 10,),
                     FutureBuilder<dynamic>(
-                      future: apiResponse,
+                      future: _data,
                       builder: (context, snapshot) {
-                        // if (snapshot.connectionState == ConnectionState.waiting) {
-                        //   return AllDataCard(data: snapshot.data, waiting: true, onDataChanged: _fetchData,);
                         if (snapshot.hasError) {
                           return Center(child: Text('Error: ${snapshot.error}'));
                         } else {
                           return AllDataCard(
                             data: snapshot.data,
-                            onDataChanged: _fetchData,
+                            waiting: (snapshot.connectionState == ConnectionState.waiting) && _isLoading,
+                            onDataChanged: _reload,
                           );
                         }
                       },

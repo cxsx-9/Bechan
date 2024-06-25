@@ -16,7 +16,7 @@ class TransactionService {
       return null;
     }
     // print(response.body);
-    print('[TSVC] : transaction ok!');
+    print('[TSVC] : transaction done');
     return TscnResponse.fromJson(jsonDecode(response.body));
   }
 

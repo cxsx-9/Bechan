@@ -1,7 +1,7 @@
 
 class Transaction {
   final int transactionsId;
-  final int amount;
+  final double amount;
   final String note;
   final DateTime transactionDatetime;
   final String categorieName;
@@ -19,9 +19,10 @@ class Transaction {
   factory Transaction.fromJson(Map<String, dynamic> json) {
     return Transaction(
       transactionsId: json['transactions_id'],
-      amount: json['amount'],
+      amount: double.parse(json['amount']),
       note: json['note'],
-      transactionDatetime: DateTime.parse(json['transaction_datetime']).add(const Duration(hours: 7)),
+      transactionDatetime: DateTime.parse(json['transaction_datetime']),
+      // transactionDatetime: DateTime.parse(json['transaction_datetime']).add(const Duration(hours: 7)),
       categorieName: json['categorie_name'],
       categorieType: json['categorie_type'],
     );
@@ -42,8 +43,8 @@ class Transaction {
 class Summary {
   final int userId;
   final String selectedDate;
-  final int totalIncome;
-  final int totalExpense;
+  final double totalIncome;
+  final double totalExpense;
 
   Summary({
     required this.userId,
@@ -56,8 +57,8 @@ class Summary {
     return Summary(
       userId: json['user_id'],
       selectedDate: json['selected_date'],
-      totalIncome: json['total_income'],
-      totalExpense: json['total_expense'],
+      totalIncome: double.parse(json['total_income']),
+      totalExpense: double.parse(json['total_expense']),
     );
   }
 

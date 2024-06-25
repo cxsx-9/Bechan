@@ -59,7 +59,6 @@ class ApiService {
   }
 
   Future<http.Response> _put(String endPoint, dynamic data) async {
-    print("PUT PUT PUT PUT $endPoint, $data");
     dynamic response = await http.put(
       Uri.parse('${config.BASE_URL}/$endPoint'),
       headers: <String, String>{

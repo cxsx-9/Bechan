@@ -109,9 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 100,
                 width: 100,
                 child:TextButton(
-                  onPressed: (){
-                      Navigator.pushNamed(context, '/addRecord');
-                  },
+                  onPressed: (){},
                   onLongPress: enableBtn ? () async {
                       emailCtrl.text = config.ADMIN_EMAIL;
                       passCtrl.text = config.ADMIN_PASSWD;

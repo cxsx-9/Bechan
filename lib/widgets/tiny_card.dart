@@ -50,7 +50,7 @@ class TinyCards extends StatelessWidget {
             Text(
               data,
               style: GoogleFonts.inter(
-                fontSize: 18,
+                fontSize: data.length < 10 ? 18 : 14,
                 color: color,
               ),
             )

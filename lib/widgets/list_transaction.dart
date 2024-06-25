@@ -3,6 +3,7 @@ import 'package:bechan/services/transaction_service.dart';
 import 'package:bechan/widgets/transaction_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:bechan/config.dart' as config;
 import 'package:intl/intl.dart';
 
 class ListTransaction extends StatefulWidget {
@@ -23,21 +24,14 @@ class _ListTransactionState extends State<ListTransaction> {
   }
 
   _duplicate(transaction) async {
-    await showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (BuildContext context) {
-        return AddRecord(
-          amount: transaction.amount.toString(),
-          note: transaction.note,
-          type: transaction.categorieType,
-          date: transaction.transactionDatetime,
-        );
-      }
-    );
-    setState(() {
-      widget.onDataChanged();
-    });
+    await TransactionService().addData({
+      "categorie_id": transaction.categorieType == 'income' ? 1 : 6,
+      "amount": transaction.amount,
+      "note": transaction.note,
+      "transaction_datetime" : DateFormat('yyyy-MM-dd HH:mm:ss').format(transaction.transactionDatetime),
+      "fav": 0,
+      });
+    widget.onDataChanged();
   }
 
   _edit(transaction) async {
@@ -55,14 +49,12 @@ class _ListTransactionState extends State<ListTransaction> {
         );
       }
     );
-    setState(() {
-      widget.onDataChanged();
-    });
+    widget.onDataChanged();
   }
 
   @override
   Widget build(BuildContext context) {
-    final formatter = NumberFormat('#,###');
+    // print(widget.data!.transaction.amount.toString());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -127,7 +119,7 @@ class _ListTransactionState extends State<ListTransaction> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: TransactionCard(
-                      amount: formatter.format(transaction.amount),
+                      amount: config.NUM_FORMAT.format(transaction.amount),
                       note: transaction.note,
                       type: transaction.categorieType,
                       // date: DateFormat('yyyy-MM-dd HH:mm:ss').format(transaction.transactionDatetime!),
