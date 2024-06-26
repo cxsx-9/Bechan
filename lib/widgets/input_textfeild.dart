@@ -11,6 +11,7 @@ class InputTextFeild extends StatefulWidget {
   final bool obscureText;
   bool obscure;
   String errorText;
+  double width;
 
   InputTextFeild(
       {super.key,
@@ -18,13 +19,15 @@ class InputTextFeild extends StatefulWidget {
       required this.infoText,
       required this.hintText,
       required this.obscureText,
-      bool? obscure,
-      String? errorText,
-      String ? initialValue
+      bool ? obscure,
+      String ? errorText,
+      String ? initialValue,
+      double ? width
       })
       : obscure = obscureText,
         initialValue = initialValue ?? "",
-        errorText = errorText ?? "";
+        errorText = errorText ?? "",
+        width = width ?? double.infinity;
 
   @override
   State<InputTextFeild> createState() => _InputTextFeildState();
@@ -46,17 +49,23 @@ class _InputTextFeildState extends State<InputTextFeild> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+        widget.infoText != ''
+        ? Column(
+          children: [
+            Text(
+              widget.infoText,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-            widget.infoText),
-        const SizedBox(
-          height: 2,
-        ),
+            const SizedBox( height: 2)
+          ],
+        )
+        : const SizedBox(width: 1),
         SizedBox(
           height: 50,
+          width: widget.width,
           child: TextFormField(
             onChanged: (value) => {
               if (widget.infoText == "Email" && widget.errorText.isNotEmpty) {

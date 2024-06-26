@@ -5,7 +5,7 @@ import 'package:bechan/services/api_service.dart';
 
 
 class TransactionService {
-  Future<dynamic> fetchDate(String startDate, String endDate) async {
+  Future<dynamic> fetchTransaction(String startDate, String endDate) async {
     print('[TSVC] : transaction calling');
     dynamic response = await ApiService().callApi('get', 'summaryday', '?selected_date_start=$startDate&selected_date_end=$endDate');
     final jsonResponse = json.decode(response.body);
@@ -17,10 +17,10 @@ class TransactionService {
     }
     // print(response.body);
     print('[TSVC] : transaction done');
-    return TscnResponse.fromJson(jsonDecode(response.body));
+    return TransactionResponse.fromJson(jsonDecode(response.body));
   }
 
-  Future<dynamic> addData(Object data) async {
+  Future<dynamic> addTransaction(Object data) async {
     print('[TSVC] : transaction Add Data');
     dynamic response = await ApiService().callApi('post', 'record', data);
     if (response == null) {
@@ -32,7 +32,7 @@ class TransactionService {
     return response;
   }
 
-  Future<dynamic> editData(Object data) async {
+  Future<dynamic> editTransaction(Object data) async {
     print('[TSVC] : transaction Edit Data');
     dynamic response = await ApiService().callApi('put', 'edit-transaction', data);
     if (response == null) {
@@ -44,7 +44,7 @@ class TransactionService {
     return response;
   }
 
-  Future<dynamic> deleteData(Object data) async {
+  Future<dynamic> deleteTransaction(Object data) async {
     dynamic response = await ApiService().callApi('delete', 'delete-transaction', data);
     if (response == null) {
       return errorApiService();

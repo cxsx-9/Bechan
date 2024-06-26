@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
   DateTime? _start;
   DateTime? _end;
   bool _isLoading = true;
-  late Future<dynamic> _data = Future.value(TransactionService().fetchDate(_startDate, _endDate));
+  late Future<dynamic> _data = Future.value(TransactionService().fetchTransaction(_startDate, _endDate));
 
   RefreshController _refreshController = RefreshController(initialRefresh: false);
 
@@ -42,14 +42,14 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _fetchData() async {
     setState(() {_isLoading = true;});
-    _data = await Future.value(TransactionService().fetchDate(_startDate, _endDate));
+    _data = await Future.value(TransactionService().fetchTransaction(_startDate, _endDate));
     setState(() {});
   }
 
   Future<void> _reload() async {
     print("-- ---  -----   -------    RELOAD");
     setState(() {_isLoading = false;});
-    _data = await Future.value(TransactionService().fetchDate(_startDate, _endDate));
+    _data = await Future.value(TransactionService().fetchTransaction(_startDate, _endDate));
     _refreshController.refreshCompleted();
     setState(() {});
   }

@@ -39,7 +39,7 @@ class _ListTransactionState extends State<ListTransaction> {
               isDestructiveAction: false,
               onPressed: () async {
                 Navigator.pop(context);
-                await TransactionService().deleteData({'transactions_id': id});
+                await TransactionService().deleteTransaction({'transactions_id': id});
                 setState(() {widget.data!.transactions.removeAt(index);});
                 widget.onDataChanged();
               },
@@ -55,7 +55,7 @@ class _ListTransactionState extends State<ListTransaction> {
   }
 
   _duplicate(transaction) async {
-    await TransactionService().addData({
+    await TransactionService().addTransaction({
       "categorie_id": transaction.categorieType == 'income' ? 1 : 6,
       "amount": transaction.amount,
       "note": transaction.note,
@@ -66,7 +66,7 @@ class _ListTransactionState extends State<ListTransaction> {
   }
 
   _edit(transaction) async {
-    await showModalBottomSheet(
+    dynamic res = await showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       builder: (BuildContext context) {
@@ -80,7 +80,9 @@ class _ListTransactionState extends State<ListTransaction> {
         );
       }
     );
-    widget.onDataChanged();
+    if (res == true) {
+      widget.onDataChanged();
+    }
   }
 
   @override

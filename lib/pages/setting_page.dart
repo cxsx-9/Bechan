@@ -24,7 +24,13 @@ class _SettingPageState extends State<SettingPage> {
       UserService().logout(context);
       return;
     }
-    setState(() { _user = response; });
+    try {
+      _user = response;
+    } catch (e) {
+      UserService().logout(context);
+      return;
+    }
+    setState(() {});
   }
 
   @override

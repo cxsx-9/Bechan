@@ -22,7 +22,6 @@ class Transaction {
       amount: double.parse(json['amount']),
       note: json['note'],
       transactionDatetime: DateTime.parse(json['transaction_datetime']),
-      // transactionDatetime: DateTime.parse(json['transaction_datetime']).add(const Duration(hours: 7)),
       categorieName: json['categorie_name'],
       categorieType: json['categorie_type'],
     );
@@ -72,22 +71,22 @@ class Summary {
   }
 }
 
-class TscnResponse {
+class TransactionResponse {
   final String status;
   final String message;
   final Summary? summary;
   final List<Transaction>? transactions;
 
-  TscnResponse({
+  TransactionResponse({
     required this.status,
     required this.message,
     this.summary,
     this.transactions,
   });
 
-  factory TscnResponse.fromJson(Map<String, dynamic> json) {
+  factory TransactionResponse.fromJson(Map<String, dynamic> json) {
     var data = json['data'];
-    return TscnResponse(
+    return TransactionResponse(
       status: json['status'],
       message: json['message'],
       summary: data != null && data['summary'] != null ? Summary.fromJson(data['summary']) : null,

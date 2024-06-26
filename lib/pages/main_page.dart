@@ -1,4 +1,5 @@
 import 'package:bechan/pages/add_record.dart';
+import 'package:bechan/pages/category_page.dart';
 import 'package:bechan/pages/chart_page.dart';
 import 'package:bechan/pages/home_page.dart';
 import 'package:bechan/pages/loading_page.dart';
@@ -37,7 +38,7 @@ class _MainPageState extends State<MainPage> {
   final List<Widget> _page = <Widget>[
     HomePage(),
     const ChartPage(),
-    const LoadingPage(),
+    const CategoryPage(),
     const SettingPage(),
   ];
 

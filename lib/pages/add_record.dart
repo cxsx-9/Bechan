@@ -111,7 +111,7 @@ class _AddRecordState extends State<AddRecord> {
 
   Future<void> _edit() async {
     setState(() {isSending = true;});
-    await TransactionService().editData({
+    await TransactionService().editTransaction({
       "transactions_id": widget.transactionsId,
       "categorie_id": _selectedType[0] ? 1 : 6,
       "amount": double.parse(amountCtrl.text),
@@ -125,7 +125,7 @@ class _AddRecordState extends State<AddRecord> {
 
   Future<void> _create() async {
     setState(() {isSending = true;});
-    await TransactionService().addData({
+    await TransactionService().addTransaction({
       "categorie_id": _selectedType[0] ? 1 : 6,
       "amount": double.parse(amountCtrl.text),
       "note": noteCtrl.text,

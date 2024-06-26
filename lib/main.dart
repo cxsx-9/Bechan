@@ -1,4 +1,5 @@
 import 'package:bechan/models/secure_storage.dart';
+import 'package:bechan/pages/category_page.dart';
 import 'package:bechan/pages/main_page.dart';
 import 'package:bechan/pages/setting_page.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/loginPage': (context) => const LoginPage(),
         '/registerPage': (context) => const RegisterPage(),
+        '/categoryPage': (context) => const CategoryPage(),
         '/homePage': (context) => HomePage(),
         '/mainPage': (context) => const MainPage(),
         '/settingPage': (context) => const SettingPage(),
