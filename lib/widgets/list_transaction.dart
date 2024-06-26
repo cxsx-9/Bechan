@@ -2,6 +2,7 @@ import 'package:bechan/pages/add_record.dart';
 import 'package:bechan/services/transaction_service.dart';
 import 'package:bechan/widgets/transaction_card.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:bechan/config.dart' as config;
@@ -77,6 +78,7 @@ class _ListTransactionState extends State<ListTransaction> {
           note: transaction.note,
           type: transaction.categorieType,
           date: transaction.transactionDatetime,
+          categorieName: transaction.categorieName,
         );
       }
     );
@@ -146,6 +148,7 @@ class _ListTransactionState extends State<ListTransaction> {
                       note: transaction.note,
                       type: transaction.categorieType,
                       date: DateFormat('dd MMMM yyyy').format(transaction.transactionDatetime!),
+                      category: transaction.categorieName,
                     ),
                   ),
                 ),

@@ -19,19 +19,25 @@ class Category {
 }
 
 class CategoriesResponse {
-  final String status;
-  final String message;
-  final List<Category> income;
-  final List<Category> expenses;
-  final List<Category> tag;
+  String status;
+  String message;
+  List<Category> income;
+  List<Category> expenses;
+  List<Category> tag;
 
   CategoriesResponse({
-    required this.status,
-    required this.message,
-    required this.income,
-    required this.expenses,
-    required this.tag,
-  });
+    String ? status,
+    String ? message,
+    List<Category> ? income,
+    List<Category> ? expenses,
+    List<Category> ? tag,
+  }) :
+    status = status ?? '',
+    message = message ?? '',
+    income = income ?? [],
+    expenses = expenses ?? [],
+    tag = tag ?? []
+  ;
 
   factory CategoriesResponse.fromJson(Map<String, dynamic> json) {
     var incomeList = json['data']['income'] as List;

@@ -33,6 +33,15 @@ class NoTransaction extends StatelessWidget{
             "That's awesome!\nMaybe you're saving like a pro!",
           ),
           const SizedBox(height: 50),
+          const Text(
+            "Double Tap! to start",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 12,
+            ),
+          ),
+          const SizedBox(height: 20),
         ],
       ),
     );

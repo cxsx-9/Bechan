@@ -34,7 +34,7 @@ class AllDataCard extends StatelessWidget {
           width: 360,
           height: 415,
           child: GestureDetector(
-            onTap: (){
+            onDoubleTap: (){
               if (!waiting && data == null) {
                 showModalBottomSheet(
                   isScrollControlled: true,

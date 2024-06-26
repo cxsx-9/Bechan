@@ -10,6 +10,7 @@ import 'package:bechan/widgets/small_profile_card.dart';
 import 'package:bechan/config.dart' as config;
 import 'package:bechan/services/transaction_service.dart';
 
+// ignore: must_be_immutable
 class HomePage extends StatefulWidget {
   HomePage({
     super.key,
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   bool _isLoading = true;
   late Future<dynamic> _data = Future.value(TransactionService().fetchTransaction(_startDate, _endDate));
 
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   @override
   void initState() {

@@ -2,9 +2,11 @@ import 'package:bechan/services/transaction_service.dart';
 import 'package:bechan/widgets/input_number.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/widgets/submit_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:bechan/config.dart' as config;
 
 const List<Widget> transactionType = <Widget>[
   Text('Income'),
@@ -14,6 +16,7 @@ const List<Widget> transactionType = <Widget>[
 class AddRecord extends StatefulWidget {
   final bool isEdit;
   final int transactionsId;
+  final String categorieName;
   final String amount;
   final String note;
   final String type;
@@ -23,6 +26,7 @@ class AddRecord extends StatefulWidget {
     super.key,
     bool ? isEdit,
     int ? transactionsId,
+    String ? categorieName,
     String ? amount,
     String ? note,
     String ? type,
@@ -31,7 +35,8 @@ class AddRecord extends StatefulWidget {
     isEdit = isEdit ?? false,
     note = note ?? '',
     type = type ?? 'expense',
-    transactionsId = transactionsId ?? 0
+    transactionsId = transactionsId ?? 0,
+    categorieName = categorieName ?? ''
   ;
   @override
   State<AddRecord> createState() => _AddRecordState();
@@ -45,6 +50,8 @@ class _AddRecordState extends State<AddRecord> {
   bool isSending = false;
   String _selectedDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
   String ? _sendDate;
+  late dynamic categoryData = _selectedType[0] ? config.CATEGORY.income : config.CATEGORY.expenses;
+  late int selectedCategory = widget.categorieName == '' ? 0 : categoryData.indexWhere((category) => category.name == widget.categorieName) ;
 
   @override
   void initState() {
@@ -109,11 +116,30 @@ class _AddRecordState extends State<AddRecord> {
     );
   }
 
+  void _showDialog(Widget child) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => Container(
+        height: 216,
+        padding: const EdgeInsets.only(top: 6.0),
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        child: SafeArea(
+          top: false,
+          child: child,
+        ),
+      ),
+    );
+  }
+
+
   Future<void> _edit() async {
     setState(() {isSending = true;});
     await TransactionService().editTransaction({
       "transactions_id": widget.transactionsId,
-      "categorie_id": _selectedType[0] ? 1 : 6,
+      "categorie_id": categoryData[selectedCategory].categorieId,
       "amount": double.parse(amountCtrl.text),
       "note": noteCtrl.text,
       "transaction_datetime" : _sendDate,
@@ -124,9 +150,11 @@ class _AddRecordState extends State<AddRecord> {
   }
 
   Future<void> _create() async {
+    print("CREATE with -> ");
+    print(categoryData[selectedCategory].categorieId,);
     setState(() {isSending = true;});
     await TransactionService().addTransaction({
-      "categorie_id": _selectedType[0] ? 1 : 6,
+      "categorie_id": categoryData[selectedCategory].categorieId,
       "amount": double.parse(amountCtrl.text),
       "note": noteCtrl.text,
       "transaction_datetime" : _sendDate,
@@ -172,7 +200,6 @@ class _AddRecordState extends State<AddRecord> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 10,),
                     Center(
                       child: ToggleButtons(
                         direction: Axis.horizontal,
@@ -181,6 +208,8 @@ class _AddRecordState extends State<AddRecord> {
                             for (int i = 0; i < _selectedType.length; i++) {
                               _selectedType[i] = i == index;
                             }
+                            categoryData = _selectedType[0] ? config.CATEGORY.income : config.CATEGORY.expenses;
+                            selectedCategory = 0;
                           });
                         },
                         borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -197,7 +226,52 @@ class _AddRecordState extends State<AddRecord> {
                         children: transactionType,
                       ),
                     ),
-                    const SizedBox(height: 30,),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          CupertinoButton(child: 
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                border: Border.all(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  width: 180,
+                                  height: 30,
+                                  child: Center(child: Text(categoryData[selectedCategory].name))
+                                ),
+                              )
+                            ),
+                            onPressed: () => _showDialog(
+                              CupertinoPicker(
+                                magnification: 1.22,
+                                squeeze: 1.2,
+                                useMagnifier: true,
+                                itemExtent: 32.0,
+                                scrollController: FixedExtentScrollController(
+                                  initialItem: selectedCategory,
+                                ),
+                                onSelectedItemChanged: (int selectedItem) {
+                                  setState(() {
+                                    selectedCategory = selectedItem;
+                                  });
+                                },
+                                children:
+                                  List<Widget>.generate(categoryData.length, (int index) {
+                                  return Center(child: Text(categoryData[index].name));
+                                }),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                     TextButton(
                       onPressed: () {showDatePicker(context);},
                       child: Row(
@@ -215,7 +289,7 @@ class _AddRecordState extends State<AddRecord> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 30,),
+                    const SizedBox(height: 10),
                     InputTextFeild(
                       initialValue: widget.note,
                       controller: noteCtrl,
@@ -223,7 +297,7 @@ class _AddRecordState extends State<AddRecord> {
                       hintText: "name",
                       obscureText: false
                     ),
-                    const SizedBox(height: 30,),
+                    const SizedBox(height: 10),
                     InputNumber(
                       initialValue: widget.amount,
                       controller: amountCtrl,
@@ -233,13 +307,13 @@ class _AddRecordState extends State<AddRecord> {
                   ],
                 ),
               ),
-              const SizedBox(height: 242,),
+              const SizedBox(height: 220,),
               SubmitButton(
                 btnText: widget.isEdit
                   ? 'Edit'
                   : 'Create',
-                type: isFeildFull && noteCtrl.text.length < 26 && !isSending ? 1 : 0,
-                onTap: isFeildFull && noteCtrl.text.length < 26 && !isSending ? () async {
+                type: isFeildFull && noteCtrl.text.length <= 18 && !isSending ? 1 : 0,
+                onTap: isFeildFull && noteCtrl.text.length <= 18 && !isSending ? () async {
                   widget.isEdit ? await _edit() : await _create();
                   Navigator.pop(context, true);
                 } : null,

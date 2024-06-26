@@ -6,16 +6,19 @@ class TransactionCard extends StatelessWidget {
   final String note;
   final String date;
   final String type;
+  final String category;
   const TransactionCard({
     super.key,
     String ? amount,
     String ? note,
     String ? date,
     String ? type,
+    String ? category,
   }) : amount = amount ?? '00.00',
     note = note ?? 'nothing',
     date = date ?? '',
-    type = type ?? 'none'
+    type = type ?? 'none',
+    category = category ?? ''
   ;
 
   @override
@@ -40,49 +43,63 @@ class TransactionCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
-                children: [
-                  Container(
-                    width: 15,
-                    height: 15,
-                    decoration: BoxDecoration(
-                      color: type == 'none' ? Colors.grey.shade300 : type != 'income' ? Colors.red.shade100 : Colors.green.shade200,
-                      borderRadius: BorderRadius.circular(15)
-                    ),
-                  ),
-                  const SizedBox(width: 20,),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        note,
-                        style: GoogleFonts.inter(
-                          fontSize: 16,
-                          color: Theme.of(context).colorScheme.primary,
-                        )
-                      ),
-                      Text(
-                        date,
-                        style: GoogleFonts.inter(
-                          fontSize: 12,
-                          color: Theme.of(context).colorScheme.secondary,
-                        )
-                      ),
-                    ],
-                  ),
-                ],
+              Container(
+                width: 15,
+                height: 15,
+                decoration: BoxDecoration(
+                  color: type == 'none' ? Colors.grey.shade300 : type != 'income' ? Colors.red.shade100 : Colors.green.shade200,
+                  borderRadius: BorderRadius.circular(15)
+                ),
               ),
-              Text(
-                (type == 'none' ? '?' : type == 'income' ? '+' : '-') + amount,
-                style: GoogleFonts.inter(
-                  fontSize: 16,
-                  color: Theme.of(context).colorScheme.primary,
-                )
-              )
+              const SizedBox(width: 20,),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          note,
+                          style: GoogleFonts.inter(
+                            fontSize: 16,
+                            color: Theme.of(context).colorScheme.primary,
+                          )
+                        ),
+                        Text(
+                          (type == 'none' ? '?' : type == 'income' ? '+' : '-') + amount,
+                          style: GoogleFonts.inter(
+                            fontSize: 16,
+                            color: Theme.of(context).colorScheme.primary,
+                          )
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          date,
+                          style: GoogleFonts.inter(
+                            fontSize: 12,
+                            color: Theme.of(context).colorScheme.secondary,
+                          )
+                        ),
+                        SizedBox(width: 10,),
+                        Text(
+                          category, 
+                          style: GoogleFonts.inter(
+                            fontSize: 12,
+                            color: Theme.of(context).colorScheme.secondary,
+                          )
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

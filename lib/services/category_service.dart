@@ -1,8 +1,8 @@
 import 'dart:convert';
-
 import 'package:bechan/models/category_model.dart';
 import 'package:bechan/models/user_model.dart';
 import 'package:bechan/services/api_service.dart';
+import 'package:bechan/config.dart' as config;
 
 class CategoryService {
   Future<dynamic> fetchCategory() async {
@@ -13,7 +13,8 @@ class CategoryService {
       print(res.message);
       return null;
     }
-    print(response.body);
-    return CategoriesResponse.fromJson(jsonDecode(response.body));
+    // print(response.body);
+    config.CATEGORY = CategoriesResponse.fromJson(jsonDecode(response.body));
+    return config.CATEGORY;
   }
 }

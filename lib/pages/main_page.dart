@@ -4,6 +4,7 @@ import 'package:bechan/pages/chart_page.dart';
 import 'package:bechan/pages/home_page.dart';
 import 'package:bechan/pages/loading_page.dart';
 import 'package:bechan/pages/setting_page.dart';
+import 'package:bechan/services/category_service.dart';
 import 'package:bechan/services/user_service.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +22,7 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     _fetchUserData();
+    CategoryService().fetchCategory();
   }
 
   Future<void> _fetchUserData() async {

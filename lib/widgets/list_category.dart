@@ -6,6 +6,7 @@ class ListCategory extends StatelessWidget {
 
 
   const ListCategory({
+    super.key,
     required this.name,
     required this.type,
   });
