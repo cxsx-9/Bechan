@@ -29,7 +29,12 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]); // Preferred Portrait
-
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   const SystemUiOverlayStyle(
+    //     statusBarColor: Colors.black, // Transparent status bar
+    //     statusBarBrightness: Brightness.dark, // Dark text for status bar// Status bar color
+    //   )
+    // );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: FutureBuilder<bool?>(

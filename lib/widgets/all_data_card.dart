@@ -1,4 +1,3 @@
-import 'package:bechan/pages/add_record.dart';
 import 'package:bechan/widgets/card_decoration.dart';
 import 'package:bechan/widgets/list_transaction.dart';
 import 'package:bechan/widgets/no_transaction.dart';
@@ -33,26 +32,13 @@ class AllDataCard extends StatelessWidget {
         SizedBox(
           width: 360,
           height: 415,
-          child: GestureDetector(
-            onDoubleTap: (){
-              if (!waiting && data == null) {
-                showModalBottomSheet(
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AddRecord(date: start,);
-                  }
-                );
-              }
-            },
-            child: Container(
-              decoration: cardDecoration(context),
-              child: waiting
-              ? const Center(child: CircularProgressIndicator())
-              : data != null
-              ? ListTransaction(data: data, onDataChanged: onDataChanged)
-              : const NoTransaction()
-            ),
+          child: Container(
+            decoration: cardDecoration(context),
+            child: waiting
+            ? const Center(child: CircularProgressIndicator())
+            : data != null
+            ? ListTransaction(data: data, onDataChanged: onDataChanged)
+            : const NoTransaction()
           ),
         ),
       ],

@@ -18,6 +18,24 @@ class _CategoryPageState extends State<CategoryPage> {
   String? _type = 'income';
   dynamic textCtrl = TextEditingController();
 
+  Future<void> _fetchData() async {
+    await CategoryService().fetchCategory();
+    setState(() {});
+  }
+
+  Future<void> createCategory() async {
+    await CategoryService().addCategory(
+      {
+        "name": textCtrl.text,
+        "type": _type
+      }
+    );
+    _fetchData();
+    setState(() {
+      textCtrl.text = '';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
   int count = _type == 'income' ? config.CATEGORY.income.length : _type == 'expense' ? config.CATEGORY.expenses.length : config.CATEGORY.tag.length;
@@ -38,27 +56,39 @@ class _CategoryPageState extends State<CategoryPage> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 25,),
+                  SizedBox(
+                    height: 44,
+                    child:
+                      Text(
+                        'Category',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).colorScheme.secondary,
+                        )
+                      ),
+                  ),
                   Center(
                     child : CupertinoSlidingSegmentedControl(
                       groupValue: _type,
                       children: const {
                         'income' : SizedBox(width: 80, child: Center(child: Text('Income'))),
                         'expense' : SizedBox(width: 80, child: Center(child: Text('Expense'))),
-                        'tags' : SizedBox(width: 80, child: Center(child: Text('Tags'))),
+                        'tag' : SizedBox(width: 80, child: Center(child: Text('Tags'))),
                       },
-                      onValueChanged: (index) {
+                      onValueChanged: (name) {
                         setState(() {
-                          _type = index;
+                          _type = name;
                         });
                       },
                     )
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(height: 15,),
                   SizedBox(
-                    width: 360,
-                    height: 622,
+                    width: double.infinity,
+                    height: 584,
                     child: Container(
                       decoration: cardDecoration(context),
                       child: Column(
@@ -72,7 +102,9 @@ class _CategoryPageState extends State<CategoryPage> {
                               children: [
                                 InputTextFeild(controller: textCtrl, infoText: '', hintText: 'New Category', obscureText: false, width: 250,),
                                 IconButton(
-                                  onPressed: (){},
+                                  onPressed: textCtrl.text == '' ? null : () async {
+                                    await createCategory();
+                                  },
                                   icon: const Icon(Icons.add),
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
@@ -80,36 +112,19 @@ class _CategoryPageState extends State<CategoryPage> {
                             ),
                           ),
                           Expanded(
-                            child: ListView.builder(
-                              itemCount: count,
-                              itemBuilder: (context, index) {
-                                final item = data[index];
-                                return ListCategory(name: item.name, type: 'income');
-                              },
+                              child: ListView.separated(
+                                itemCount: count,
+                                itemBuilder: (context, index) {
+                                  final item = data[index];
+                                  return ListCategory(item: item, type : _type!, onDataChanged: _fetchData);
+                                },
+                                separatorBuilder: (context, index) {
+                                  return Divider(
+                                    color: Theme.of(context).colorScheme.shadow,
+                                    height: 0,
+                                  );
+                                },
                             ),
-                          // FutureBuilder<dynamic>(
-                          //   future: _categoryRes,
-                          //   builder: (context, snapshot) {
-                          //     if (snapshot.hasError) {
-                          //       return Center(child: Text('Error: ${snapshot.error}'));
-                          //     } else if (snapshot.connectionState == ConnectionState.waiting) {
-                          //       return const CircularProgressIndicator();
-                          //     } else if (snapshot.hasData) {
-                          //       int count = _type == 'income' ? snapshot.data!.income.length : _type == 'expense' ? snapshot.data!.expenses.length : snapshot.data!.tag.length;
-                          //       final data = _type == 'income' ? snapshot.data!.income : _type == 'expense' ? snapshot.data!.expenses : snapshot.data!.tag;
-                          //       return Expanded(
-                          //         child: ListView.builder(
-                          //           itemCount: count,
-                          //           itemBuilder: (context, index) {
-                          //             final item = data[index];
-                          //             return ListCategory(name: item.name, type: 'income');
-                          //           },
-                          //         ),
-                          //       );
-                          //     } else {
-                          //       return const Text('-');
-                          //     }
-                          //   },
                           ),
                         ],
                       ),

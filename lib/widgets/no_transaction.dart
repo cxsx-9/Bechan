@@ -10,6 +10,7 @@ class NoTransaction extends StatelessWidget{
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          const SizedBox(height: 60),
           Image.asset(
             'assets/dance.webp',
             height: 120,
@@ -22,7 +23,7 @@ class NoTransaction extends StatelessWidget{
               fontSize: 16,
             ),
           ),
-          const SizedBox(height: 5,),
+          const SizedBox(height: 5),
           const Text(
             style: TextStyle(
               fontWeight: FontWeight.w300,
@@ -32,16 +33,22 @@ class NoTransaction extends StatelessWidget{
             textAlign: TextAlign.center,
             "That's awesome!\nMaybe you're saving like a pro!",
           ),
-          const SizedBox(height: 50),
-          const Text(
-            "Double Tap! to start",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 12,
+          const Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const Text(
+                  "Tap to start :)",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 5),
         ],
       ),
     );

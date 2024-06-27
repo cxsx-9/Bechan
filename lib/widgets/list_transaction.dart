@@ -2,7 +2,6 @@ import 'package:bechan/pages/add_record.dart';
 import 'package:bechan/services/transaction_service.dart';
 import 'package:bechan/widgets/transaction_card.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:bechan/config.dart' as config;
@@ -56,8 +55,9 @@ class _ListTransactionState extends State<ListTransaction> {
   }
 
   _duplicate(transaction) async {
+    dynamic categoryData = transaction.categorieName == 'income' ? config.CATEGORY.income : config.CATEGORY.expenses;
     await TransactionService().addTransaction({
-      "categorie_id": transaction.categorieType == 'income' ? 1 : 6,
+      "categorie_id": categoryData[categoryData.indexWhere((category) => category.name == transaction.categorieName)].categorieId,
       "amount": transaction.amount,
       "note": transaction.note,
       "transaction_datetime" : DateFormat('yyyy-MM-dd HH:mm:ss').format(transaction.transactionDatetime),
@@ -104,6 +104,7 @@ class _ListTransactionState extends State<ListTransaction> {
               return Slidable(
                 key: ValueKey(transaction.transactionsId),
                 startActionPane: ActionPane(
+                  extentRatio: 0.3,
                   motion: const ScrollMotion(),
                   children: [
                     SlidableAction(

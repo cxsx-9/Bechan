@@ -4,6 +4,7 @@ import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/widgets/submit_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:bechan/config.dart' as config;
@@ -187,10 +188,11 @@ class _AddRecordState extends State<AddRecord> {
         resizeToAvoidBottomInset: false,
         backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
-          toolbarHeight: 150,
-          elevation: 0,
-          // backgroundColor: Theme.of(context).colorScheme.primary,
-          backgroundColor: Colors.transparent,
+          toolbarHeight: 100,
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+            statusBarBrightness: Brightness.light, // For iOS (dark icons)
+          ),
         ),
         body: SafeArea(
           child: Column(
@@ -307,16 +309,23 @@ class _AddRecordState extends State<AddRecord> {
                   ],
                 ),
               ),
-              const SizedBox(height: 220,),
-              SubmitButton(
-                btnText: widget.isEdit
-                  ? 'Edit'
-                  : 'Create',
-                type: isFeildFull && noteCtrl.text.length <= 18 && !isSending ? 1 : 0,
-                onTap: isFeildFull && noteCtrl.text.length <= 18 && !isSending ? () async {
-                  widget.isEdit ? await _edit() : await _create();
-                  Navigator.pop(context, true);
-                } : null,
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SubmitButton(
+                      btnText: widget.isEdit
+                        ? 'Edit'
+                        : 'Create',
+                      type: isFeildFull && noteCtrl.text.length <= 18 && !isSending ? 1 : 0,
+                      onTap: isFeildFull && noteCtrl.text.length <= 18 && !isSending ? () async {
+                        widget.isEdit ? await _edit() : await _create();
+                        Navigator.pop(context, true);
+                      } : null,
+                    ),
+                    const SizedBox(height: 40,),
+                  ],
+                ),
               ),
             ],
           ),

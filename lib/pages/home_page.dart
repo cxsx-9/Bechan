@@ -141,9 +141,6 @@ class _HomePageState extends State<HomePage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(
-                  height: 25,
-                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   // Container(

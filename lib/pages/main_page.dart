@@ -7,6 +7,7 @@ import 'package:bechan/pages/setting_page.dart';
 import 'package:bechan/services/category_service.dart';
 import 'package:bechan/services/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -70,6 +71,13 @@ class _MainPageState extends State<MainPage> {
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      appBar: AppBar(
+        toolbarHeight: 25,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+          statusBarBrightness: Brightness.light, // For iOS (dark icons)
+        ),
+      ),
       body: _page.elementAt(_selectedIndex),
       bottomNavigationBar: BottomAppBar(
         padding: const EdgeInsets.all(0),
