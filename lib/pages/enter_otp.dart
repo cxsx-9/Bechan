@@ -1,8 +1,11 @@
+import 'package:bechan/services/user_service.dart';
+import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/widgets/submit_button.dart';
 import 'package:bechan/widgets/text_and_highlight.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:bechan/config.dart' as config;
 
 class EnterOtp extends StatefulWidget {
   const EnterOtp({super.key});
@@ -82,8 +85,17 @@ class _EnterOtpState extends State<EnterOtp> {
               ),
               const SizedBox(height: 20,),
               SubmitButton(
-                onTap: () {
-                  Navigator.pushReplacementNamed(context, '/setPasswordPage');
+                onTap: () async {
+                  setState(() {enableBtn = false;});
+                  dynamic res = await UserService().verifyTokenPassword({'email' : config.USER_DATA.email, 'token' : otpCtrl.text});
+                  setState(() {enableBtn = true;});
+                  // if (res.status == 'error') {
+                  if (res.status == 'error' || res.status == 'ERR_CONNECTION') {
+                    ScaffoldMessenger.of(context).showSnackBar(getSnackBar(res.message,55,70,false));
+                  } else {
+                    config.STATUS.token = otpCtrl.text;
+                    Navigator.pushReplacementNamed(context, '/setPasswordPage');
+                  }
                 },
                 btnText: 'Continue',
                 type: isFeildFull && enableBtn ? 1 : 0,

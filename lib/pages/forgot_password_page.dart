@@ -1,8 +1,11 @@
+import 'package:bechan/services/user_service.dart';
+import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/widgets/submit_button.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:bechan/config.dart' as config;
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -85,12 +88,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               ),
               const SizedBox(height: 20,),
               SubmitButton(
-                onTap: () {
-                  // setState(() {enableBtn = false;});
-                  //pass
-                  // setState(() {enableBtn = true;});
-                  Navigator.pushReplacementNamed(context, '/enterOtp');
-                },
+                onTap: isFeildFull && enableBtn && validEmail ? () async {
+                  setState(() {enableBtn = false;});
+                  dynamic res = await UserService().forgotPassword({'email' : emailCtrl.text});
+                  if (res.status == 'error' || res.status == 'ERR_CONNECTION') {
+                    ScaffoldMessenger.of(context).showSnackBar(getSnackBar(res.message,55,70,false));
+                  } else {
+                    config.USER_DATA.email = emailCtrl.text;
+                    Navigator.pushReplacementNamed(context, '/enterOtp');
+                  }
+                  setState(() {enableBtn = true;});
+                } : null,
                 btnText: 'Reset Password',
                 type: isFeildFull && enableBtn && validEmail ? 1 : 0,
               ),

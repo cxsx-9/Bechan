@@ -1,7 +1,10 @@
+import 'package:bechan/services/user_service.dart';
+import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/widgets/submit_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:bechan/config.dart' as config;
 
 class SetPasswordPage extends StatefulWidget {
   const SetPasswordPage({super.key});
@@ -94,7 +97,24 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
               ),
               const SizedBox(height: 20,),
               SubmitButton(
-                onTap: () {},
+                onTap: isFeildFull && enableBtn && (cpassCtrl.text == passCtrl.text)? () async {
+                  if (cpassCtrl.text == passCtrl.text) {
+                    setState(() {enableBtn = false;});
+                    dynamic res = await UserService().setNewPassword({
+                      "email": config.USER_DATA.email,
+                      "token": config.STATUS.token,
+                      "new_password": passCtrl.text
+                    });
+                    setState(() {enableBtn = true;});
+                    if (res.status != 'ERR_CONNECTION' && res.status != 'error') {
+                      ScaffoldMessenger.of(context).showSnackBar(getSnackBar('Changing password success!', 55, 70, true));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(getSnackBar(res.message, 55, 70, false));
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(getSnackBar('Corfirm password does not match.', 55, 70, false));
+                  }
+                } : null,
                 btnText: 'Continue',
                 type: isFeildFull && enableBtn ? 1 : 0,
               ),

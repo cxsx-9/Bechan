@@ -46,4 +46,34 @@ class UserService {
     SecureStorage().deleteToken();
     Navigator.pushReplacementNamed(context, '/loginPage');
   }
+
+  Future<dynamic> forgotPassword(dynamic data) async {
+    print('[USVC] : forgotPassword');
+    dynamic response = await ApiService().callApi('post', 'req-password-reset', data);
+    if (response == null) {
+      return errorApiService();
+    }
+    config.STATUS = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    return config.STATUS;
+  }
+
+  Future<dynamic> verifyTokenPassword(dynamic data) async {
+    print('[USVC] : forgotPassword');
+    dynamic response = await ApiService().callApi('post', 'verify-token-password', data);
+    if (response == null) {
+      return errorApiService();
+    }
+    config.STATUS = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    return config.STATUS;
+  }
+
+  Future<dynamic> setNewPassword(dynamic data) async {
+    print('[USVC] : forgotPassword');
+    dynamic response = await ApiService().callApi('post', 'setnewpassword', data);
+    if (response == null) {
+      return errorApiService();
+    }
+    config.STATUS = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    return config.STATUS;
+  }
 }
