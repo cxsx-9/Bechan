@@ -186,7 +186,8 @@ class _AddRecordState extends State<AddRecord> {
         resizeToAvoidBottomInset: false,
         backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
-          toolbarHeight: 100,
+          automaticallyImplyLeading: false,
+          // toolbarHeight: 100,
           systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
             statusBarBrightness: Brightness.light, // For iOS (dark icons)
@@ -195,6 +196,15 @@ class _AddRecordState extends State<AddRecord> {
         body: SafeArea(
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    IconButton(onPressed: () =>  {Navigator.pop(context, false)}, icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+                  ],
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 50),
                 child: Column(
@@ -226,7 +236,7 @@ class _AddRecordState extends State<AddRecord> {
                         children: transactionType,
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20),
                     SizedBox(
                       height: 50,
                       child: TextButton(
@@ -247,7 +257,7 @@ class _AddRecordState extends State<AddRecord> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20),
                     InputTextFeild(
                       initialValue: widget.note,
                       controller: noteCtrl,

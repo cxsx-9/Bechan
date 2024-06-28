@@ -89,7 +89,6 @@ class _EnterOtpState extends State<EnterOtp> {
                   setState(() {enableBtn = false;});
                   dynamic res = await UserService().verifyTokenPassword({'email' : config.USER_DATA.email, 'token' : otpCtrl.text});
                   setState(() {enableBtn = true;});
-                  // if (res.status == 'error') {
                   if (res.status == 'error' || res.status == 'ERR_CONNECTION') {
                     ScaffoldMessenger.of(context).showSnackBar(getSnackBar(res.message,55,70,false));
                   } else {

@@ -76,4 +76,14 @@ class UserService {
     config.STATUS = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
     return config.STATUS;
   }
+
+  Future<dynamic> changePassword(dynamic data) async {
+    print('[USVC] : forgotPassword');
+    dynamic response = await ApiService().callApi('post', 'changepassword', data);
+    if (response == null) {
+      return errorApiService();
+    }
+    config.STATUS = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    return config.STATUS;
+  }
 }

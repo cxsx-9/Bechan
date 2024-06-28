@@ -1,11 +1,9 @@
 import 'package:bechan/models/user_model.dart';
 import 'package:bechan/services/user_service.dart';
-// import 'package:bechan/theme/theme.dart';
 import 'package:bechan/widgets/card_decoration.dart';
-// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
 import 'package:bechan/config.dart' as config;
+import 'package:flutter_gravatar/flutter_gravatar.dart';
 
 
 class SettingPage extends StatefulWidget {
@@ -49,10 +47,20 @@ class _SettingPageState extends State<SettingPage> {
                     width: double.infinity,
                     decoration: cardDecoration(context),
                     child: Padding(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(30.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          SizedBox(
+                            width: 80,
+                            height: 80,
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  Gravatar(_user.email).imageUrl(),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20,),
                           Text(
                             "${_user.firstname} ${_user.lastname}",
                             style: const TextStyle(
@@ -66,21 +74,30 @@ class _SettingPageState extends State<SettingPage> {
                               fontSize: 16,
                               fontWeight: FontWeight.w400
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  // IconButton(onPressed:() => _reload(), icon: const Icon(Icons.refresh_rounded)),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     const Text("Theme"),
-                  //     CupertinoSwitch(value: Provider.of<ThemeProvider>(context, listen: false).isDarkMode,onChanged: (value) {Provider.of<ThemeProvider>(context, listen: false).toggleTheme();},
-                  //     ),
-                  //   ],
-                  // ),
                   const SizedBox(height: 20),
+                  Container(
+                    width: double.infinity,
+                    decoration: cardDecoration(context),
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/changePasswordPage');
+                        // UserService().logout(context);
+                      },
+                      child: Text(
+                        'Change password',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 14
+                        ),
+                      )
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   Container(
                     width: double.infinity,
                     decoration: cardDecoration(context),
