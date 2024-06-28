@@ -1,5 +1,6 @@
 import 'package:bechan/models/tag_model.dart';
 import 'package:bechan/services/transaction_service.dart';
+import 'package:bechan/widgets/custom_chip.dart';
 import 'package:bechan/widgets/input_number.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/widgets/submit_button.dart';
@@ -75,7 +76,9 @@ class _AddRecordState extends State<AddRecord> {
       _selectedType = [true, false];
     }
     if (widget.tags != []) {
-      widget.tags.forEach((tag) => selectedTags.add(tag.tagId));
+      for (var tag in widget.tags) {
+        selectedTags.add(tag.tagId);
+      }
     }
   }
 
@@ -338,33 +341,22 @@ class _AddRecordState extends State<AddRecord> {
                   spacing: 5.0,
                   runSpacing: 5.0,
                   children: config.TAG.tags.map((Tag tag) {
-                    return ChoiceChip(
-                      visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        side: BorderSide(color: Colors.transparent),
-                      ),
-                      backgroundColor: const Color.fromARGB(255, 215, 215, 215),
-                      selectedColor: Colors.blue.shade300,
-                      labelPadding: const EdgeInsets.all(1),
-                      label: Text(
-                        tag.name,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white
-                        ),
-                      ),
-                      selected: selectedTags.contains(tag.tagId),
-                      onSelected: (bool selected) {
+                    return GestureDetector(
+                      onTap: () {
                         setState(() {
-                          if (selected) {
-                            selectedTags.add(tag.tagId);
-                          } else {
+                          if (selectedTags.contains(tag.tagId)) {
                             selectedTags.remove(tag.tagId);
+                          } else {
+                            selectedTags.add(tag.tagId);
                           }
                         });
                       },
+                      child: CustomChip(
+                        text: tag.name,
+                        selected: selectedTags.contains(tag.tagId),
+                        backgroundColor: Color.fromARGB(255, 227, 227, 227),
+                        selectedColor: Colors.grey.shade600,
+                      ),
                     );
                   }).toList(),
                 ),

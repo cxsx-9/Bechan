@@ -46,92 +46,95 @@ class _EnterOtpState extends State<EnterOtp> {
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 120),
-              SizedBox(
-                height: 120,
-                child: Column(
-                  children: [
-                    Text(
-                      'Password reset',
-                      style: GoogleFonts.inter(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'We\'ll send you reset instructions.',
-                      style: GoogleFonts.inter(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 55),
-                child: InputTextFeild(
-                  controller: otpCtrl,
-                  infoText: 'OTP',
-                  hintText: 'Enter OTP from email',
-                  obscureText: false,
-                ),
-              ),
-              const SizedBox(height: 20,),
-              SubmitButton(
-                onTap: () async {
-                  setState(() {enableBtn = false;});
-                  dynamic res = await UserService().verifyTokenPassword({'email' : config.USER_DATA.email, 'token' : otpCtrl.text});
-                  setState(() {enableBtn = true;});
-                  if (res.status == 'error' || res.status == 'ERR_CONNECTION') {
-                    ScaffoldMessenger.of(context).showSnackBar(getSnackBar(res.message,55,70,false));
-                  } else {
-                    config.STATUS.token = otpCtrl.text;
-                    Navigator.pushReplacementNamed(context, '/setPasswordPage');
-                  }
-                },
-                btnText: 'Continue',
-                type: isFeildFull && enableBtn ? 1 : 0,
-              ),
-              const SizedBox(height: 40,),
-              TextAndHighlight(
-                text: "Didn't recieve the email? ",
-                highlight: "Resend",
-                link: true,
-                onTap: () {
-                  resend;
-                }
-              ),
-              SizedBox(
-                width: 150,
-                child: TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Row(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 120),
+                SizedBox(
+                  height: 120,
+                  child: Column(
                     children: [
-                      const Icon(
-                        Icons.arrow_back_ios_new_rounded,
-                        size: 14,
-                      ),
-                      const SizedBox(width: 6),
                       Text(
-                        'Back to log in',
+                        'Password reset',
                         style: GoogleFonts.inter(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'We\'ll send you reset instructions.',
+                        style: GoogleFonts.inter(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
-                    ]
-                  )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 55),
+                  child: InputTextFeild(
+                    controller: otpCtrl,
+                    infoText: 'OTP',
+                    hintText: 'Enter OTP from email',
+                    obscureText: false,
+                  ),
+                ),
+                const SizedBox(height: 20,),
+                SubmitButton(
+                  onTap: () async {
+                    setState(() {enableBtn = false;});
+                    dynamic res = await UserService().verifyTokenPassword({'email' : config.USER_DATA.email, 'token' : otpCtrl.text});
+                    setState(() {enableBtn = true;});
+                    if (res.status == 'error' || res.status == 'ERR_CONNECTION') {
+                      ScaffoldMessenger.of(context).showSnackBar(getSnackBar(res.message,55,70,false));
+                    } else {
+                      config.STATUS.token = otpCtrl.text;
+                      Navigator.pushReplacementNamed(context, '/setPasswordPage');
+                    }
+                  },
+                  btnText: 'Continue',
+                  type: isFeildFull && enableBtn ? 1 : 0,
+                ),
+                const SizedBox(height: 40,),
+                TextAndHighlight(
+                  text: "Didn't recieve the email? ",
+                  highlight: "Resend",
+                  link: true,
+                  onTap: () {
+                    resend;
+                  }
+                ),
+                SizedBox(
+                  width: 150,
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          size: 14,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          'Back to log in',
+                          style: GoogleFonts.inter(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        ),
+                      ]
+                    )
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
