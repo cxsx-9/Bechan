@@ -1,7 +1,9 @@
 import 'package:bechan/services/category_service.dart';
+import 'package:bechan/services/tag_service.dart';
 import 'package:bechan/widgets/card_decoration.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/widgets/list_category.dart';
+import 'package:bechan/widgets/list_tag.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bechan/config.dart' as config;
@@ -22,6 +24,10 @@ class _CategoryPageState extends State<CategoryPage> {
     await CategoryService().fetchCategory();
     setState(() {});
   }
+  Future<void> _fetchTag() async {
+    await TagService().fetchTag();
+    setState(() {});
+  }
 
   Future<void> createCategory() async {
     await CategoryService().addCategory(
@@ -36,10 +42,23 @@ class _CategoryPageState extends State<CategoryPage> {
     });
   }
 
+  Future<void> createTag() async {
+    await TagService().addTag(
+      {
+        "tag_name": textCtrl.text,
+      }
+    );
+    _fetchTag();
+    setState(() {
+      textCtrl.text = '';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-  int count = _type == 'income' ? config.CATEGORY.income.length : config.CATEGORY.expenses.length;
-  final data = _type == 'income' ? config.CATEGORY.income : config.CATEGORY.expenses;
+  int count = _type == 'income' ? config.CATEGORY.income.length : _type == 'expense' ? config.CATEGORY.expenses.length : config.TAG.tags.length;
+  final data = _type == 'income' ? config.CATEGORY.income : _type == 'expense' ? config.CATEGORY.expenses : null;
+  final tags = config.TAG.tags;
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -76,7 +95,7 @@ class _CategoryPageState extends State<CategoryPage> {
                       children: const {
                         'income' : SizedBox(width: 80, child: Center(child: Text('Income'))),
                         'expense' : SizedBox(width: 80, child: Center(child: Text('Expense'))),
-                        // 'tag' : SizedBox(width: 80, child: Center(child: Text('Tags'))),
+                        'tag' : SizedBox(width: 80, child: Center(child: Text('Tags'))),
                       },
                       onValueChanged: (name) {
                         setState(() {
@@ -103,7 +122,11 @@ class _CategoryPageState extends State<CategoryPage> {
                                 InputTextFeild(controller: textCtrl, infoText: '', hintText: 'New Category', obscureText: false, width: 250,),
                                 IconButton(
                                   onPressed: textCtrl.text == '' ? null : () async {
-                                    await createCategory();
+                                    if (_type == 'tag') {
+                                      await createTag();
+                                    } else {
+                                      await createCategory();
+                                    }
                                   },
                                   icon: const Icon(Icons.add),
                                   color: Theme.of(context).colorScheme.primary,
@@ -115,8 +138,11 @@ class _CategoryPageState extends State<CategoryPage> {
                               child: ListView.separated(
                                 itemCount: count,
                                 itemBuilder: (context, index) {
-                                  final item = data[index];
-                                  return ListCategory(item: item, type : _type!, onDataChanged: _fetchData);
+                                  if (_type == 'tag') {
+                                    return ListTag(item: tags[index], onDataChanged: _fetchTag);
+                                  } else {
+                                    return ListCategory(item: data![index], type : _type!, onDataChanged: _fetchData);
+                                  }
                                 },
                                 separatorBuilder: (context, index) {
                                   return Divider(

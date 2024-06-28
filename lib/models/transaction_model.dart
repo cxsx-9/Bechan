@@ -4,6 +4,7 @@ class Transaction {
   final double amount;
   final String note;
   final DateTime transactionDatetime;
+  final int categorieId;
   final String categorieName;
   final String categorieType;
 
@@ -12,6 +13,7 @@ class Transaction {
     required this.amount,
     required this.note,
     required this.transactionDatetime,
+    required this.categorieId,
     required this.categorieName,
     required this.categorieType,
   });
@@ -22,6 +24,7 @@ class Transaction {
       amount: double.parse(json['amount']),
       note: json['note'],
       transactionDatetime: DateTime.parse(json['transaction_datetime']),
+      categorieId: json['categorie_id'],
       categorieName: json['categorie_name'],
       categorieType: json['categorie_type'],
     );
@@ -33,6 +36,7 @@ class Transaction {
       'amount': amount,
       'note': note,
       'transaction_datetime': transactionDatetime.toIso8601String(),
+      'categorie_id': categorieId,
       'categorie_name': categorieName,
       'categorie_type': categorieType,
     };

@@ -1,3 +1,4 @@
+import 'package:bechan/models/tag_model.dart';
 import 'package:bechan/services/transaction_service.dart';
 import 'package:bechan/widgets/input_number.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
@@ -53,6 +54,8 @@ class _AddRecordState extends State<AddRecord> {
   String ? _sendDate;
   late dynamic categoryData = _selectedType[0] ? config.CATEGORY.income : config.CATEGORY.expenses;
   late int selectedCategory = widget.categorieName == '' ? 0 : categoryData.indexWhere((category) => category.name == widget.categorieName) ;
+
+  Set<Tag> selectedTags = <Tag>{};
 
   @override
   void initState() {
@@ -187,7 +190,6 @@ class _AddRecordState extends State<AddRecord> {
         backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          // toolbarHeight: 100,
           systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
             statusBarBrightness: Brightness.light, // For iOS (dark icons)
@@ -320,6 +322,43 @@ class _AddRecordState extends State<AddRecord> {
                       ),
                     ),
                   ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                child: Wrap(
+                  spacing: 5.0,
+                  runSpacing: 5.0,
+                  children: config.TAG.tags.map((Tag tag) {
+                    return ChoiceChip(
+                      visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        side: BorderSide(color: Colors.transparent),
+                      ),
+                      backgroundColor: const Color.fromARGB(255, 215, 215, 215),
+                      selectedColor: Colors.blue.shade300,
+                      labelPadding: const EdgeInsets.all(1),
+                      label: Text(
+                        tag.name,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white
+                        ),
+                      ),
+                      selected: selectedTags.contains(tag),
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if (selected) {
+                            selectedTags.add(tag);
+                          } else {
+                            selectedTags.remove(tag);
+                          }
+                        });
+                      },
+                    );
+                  }).toList(),
                 ),
               ),
               Expanded(

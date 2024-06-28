@@ -45,7 +45,18 @@ class _SettingPageState extends State<SettingPage> {
                 children: [
                   Container(
                     width: double.infinity,
-                    decoration: cardDecoration(context),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(context).colorScheme.secondary,
+                          spreadRadius: 1,
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        )
+                      ]
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.all(30.0),
                       child: Column(
@@ -56,21 +67,23 @@ class _SettingPageState extends State<SettingPage> {
                             height: 80,
                             child: CircleAvatar(
                               backgroundImage: NetworkImage(
-                                  Gravatar(_user.email).imageUrl(),
+                                Gravatar(_user.email).imageUrl(),
                               ),
                             ),
                           ),
                           const SizedBox(height: 20,),
                           Text(
                             "${_user.firstname} ${_user.lastname}",
-                            style: const TextStyle(
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
                               fontSize: 20,
                               fontWeight: FontWeight.bold
                             ),
                           ),
                           Text(
                             _user.email,
-                            style: const TextStyle(
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
                               fontSize: 16,
                               fontWeight: FontWeight.w400
                             ),
@@ -86,7 +99,6 @@ class _SettingPageState extends State<SettingPage> {
                     child: TextButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/changePasswordPage');
-                        // UserService().logout(context);
                       },
                       child: Text(
                         'Change password',

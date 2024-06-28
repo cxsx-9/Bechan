@@ -5,6 +5,7 @@ import 'package:bechan/pages/home_page.dart';
 import 'package:bechan/pages/loading_page.dart';
 import 'package:bechan/pages/setting_page.dart';
 import 'package:bechan/services/category_service.dart';
+import 'package:bechan/services/tag_service.dart';
 import 'package:bechan/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,6 +25,7 @@ class _MainPageState extends State<MainPage> {
     super.initState();
     _fetchUserData();
     CategoryService().fetchCategory();
+    TagService().fetchTag();
   }
 
   Future<void> _fetchUserData() async {
