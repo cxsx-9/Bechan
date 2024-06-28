@@ -151,8 +151,6 @@ class _AddRecordState extends State<AddRecord> {
   }
 
   Future<void> _create() async {
-    print("CREATE with -> ");
-    print(categoryData[selectedCategory].categorieId,);
     setState(() {isSending = true;});
     await TransactionService().addTransaction({
       "categorie_id": categoryData[selectedCategory].categorieId,
@@ -228,6 +226,43 @@ class _AddRecordState extends State<AddRecord> {
                         children: transactionType,
                       ),
                     ),
+                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 50,
+                      child: TextButton(
+                        onPressed: () {showDatePicker(context);},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.date_range_rounded),
+                            const SizedBox(width: 10,),
+                            Text(
+                              _selectedDate,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20,),
+                    InputTextFeild(
+                      initialValue: widget.note,
+                      controller: noteCtrl,
+                      infoText: "Name",
+                      hintText: "name",
+                      obscureText: false
+                    ),
+                    const SizedBox(height: 10),
+                    InputNumber(
+                      initialValue: widget.amount,
+                      controller: amountCtrl,
+                      hintText: '00.00',
+                      infoText: 'Amount',
+                    ),
+                    const SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
@@ -273,38 +308,6 @@ class _AddRecordState extends State<AddRecord> {
                           )
                         ],
                       ),
-                    ),
-                    TextButton(
-                      onPressed: () {showDatePicker(context);},
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.date_range_rounded),
-                          const SizedBox(width: 10,),
-                          Text(
-                            _selectedDate,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    InputTextFeild(
-                      initialValue: widget.note,
-                      controller: noteCtrl,
-                      infoText: "Name",
-                      hintText: "name",
-                      obscureText: false
-                    ),
-                    const SizedBox(height: 10),
-                    InputNumber(
-                      initialValue: widget.amount,
-                      controller: amountCtrl,
-                      hintText: '00.00',
-                      infoText: 'Amount',
                     ),
                   ],
                 ),

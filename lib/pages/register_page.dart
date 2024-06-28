@@ -1,10 +1,10 @@
-import 'package:bechan/widgets/text_and_highlight.dart';
 import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/services/user_service.dart';
 import 'package:bechan/widgets/submit_button.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:bechan/theme/theme.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -151,9 +151,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 60,
-                ),
+                const SizedBox(height: 70),
                 Column(
                   children: [
                     SubmitButton(
@@ -165,13 +163,29 @@ class _RegisterPageState extends State<RegisterPage> {
                       btnText: "Register",
                       type: isFeildFull && enableBtn && validEmail ? 1 : 0
                     ),
-                    const SizedBox(height: 20),
-                    const TextAndHighlight(text: "Already have an account? ", highlight: "Login"),
-                    const SizedBox(height: 5),
-                    SubmitButton(
-                      onTap: () { Navigator.pop(context); },
-                      icon: Icons.arrow_back_rounded,
-                      type: 2
+                    const SizedBox(height: 30),
+                    SizedBox(
+                      width: 150,
+                      child: TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.arrow_back_ios_new_rounded,
+                              size: 14,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              'Back to log in',
+                              style: GoogleFonts.inter(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ]
+                        )
+                      ),
                     ),
                   ],
                 ),

@@ -74,9 +74,15 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 70,
               ),
-              Image.asset(
-                Provider.of<ThemeProvider>(context, listen: false).isDarkMode ? 'assets/Banche_logo_dark.png' : 'assets/Banche_logo_light.png',
-                height: 83,
+              GestureDetector(
+                  onLongPress: () {
+                      emailCtrl.text = config.ADMIN_EMAIL;
+                      passCtrl.text = config.ADMIN_PASSWD;
+                },
+                child: Image.asset(
+                  Provider.of<ThemeProvider>(context, listen: false).isDarkMode ? 'assets/Banche_logo_dark.png' : 'assets/Banche_logo_light.png',
+                  height: 83,
+                ),
               ),
               const SizedBox(
                 height: 50,
@@ -84,6 +90,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 55.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     InputTextFeild(
                       controller: emailCtrl,
@@ -92,54 +99,51 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: false,
                       errorText: "Enter a valid email address",
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                     InputTextFeild(
                       controller: passCtrl,
                       infoText: "Password",
                       hintText: "Enter Password",
                       obscureText: true
                     ),
+                    TextButton(
+                      onPressed: () => Navigator.pushNamed(context, '/forgotPasswordPage'),
+                      child: const Text(
+                        'Forgot password?',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w300
+                        ),
+                      ),
+                    ),
                   ],
                 )
               ),
-              const SizedBox(height: 100,),
-               SizedBox(
-                height: 100,
-                width: 100,
-                child:TextButton(
-                  onPressed: (){},
-                  onLongPress: enableBtn ? () async {
-                      emailCtrl.text = config.ADMIN_EMAIL;
-                      passCtrl.text = config.ADMIN_PASSWD;
-                      setState(() {enableBtn = false;});
-                      await login(context);
-                      setState(() {enableBtn = true;});
-                  } : null,
-                  child: const Icon(Icons.fingerprint, size: 40,)
+              // const SizedBox(height: 200,),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SubmitButton(
+                      onTap: isFeildFull && enableBtn && validEmail ? () async {
+                          setState(() {enableBtn = false;});
+                          await login(context);
+                          setState(() {enableBtn = true;});
+                      } : null,
+                      btnText: "Login",
+                      type: isFeildFull && enableBtn && validEmail ? 1 : 0
+                    ),
+                    const SizedBox(height: 20),
+                    const TextAndHighlight(text: "Don't have an account? ", highlight: "Register", link: false, onTap: null,),
+                    const SizedBox(height: 5),
+                    SubmitButton(
+                      onTap: () { Navigator.pushNamed(context, '/registerPage'); },
+                      btnText: "Register",
+                      type: 2
+                    ),
+                    const SizedBox(height: 50),
+                  ],
                 ),
-              ),
-              Column(
-                children: [
-                  SubmitButton(
-                    onTap: isFeildFull && enableBtn && validEmail ? () async {
-                        setState(() {enableBtn = false;});
-                        await login(context);
-                        setState(() {enableBtn = true;});
-                    } : null,
-                    btnText: "Login",
-                    type: isFeildFull && enableBtn && validEmail ? 1 : 0
-                  ),
-                  const SizedBox(height: 20),
-                  const TextAndHighlight(text: "Don't have an account? ", highlight: "Register"),
-                  const SizedBox(height: 5),
-                  SubmitButton(
-                    onTap: () { Navigator.pushNamed(context, '/registerPage'); },
-                    btnText: "Register",
-                    type: 2
-                  ),
-                ],
               ),
             ],
           ),

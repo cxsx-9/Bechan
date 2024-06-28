@@ -1,10 +1,10 @@
 import 'package:bechan/models/user_model.dart';
 import 'package:bechan/services/user_service.dart';
-import 'package:bechan/theme/theme.dart';
+// import 'package:bechan/theme/theme.dart';
 import 'package:bechan/widgets/card_decoration.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 import 'package:bechan/config.dart' as config;
 
 
@@ -71,19 +71,16 @@ class _SettingPageState extends State<SettingPage> {
                       ),
                     ),
                   ),
-                  IconButton(onPressed:() => _reload(), icon: const Icon(Icons.refresh_rounded)),
-
+                  // IconButton(onPressed:() => _reload(), icon: const Icon(Icons.refresh_rounded)),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     const Text("Theme"),
+                  //     CupertinoSwitch(value: Provider.of<ThemeProvider>(context, listen: false).isDarkMode,onChanged: (value) {Provider.of<ThemeProvider>(context, listen: false).toggleTheme();},
+                  //     ),
+                  //   ],
+                  // ),
                   const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Theme"),
-                      CupertinoSwitch(value: Provider.of<ThemeProvider>(context, listen: false).isDarkMode,onChanged: (value) {Provider.of<ThemeProvider>(context, listen: false).toggleTheme();},
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-
                   Container(
                     width: double.infinity,
                     decoration: cardDecoration(context),

@@ -38,8 +38,8 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-  int count = _type == 'income' ? config.CATEGORY.income.length : _type == 'expense' ? config.CATEGORY.expenses.length : config.CATEGORY.tag.length;
-  final data = _type == 'income' ? config.CATEGORY.income : _type == 'expense' ? config.CATEGORY.expenses : config.CATEGORY.tag;
+  int count = _type == 'income' ? config.CATEGORY.income.length : config.CATEGORY.expenses.length;
+  final data = _type == 'income' ? config.CATEGORY.income : config.CATEGORY.expenses;
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -76,7 +76,7 @@ class _CategoryPageState extends State<CategoryPage> {
                       children: const {
                         'income' : SizedBox(width: 80, child: Center(child: Text('Income'))),
                         'expense' : SizedBox(width: 80, child: Center(child: Text('Expense'))),
-                        'tag' : SizedBox(width: 80, child: Center(child: Text('Tags'))),
+                        // 'tag' : SizedBox(width: 80, child: Center(child: Text('Tags'))),
                       },
                       onValueChanged: (name) {
                         setState(() {

@@ -77,7 +77,6 @@ class _ListCategoryState extends State<ListCategory> {
         ),
       ),
     );
-    widget.onDataChanged();
   }
 
   Future<void> deleteCategory(context) async {
