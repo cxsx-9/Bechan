@@ -150,7 +150,7 @@ class _HomePageState extends State<HomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SmallProfileCard(firstname: _user.firstname, greeting: "Welcome back!"),
+                          SmallProfileCard(firstname: _user.firstname, email: _user.email, greeting: "Welcome back!"),
                           const SizedBox(width: 10),
                           DateCard(time: _now)
                         ],

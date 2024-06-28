@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gravatar/flutter_gravatar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SmallProfileCard extends StatelessWidget {
   final String firstname;
+  final String email;
   final String greeting;
   
   const SmallProfileCard ({
     super.key,
     required this.firstname,
+    required this.email,
     required this.greeting,
   });
   
   @override
   Widget build(BuildContext context) {
+    Gravatar gravatar = Gravatar(email);
     return SizedBox(
       width: 175,
       height: 90,
@@ -31,10 +35,14 @@ class SmallProfileCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Row(
             children: [
-              Image.asset(
-                'assets/default_profile_image.png',
-                height: 48,
+              SizedBox(
                 width: 48,
+                height: 48,
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      gravatar.imageUrl(),
+                  ),
+                ),
               ),
               const SizedBox(width: 5,),
               Expanded(
