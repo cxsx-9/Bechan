@@ -2,19 +2,19 @@
 class Tag {
   final int tagId;
   final String name;
-  final int userId;
+  // final int userId;
 
   Tag({
     required this.tagId,
     required this.name,
-    required this.userId
+    // required this.userId
   });
 
   factory Tag.fromJson(Map<String, dynamic> json) {
     return Tag(
       tagId: json['tag_id'],
-      name: json['name'],
-      userId: json['user_id'],
+      name: json['tag_name'],
+      // userId: json['user_id'],
     );
   }
 }

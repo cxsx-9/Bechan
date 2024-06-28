@@ -1,4 +1,6 @@
 
+import 'package:bechan/models/tag_model.dart';
+
 class Transaction {
   final int transactionsId;
   final double amount;
@@ -7,6 +9,7 @@ class Transaction {
   final int categorieId;
   final String categorieName;
   final String categorieType;
+  final List<Tag> tags;
 
   Transaction({
     required this.transactionsId,
@@ -16,9 +19,11 @@ class Transaction {
     required this.categorieId,
     required this.categorieName,
     required this.categorieType,
+    required this.tags,
   });
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
+    var data = json['tags'];
     return Transaction(
       transactionsId: json['transactions_id'],
       amount: double.parse(json['amount']),
@@ -27,6 +32,7 @@ class Transaction {
       categorieId: json['categorie_id'],
       categorieName: json['categorie_name'],
       categorieType: json['categorie_type'],
+      tags: data != [] ? (data as List).map((tags)=> Tag.fromJson(tags)).toList() : []
     );
   }
 

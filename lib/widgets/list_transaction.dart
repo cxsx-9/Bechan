@@ -79,6 +79,7 @@ class _ListTransactionState extends State<ListTransaction> {
           type: transaction.categorieType,
           date: transaction.transactionDatetime,
           categorieName: transaction.categorieName,
+          tags: transaction.tags,
         );
       }
     );

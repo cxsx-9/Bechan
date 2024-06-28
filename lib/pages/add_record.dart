@@ -15,6 +15,7 @@ const List<Widget> transactionType = <Widget>[
   Text('Expense')
 ];
 
+// ignore: must_be_immutable
 class AddRecord extends StatefulWidget {
   final bool isEdit;
   final int transactionsId;
@@ -23,8 +24,9 @@ class AddRecord extends StatefulWidget {
   final String note;
   final String type;
   final DateTime date;
-
-  const AddRecord({
+  List<Tag> tags;
+ 
+  AddRecord({
     super.key,
     bool ? isEdit,
     int ? transactionsId,
@@ -32,13 +34,15 @@ class AddRecord extends StatefulWidget {
     String ? amount,
     String ? note,
     String ? type,
+    List<Tag> ? tags,
     required this.date,
   }) : amount = amount ?? '',
     isEdit = isEdit ?? false,
     note = note ?? '',
     type = type ?? 'expense',
     transactionsId = transactionsId ?? 0,
-    categorieName = categorieName ?? ''
+    categorieName = categorieName ?? '',
+    tags = tags ?? []
   ;
   @override
   State<AddRecord> createState() => _AddRecordState();
@@ -55,7 +59,7 @@ class _AddRecordState extends State<AddRecord> {
   late dynamic categoryData = _selectedType[0] ? config.CATEGORY.income : config.CATEGORY.expenses;
   late int selectedCategory = widget.categorieName == '' ? 0 : categoryData.indexWhere((category) => category.name == widget.categorieName) ;
 
-  Set<Tag> selectedTags = <Tag>{};
+  List<int> selectedTags = [];
 
   @override
   void initState() {
@@ -69,6 +73,9 @@ class _AddRecordState extends State<AddRecord> {
     noteCtrl.addListener(() { setIsFull();});
     if (widget.type == 'income') {
       _selectedType = [true, false];
+    }
+    if (widget.tags != []) {
+      widget.tags.forEach((tag) => selectedTags.add(tag.tagId));
     }
   }
 
@@ -138,7 +145,6 @@ class _AddRecordState extends State<AddRecord> {
     );
   }
 
-
   Future<void> _edit() async {
     setState(() {isSending = true;});
     await TransactionService().editTransaction({
@@ -148,6 +154,7 @@ class _AddRecordState extends State<AddRecord> {
       "note": noteCtrl.text,
       "transaction_datetime" : _sendDate,
       "fav": '0',
+      "tag_id" : selectedTags
       }
     );
     setState(() {isSending = false;});
@@ -161,6 +168,7 @@ class _AddRecordState extends State<AddRecord> {
       "note": noteCtrl.text,
       "transaction_datetime" : _sendDate,
       "fav": 0,
+      "tag_id" : selectedTags
       }
     );
     setState(() {isSending = false;});
@@ -347,13 +355,13 @@ class _AddRecordState extends State<AddRecord> {
                           color: Colors.white
                         ),
                       ),
-                      selected: selectedTags.contains(tag),
+                      selected: selectedTags.contains(tag.tagId),
                       onSelected: (bool selected) {
                         setState(() {
                           if (selected) {
-                            selectedTags.add(tag);
+                            selectedTags.add(tag.tagId);
                           } else {
-                            selectedTags.remove(tag);
+                            selectedTags.remove(tag.tagId);
                           }
                         });
                       },
