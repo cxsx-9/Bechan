@@ -1,5 +1,6 @@
 import 'package:bechan/models/category_model.dart';
 import 'package:bechan/services/category_service.dart';
+import 'package:bechan/widgets/soft_appear_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -27,7 +28,7 @@ class _ListCategoryState extends State<ListCategory> {
     nameCtrl.text = widget.item.name;
     showDialog<void>(
       context: context,
-      builder: (BuildContext context) => _SoftAppearDialog(
+      builder: (BuildContext context) => SoftAppearDialog(
         child: CupertinoAlertDialog(
           content: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -82,7 +83,7 @@ class _ListCategoryState extends State<ListCategory> {
   Future<void> deleteCategory(context) async {
     showDialog<void>(
       context: context,
-      builder: (BuildContext context) => _SoftAppearDialog(
+      builder: (BuildContext context) => SoftAppearDialog(
         child: CupertinoAlertDialog(
           content: const Text('Are you sure you want to delete \nthis data?'),
           actions: <CupertinoDialogAction>[
@@ -158,26 +159,6 @@ class _ListCategoryState extends State<ListCategory> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _SoftAppearDialog extends StatelessWidget {
-  final Widget child;
-
-  const _SoftAppearDialog({required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.transparent,
-      child: FadeTransition(
-        opacity: CurvedAnimation(
-          parent: ModalRoute.of(context)!.animation!,
-          curve: Curves.easeInOut,
-        ),
-        child: child,
       ),
     );
   }

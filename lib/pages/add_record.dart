@@ -1,15 +1,17 @@
+import 'package:bechan/models/favourite_transaction_model.dart';
 import 'package:bechan/models/tag_model.dart';
 import 'package:bechan/services/transaction_service.dart';
+import 'package:bechan/widgets/all_favourite.dart';
 import 'package:bechan/widgets/card_decoration.dart';
 import 'package:bechan/widgets/custom_chip.dart';
 import 'package:bechan/widgets/input_number.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
+import 'package:bechan/widgets/show_date_picker.dart';
 import 'package:bechan/widgets/submit_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:bechan/config.dart' as config;
 
 const List<Widget> transactionType = <Widget>[
@@ -19,19 +21,21 @@ const List<Widget> transactionType = <Widget>[
 
 // ignore: must_be_immutable
 class AddRecord extends StatefulWidget {
-  final bool isEdit;
+  bool isEdit;
   final int transactionsId;
   final String categorieName;
   final String amount;
   final String note;
   final String type;
   final DateTime date;
+  final int fav;
   List<Tag> tags;
  
   AddRecord({
     super.key,
     bool ? isEdit,
     int ? transactionsId,
+    int ? fav,
     String ? categorieName,
     String ? amount,
     String ? note,
@@ -43,6 +47,7 @@ class AddRecord extends StatefulWidget {
     note = note ?? '',
     type = type ?? 'expense',
     transactionsId = transactionsId ?? 0,
+    fav = fav ?? 0,
     categorieName = categorieName ?? '',
     tags = tags ?? []
   ;
@@ -62,6 +67,7 @@ class _AddRecordState extends State<AddRecord> {
   late int selectedCategory = widget.categorieName == '' ? 0 : categoryData.indexWhere((category) => category.name == widget.categorieName) ;
   bool _isShowTags = true;
   List<int> selectedTags = [];
+  bool _fav = false;
 
   @override
   void initState() {
@@ -76,6 +82,9 @@ class _AddRecordState extends State<AddRecord> {
     if (widget.isEdit) {
       _isShowTags = false;
     }
+    if (widget.fav == 1) {
+      _fav = true;
+    }
     if (widget.type == 'income') {
       _selectedType = [true, false];
     }
@@ -84,54 +93,6 @@ class _AddRecordState extends State<AddRecord> {
         selectedTags.add(tag.tagId);
       }
     }
-  }
-
-  void showDatePicker(context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            'Date',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          content: SizedBox(
-            height: 300,
-            width: double.maxFinite,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Expanded(
-                  child: SfDateRangePicker(
-                    backgroundColor: Theme.of(context).colorScheme.onPrimary,
-                    headerStyle: DateRangePickerHeaderStyle(
-                      backgroundColor: Theme.of(context).colorScheme.onPrimary,
-                      textAlign: TextAlign.center,
-                      textStyle: TextStyle(
-                        fontStyle: FontStyle.normal,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary,
-                      )
-                    ),
-                    onCancel: (){ Navigator.of(context).pop(); },
-                    showActionButtons: true,
-                    onSubmit:(value) {
-                      if (value != null) { _onSubmit(value); }
-                    },
-                    selectionMode: DateRangePickerSelectionMode.single,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
   }
 
   void _showDialog(Widget child) {
@@ -166,7 +127,7 @@ class _AddRecordState extends State<AddRecord> {
       "amount": double.parse(amountCtrl.text),
       "note": noteCtrl.text,
       "transaction_datetime" : _sendDate,
-      "fav": '0',
+      "fav": _fav ? 1 : 0,
       "tag_id" : selectedTags
       }
     );
@@ -180,7 +141,7 @@ class _AddRecordState extends State<AddRecord> {
       "amount": double.parse(amountCtrl.text),
       "note": noteCtrl.text,
       "transaction_datetime" : _sendDate,
-      "fav": 0,
+      "fav": _fav ? 1 : 0,
       "tag_id" : selectedTags
       }
     );
@@ -195,6 +156,24 @@ class _AddRecordState extends State<AddRecord> {
       });
     }
     Navigator.of(context).pop();
+  }
+
+  void _setFavourite(Favourite favouritItem) {
+    setState(() {
+      amountCtrl.text = favouritItem.amount.toString();
+      if (favouritItem.categorieType == 'income') {
+        _selectedType = [true, false];
+      }
+      categoryData = _selectedType[0] ? config.CATEGORY.income : config.CATEGORY.expenses;
+      selectedCategory = categoryData.indexWhere((category) => category.name == favouritItem.categorieName) ;
+      if (favouritItem.tags != []) {
+        for (var tag in favouritItem.tags) {
+          selectedTags.add(tag.tagId);
+        }
+        noteCtrl.text = favouritItem.note;
+      }
+      widget.isEdit = true;
+    });
   }
 
   @override
@@ -219,31 +198,35 @@ class _AddRecordState extends State<AddRecord> {
         body: SafeArea(
           child: Column(
             children: [
+
               // HEAD
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.only(right: 20, left: 10),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     IconButton(onPressed: () =>  {Navigator.pop(context, false)}, icon: const Icon(Icons.arrow_back_ios_new_rounded)),
                     Text(
-                        'Transaction',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                          color: Theme.of(context).colorScheme.primary,
-                        )
-                      ),
+                      'Transaction',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color: Theme.of(context).colorScheme.primary,
+                      )
+                    ),
                   ],
                 ),
               ),
+
               // ALL
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+
+                    // Amount
                     Container(
                       decoration: cardDecoration(context),
                       child: Padding(
@@ -263,6 +246,7 @@ class _AddRecordState extends State<AddRecord> {
                     ),
 
                     const SizedBox(height: 10),
+
                     // Type
                     Container(
                       decoration: cardDecoration(context),
@@ -316,7 +300,7 @@ class _AddRecordState extends State<AddRecord> {
                                       SizedBox(
                                         width: 50,
                                         child: Icon(
-                                          Icons.list_rounded,
+                                          Icons.arrow_drop_down_rounded,
                                           color: Theme.of(context).colorScheme.secondary,
                                         ),
                                       ),
@@ -376,7 +360,7 @@ class _AddRecordState extends State<AddRecord> {
                                 ),
                               ),
                             ),
-                            widget.isEdit ? GestureDetector(onTap: _showTag, child: const Text('show more')) : const SizedBox()
+                            widget.isEdit ? GestureDetector(onTap: _showTag, child: _isShowTags ? const Text('show less') : const Text('show more')) : const SizedBox()
                           ],
                         ),
                       ),
@@ -398,7 +382,9 @@ class _AddRecordState extends State<AddRecord> {
                             SizedBox(
                               height: 40,
                               child: TextButton(
-                                onPressed: () {showDatePicker(context);},
+                                onPressed: () async {
+                                  ShowDatePickerFunction().showDatePicker(context, _onSubmit);
+                                },
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -420,6 +406,25 @@ class _AddRecordState extends State<AddRecord> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 30,),
+                    SizedBox(
+                      width: 135,
+                      child: TextButton(
+                        onPressed: () {
+                              setState(() {
+                                _fav = !_fav;
+                              });
+                            },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text('Favourite'),
+                            const SizedBox(width: 10,),
+                            Icon(_fav ? Icons.favorite_rounded : Icons.favorite_border_rounded)
+                          ],
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -427,6 +432,27 @@ class _AddRecordState extends State<AddRecord> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text ('from your favourite bill', style: TextStyle(color: Theme.of(context).colorScheme.secondary),),
+                          IconButton(
+                            onPressed: () async {
+                              dynamic favouritItem = await showModalBottomSheet(
+                                isScrollControlled: true,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const AllFavourite();
+                                }
+                              );
+                              if (favouritItem != null) {
+                                _setFavourite(favouritItem);
+                              }
+                            },
+                            icon : Icon(Icons.arrow_drop_down_rounded, color: Theme.of(context).colorScheme.secondary),
+                          ),
+                        ],
+                      ),
                     SubmitButton(
                       btnText: widget.isEdit
                         ? 'Edit'

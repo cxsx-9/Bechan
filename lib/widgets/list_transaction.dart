@@ -1,5 +1,6 @@
 import 'package:bechan/pages/add_record.dart';
 import 'package:bechan/services/transaction_service.dart';
+import 'package:bechan/widgets/soft_appear_dialog.dart';
 import 'package:bechan/widgets/transaction_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class _ListTransactionState extends State<ListTransaction> {
   _delete(dynamic id, int index) async {
     showDialog<void>(
       context: context,
-      builder: (BuildContext context) => _SoftAppearDialog(
+      builder: (BuildContext context) => SoftAppearDialog(
         child: CupertinoAlertDialog(
           content: const Text('Are you sure you want to delete \nthis data?'),
           actions: <CupertinoDialogAction>[
@@ -87,6 +88,7 @@ class _ListTransactionState extends State<ListTransaction> {
           date: transaction.transactionDatetime,
           categorieName: transaction.categorieName,
           tags: transaction.tags,
+          fav: transaction.fav
         );
       }
     );
@@ -101,7 +103,7 @@ class _ListTransactionState extends State<ListTransaction> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const SizedBox(height: 5),
+        const SizedBox(height: 10),
         Expanded(
           child: ListView.builder(
             itemCount: widget.data!.transactions.length,
@@ -165,27 +167,8 @@ class _ListTransactionState extends State<ListTransaction> {
             },
           ),
         ),
+        const SizedBox(height: 10),
       ],
-    );
-  }
-}
-
-class _SoftAppearDialog extends StatelessWidget {
-  final Widget child;
-
-  const _SoftAppearDialog({required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.transparent,
-      child: FadeTransition(
-        opacity: CurvedAnimation(
-          parent: ModalRoute.of(context)!.animation!,
-          curve: Curves.easeInOut,
-        ),
-        child: child,
-      ),
     );
   }
 }

@@ -88,7 +88,7 @@ class TransactionCard extends StatelessWidget {
                             color: Theme.of(context).colorScheme.secondary,
                           )
                         ),
-                        const SizedBox(width: 10,),
+                        SizedBox(width: date != '' ? 10 : 0,),
                         Text(
                           category, 
                           style: GoogleFonts.inter(

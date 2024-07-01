@@ -9,6 +9,7 @@ class Transaction {
   final int categorieId;
   final String categorieName;
   final String categorieType;
+  final int fav;
   final List<Tag> tags;
 
   Transaction({
@@ -19,6 +20,7 @@ class Transaction {
     required this.categorieId,
     required this.categorieName,
     required this.categorieType,
+    required this.fav,
     required this.tags,
   });
 
@@ -32,6 +34,7 @@ class Transaction {
       categorieId: json['categorie_id'],
       categorieName: json['categorie_name'],
       categorieType: json['categorie_type'],
+      fav: json['fav'],
       tags: data != [] ? (data as List).map((tags)=> Tag.fromJson(tags)).toList() : []
     );
   }
@@ -45,6 +48,7 @@ class Transaction {
       'categorie_id': categorieId,
       'categorie_name': categorieName,
       'categorie_type': categorieType,
+      'fav': categorieName,
     };
   }
 }

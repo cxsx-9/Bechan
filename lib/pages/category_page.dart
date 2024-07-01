@@ -3,6 +3,7 @@ import 'package:bechan/services/tag_service.dart';
 import 'package:bechan/widgets/card_decoration.dart';
 import 'package:bechan/widgets/list_category.dart';
 import 'package:bechan/widgets/list_tag.dart';
+import 'package:bechan/widgets/soft_appear_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bechan/config.dart' as config;
@@ -58,7 +59,7 @@ class _CategoryPageState extends State<CategoryPage> {
   void addNew() {
     showDialog<void>(
       context: context,
-      builder: (BuildContext context) => _SoftAppearDialog(
+      builder: (BuildContext context) => SoftAppearDialog(
         child: CupertinoAlertDialog(
           content: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -226,26 +227,6 @@ class _CategoryPageState extends State<CategoryPage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _SoftAppearDialog extends StatelessWidget {
-  final Widget child;
-
-  const _SoftAppearDialog({required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.transparent,
-      child: FadeTransition(
-        opacity: CurvedAnimation(
-          parent: ModalRoute.of(context)!.animation!,
-          curve: Curves.easeInOut,
-        ),
-        child: child,
       ),
     );
   }

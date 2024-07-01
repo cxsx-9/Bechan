@@ -1,3 +1,4 @@
+import 'package:bechan/widgets/show_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -71,56 +72,6 @@ class _HomePageState extends State<HomePage> {
     Navigator.of(context).pop();
   }
 
-  void showDatePicker(context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            'Date Range',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          content: SizedBox(
-            height: 300, // Adjust as needed
-            width: double.maxFinite,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Expanded(
-                  child: SfDateRangePicker(
-                    backgroundColor: Theme.of(context).colorScheme.onPrimary,
-                    headerStyle: DateRangePickerHeaderStyle(
-                        backgroundColor: Theme.of(context).colorScheme.onPrimary,
-                        textAlign: TextAlign.center,
-                        textStyle: TextStyle(
-                          fontStyle: FontStyle.normal,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primary,
-                        )),
-                    onCancel: () {
-                      Navigator.of(context).pop();
-                    },
-                    showActionButtons: true,
-                    onSubmit: (value) {
-                      _onSubmit(value!);
-                    },
-                    selectionMode: DateRangePickerSelectionMode.range,
-                    initialSelectedRange: PickerDateRange(_start, _end),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     if (widget.isReload) {
@@ -163,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                           decoration: cardDecoration(context),
                           child: TextButton(
                             onPressed: () {
-                              showDatePicker(context);
+                              ShowDatePickerFunction().showDateRange(context, _start, _end, _onSubmit);
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,

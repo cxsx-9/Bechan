@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bechan/models/favourite_transaction_model.dart';
 import 'package:bechan/models/transaction_model.dart';
 import 'package:bechan/models/user_model.dart';
 import 'package:bechan/services/api_service.dart';
@@ -18,6 +19,21 @@ class TransactionService {
     // print(response.body);
     print('[TSVC] : transaction done');
     return TransactionResponse.fromJson(jsonDecode(response.body));
+  }
+
+  Future<dynamic> fetchFav() async {
+    print('[TSVC] : transaction calling');
+    dynamic response = await ApiService().callApi('get', 'getFavorite', '?fav=1');
+    final jsonResponse = json.decode(response.body);
+    if (response == null || jsonResponse['status'] == "error") {
+      print('[TSVC] : transaction Error');
+      Status res = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+      print(res.message);
+      return null;
+    }
+    // print(response.body);
+    print('[TSVC] : transaction done');
+    return FavouriteTransactionResposne.fromJson(jsonDecode(response.body));
   }
 
   Future<dynamic> addTransaction(Object data) async {
