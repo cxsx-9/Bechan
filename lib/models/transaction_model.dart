@@ -26,7 +26,7 @@ class Transaction {
     var data = json['tags'];
     return Transaction(
       transactionsId: json['transactions_id'],
-      amount: double.parse(json['amount']),
+      amount: json['amount'].toDouble(),
       note: json['note'],
       transactionDatetime: DateTime.parse(json['transaction_datetime']),
       categorieId: json['categorie_id'],
@@ -66,8 +66,8 @@ class Summary {
     return Summary(
       userId: json['user_id'],
       selectedDate: json['selected_date'],
-      totalIncome: double.parse(json['total_income']),
-      totalExpense: double.parse(json['total_expense']),
+      totalIncome: json['total_income'].toDouble(),
+      totalExpense: json['total_expense'].toDouble(),
     );
   }
 

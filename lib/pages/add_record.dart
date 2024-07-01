@@ -1,5 +1,6 @@
 import 'package:bechan/models/tag_model.dart';
 import 'package:bechan/services/transaction_service.dart';
+import 'package:bechan/widgets/card_decoration.dart';
 import 'package:bechan/widgets/custom_chip.dart';
 import 'package:bechan/widgets/input_number.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
@@ -59,7 +60,7 @@ class _AddRecordState extends State<AddRecord> {
   String ? _sendDate;
   late dynamic categoryData = _selectedType[0] ? config.CATEGORY.income : config.CATEGORY.expenses;
   late int selectedCategory = widget.categorieName == '' ? 0 : categoryData.indexWhere((category) => category.name == widget.categorieName) ;
-
+  bool _isShowTags = true;
   List<int> selectedTags = [];
 
   @override
@@ -72,6 +73,9 @@ class _AddRecordState extends State<AddRecord> {
     _selectedDate = DateFormat('dd MMMM yyyy').format(widget.date);
     amountCtrl.addListener(() { setIsFull();});
     noteCtrl.addListener(() { setIsFull();});
+    if (widget.isEdit) {
+      _isShowTags = false;
+    }
     if (widget.type == 'income') {
       _selectedType = [true, false];
     }
@@ -148,6 +152,12 @@ class _AddRecordState extends State<AddRecord> {
     );
   }
 
+  void _showTag() {
+    setState(() {
+    _isShowTags = !_isShowTags;
+    });
+  }
+
   Future<void> _edit() async {
     setState(() {isSending = true;});
     await TransactionService().editTransaction({
@@ -209,156 +219,208 @@ class _AddRecordState extends State<AddRecord> {
         body: SafeArea(
           child: Column(
             children: [
+              // HEAD
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     IconButton(onPressed: () =>  {Navigator.pop(context, false)}, icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+                    Text(
+                        'Transaction',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).colorScheme.primary,
+                        )
+                      ),
                   ],
                 ),
               ),
+              // ALL
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Center(
-                      child: ToggleButtons(
-                        direction: Axis.horizontal,
-                        onPressed: (int index) {
-                          setState(() {
-                            for (int i = 0; i < _selectedType.length; i++) {
-                              _selectedType[i] = i == index;
-                            }
-                            categoryData = _selectedType[0] ? config.CATEGORY.income : config.CATEGORY.expenses;
-                            selectedCategory = 0;
-                          });
-                        },
-                        borderRadius: const BorderRadius.all(Radius.circular(8)),
-                        borderColor: Theme.of(context).colorScheme.secondary,
-                        selectedBorderColor: _selectedType[1] ? Colors.red[700] : Colors.green[700],
-                        selectedColor: Colors.white,
-                        fillColor: _selectedType[1] ? Colors.red[200] : Colors.green[200],
-                        color: _selectedType[1] ? Colors.red[400] : Colors.green[400],
-                        constraints: const BoxConstraints(
-                          minHeight: 40.0,
-                          minWidth: 140.0,
+                    Container(
+                      decoration: cardDecoration(context),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Column(
+                          children: [
+                            // Amount
+                            InputNumber(
+                              initialValue: widget.amount,
+                              controller: amountCtrl,
+                              hintText: '00.00',
+                              infoText: '',
+                            ),
+                          ],
                         ),
-                        isSelected: _selectedType,
-                        children: transactionType,
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      height: 50,
-                      child: TextButton(
-                        onPressed: () {showDatePicker(context);},
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+
+                    const SizedBox(height: 10),
+                    // Type
+                    Container(
+                      decoration: cardDecoration(context),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20, top: 30, bottom: 20),
+                        child: Column(
                           children: [
-                            const Icon(Icons.date_range_rounded),
-                            const SizedBox(width: 10,),
-                            Text(
-                              _selectedDate,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
+                            Center(
+                              child: ToggleButtons(
+                                direction: Axis.horizontal,
+                                onPressed: (int index) {
+                                  setState(() {
+                                    for (int i = 0; i < _selectedType.length; i++) {
+                                      _selectedType[i] = i == index;
+                                    }
+                                    categoryData = _selectedType[0] ? config.CATEGORY.income : config.CATEGORY.expenses;
+                                    selectedCategory = 0;
+                                  });
+                                },
+                                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                borderColor: Theme.of(context).colorScheme.secondary,
+                                selectedBorderColor: _selectedType[1] ? Colors.red[700] : Colors.green[700],
+                                selectedColor: Colors.white,
+                                fillColor: _selectedType[1] ? Colors.red[200] : Colors.green[200],
+                                color: Theme.of(context).colorScheme.secondary,
+                                // color: _selectedType[1] ? Colors.red[400] : Colors.green[400],
+                                constraints: const BoxConstraints(
+                                  minHeight: 35.0,
+                                  minWidth: 140.0,
+                                ),
+                                isSelected: _selectedType,
+                                children: transactionType,
+                              ),
+                            ),
+                            CupertinoButton(
+                              child: 
+                              Container(
+                                height: 35,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                  border: Border.all(
+                                    color: Theme.of(context).colorScheme.secondary,
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 50),
+                                  child: Row(
+                                    children: [
+                                      Expanded(child: Center(child: Text(categoryData[selectedCategory].name))),
+                                      SizedBox(
+                                        width: 50,
+                                        child: Icon(
+                                          Icons.list_rounded,
+                                          color: Theme.of(context).colorScheme.secondary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ),
+                              onPressed: () => _showDialog(
+                                CupertinoPicker(
+                                  magnification: 1.22,
+                                  squeeze: 1.2,
+                                  useMagnifier: true,
+                                  itemExtent: 32.0,
+                                  scrollController: FixedExtentScrollController(
+                                    initialItem: selectedCategory,
+                                  ),
+                                  onSelectedItemChanged: (int selectedItem) {
+                                    setState(() {
+                                      selectedCategory = selectedItem;
+                                    });
+                                  },
+                                  children:
+                                    List<Widget>.generate(categoryData.length, (int index) {
+                                    return Center(child: Text(categoryData[index].name));
+                                  }),
+                                ),
+                              ),
+                            ),
+                            // TAG
+                            SizedBox(
+                              height: 40,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Wrap(
+                                  children: config.TAG.tags.map((Tag tag) {
+                                    return _isShowTags || selectedTags.contains(tag.tagId) ? Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            if (selectedTags.contains(tag.tagId)) {
+                                              selectedTags.remove(tag.tagId);
+                                            } else {
+                                              selectedTags.add(tag.tagId);
+                                            }
+                                          });
+                                        },
+                                        child: CustomChip(
+                                          text: tag.name,
+                                          selected: selectedTags.contains(tag.tagId),
+                                          backgroundColor: const Color.fromARGB(255, 227, 227, 227),
+                                          selectedColor: Colors.grey.shade600,
+                                        )
+                                      ),
+                                    ) : const SizedBox();
+                                  }).toList(),
+                                ),
+                              ),
+                            ),
+                            widget.isEdit ? GestureDetector(onTap: _showTag, child: const Text('show more')) : const SizedBox()
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      decoration: cardDecoration(context),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          children: [
+                            InputTextFeild(
+                              initialValue: widget.note,
+                              controller: noteCtrl,
+                              infoText: "",
+                              hintText: "note",
+                              obscureText: false
+                            ),
+                            SizedBox(
+                              height: 40,
+                              child: TextButton(
+                                onPressed: () {showDatePicker(context);},
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(Icons.date_range_rounded),
+                                    const SizedBox(width: 10,),
+                                    Text(
+                                      _selectedDate,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    const Icon(Icons.arrow_drop_down_rounded),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    InputTextFeild(
-                      initialValue: widget.note,
-                      controller: noteCtrl,
-                      infoText: "Name",
-                      hintText: "name",
-                      obscureText: false
-                    ),
-                    const SizedBox(height: 10),
-                    InputNumber(
-                      initialValue: widget.amount,
-                      controller: amountCtrl,
-                      hintText: '00.00',
-                      infoText: 'Amount',
-                    ),
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          CupertinoButton(child: 
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(Radius.circular(15)),
-                                border: Border.all(
-                                  color: Theme.of(context).colorScheme.secondary,
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SizedBox(
-                                  width: 180,
-                                  height: 30,
-                                  child: Center(child: Text(categoryData[selectedCategory].name))
-                                ),
-                              )
-                            ),
-                            onPressed: () => _showDialog(
-                              CupertinoPicker(
-                                magnification: 1.22,
-                                squeeze: 1.2,
-                                useMagnifier: true,
-                                itemExtent: 32.0,
-                                scrollController: FixedExtentScrollController(
-                                  initialItem: selectedCategory,
-                                ),
-                                onSelectedItemChanged: (int selectedItem) {
-                                  setState(() {
-                                    selectedCategory = selectedItem;
-                                  });
-                                },
-                                children:
-                                  List<Widget>.generate(categoryData.length, (int index) {
-                                  return Center(child: Text(categoryData[index].name));
-                                }),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
                   ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                child: Wrap(
-                  spacing: 5.0,
-                  runSpacing: 5.0,
-                  children: config.TAG.tags.map((Tag tag) {
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          if (selectedTags.contains(tag.tagId)) {
-                            selectedTags.remove(tag.tagId);
-                          } else {
-                            selectedTags.add(tag.tagId);
-                          }
-                        });
-                      },
-                      child: CustomChip(
-                        text: tag.name,
-                        selected: selectedTags.contains(tag.tagId),
-                        backgroundColor: Color.fromARGB(255, 227, 227, 227),
-                        selectedColor: Colors.grey.shade600,
-                      ),
-                    );
-                  }).toList(),
                 ),
               ),
               Expanded(

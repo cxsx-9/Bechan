@@ -79,6 +79,7 @@ class TransactionCard extends StatelessWidget {
                       ],
                     ),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
                           date,
@@ -87,11 +88,11 @@ class TransactionCard extends StatelessWidget {
                             color: Theme.of(context).colorScheme.secondary,
                           )
                         ),
-                        SizedBox(width: 10,),
+                        const SizedBox(width: 10,),
                         Text(
                           category, 
                           style: GoogleFonts.inter(
-                            fontSize: 12,
+                            fontSize: 13,
                             color: Theme.of(context).colorScheme.secondary,
                           )
                         ),

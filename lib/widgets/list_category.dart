@@ -118,7 +118,7 @@ class _ListCategoryState extends State<ListCategory> {
   Widget build(BuildContext context) {
     return Slidable(
       key: ValueKey(widget.item.categorieId),
-        endActionPane: ActionPane(
+        endActionPane: widget.item.userId != null ? ActionPane(
           extentRatio: 0.4,
           motion: const ScrollMotion(),
           children: [
@@ -139,7 +139,7 @@ class _ListCategoryState extends State<ListCategory> {
               icon: Icons.delete_forever_rounded,
             ),
           ],
-        ),
+        ) : null,
       child: Center(
         child: SizedBox(
           width: double.infinity,
@@ -150,7 +150,8 @@ class _ListCategoryState extends State<ListCategory> {
                 child: Text(
                 widget.item.name,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: widget.item.userId != null ? Theme.of(context).colorScheme.primary
+                  : Colors.black45,
                   fontSize: 14
                 ),
               ),

@@ -28,22 +28,26 @@ class _InputNumberState extends State<InputNumber> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.infoText,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(
-          height: 2,
-        ),
+        widget.infoText != ''
+        ? Column(
+          children: [
+            Text(
+              widget.infoText,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox( height: 2)
+          ],
+        )
+        : const SizedBox(width: 1),
         SizedBox(
-          height: 70,
+          height: 50,
           child: TextField(
-            textAlignVertical: TextAlignVertical.center,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 30),
+            textAlignVertical: TextAlignVertical.bottom,
+            textAlign: TextAlign.end,
+            style: const TextStyle(fontSize: 20),
             controller: widget.controller,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: InputDecoration(
@@ -56,7 +60,7 @@ class _InputNumberState extends State<InputNumber> {
                 borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
               ),
               hintText: widget.hintText,
-              hintStyle: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 30, fontWeight: FontWeight.w200),
+              hintStyle: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 20, fontWeight: FontWeight.w300),
             ),
           ),
         ),
