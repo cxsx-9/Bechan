@@ -84,7 +84,7 @@ class _ListCategoryState extends State<ListCategory> {
       context: context,
       builder: (BuildContext context) => _SoftAppearDialog(
         child: CupertinoAlertDialog(
-          content: const Text('Are you sure want to delete \nthis data?'),
+          content: const Text('Are you sure you want to delete \nthis data?'),
           actions: <CupertinoDialogAction>[
             CupertinoDialogAction(
               isDefaultAction: true,

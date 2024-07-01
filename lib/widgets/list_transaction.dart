@@ -23,7 +23,7 @@ class _ListTransactionState extends State<ListTransaction> {
       context: context,
       builder: (BuildContext context) => _SoftAppearDialog(
         child: CupertinoAlertDialog(
-          content: const Text('Are you sure want to delete \nthis data?'),
+          content: const Text('Are you sure you want to delete \nthis data?'),
           actions: <CupertinoDialogAction>[
             CupertinoDialogAction(
               isDefaultAction: true,
@@ -56,12 +56,19 @@ class _ListTransactionState extends State<ListTransaction> {
 
   _duplicate(transaction) async {
     dynamic categoryData = transaction.categorieName == 'income' ? config.CATEGORY.income : config.CATEGORY.expenses;
+    List<int> selectedTags = [];
+    if (transaction.tags != []) {
+      for (var tag in transaction.tags) {
+        selectedTags.add(tag.tagId);
+      }
+    }
     await TransactionService().addTransaction({
       "categorie_id": categoryData[categoryData.indexWhere((category) => category.name == transaction.categorieName)].categorieId,
       "amount": transaction.amount,
       "note": transaction.note,
       "transaction_datetime" : DateFormat('yyyy-MM-dd HH:mm:ss').format(transaction.transactionDatetime),
       "fav": 0,
+      "tag_id": selectedTags,
     });
     widget.onDataChanged();
   }
