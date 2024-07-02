@@ -1,6 +1,6 @@
 import 'package:bechan/models/category_model.dart';
 import 'package:bechan/services/category_service.dart';
-import 'package:bechan/widgets/soft_appear_dialog.dart';
+import 'package:bechan/widgets/custom_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -24,95 +24,20 @@ class ListCategory extends StatefulWidget {
 class _ListCategoryState extends State<ListCategory> {
   TextEditingController nameCtrl = TextEditingController();
 
-  Future<void> editCategory(context) async {
-    nameCtrl.text = widget.item.name;
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) => SoftAppearDialog(
-        child: CupertinoAlertDialog(
-          content: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                const Text(
-                  'Enter new Category name'
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                CupertinoTextField(
-                  controller: nameCtrl,
-                  placeholder: "Category name",
-                ),
-            ],
-          ),
-          actions: <CupertinoDialogAction>[
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'Cancel',
-                style: TextStyle(color: Colors.blue),
-              ),
-            ),
-            CupertinoDialogAction(
-              isDestructiveAction: false,
-              onPressed: () async {
-                Navigator.pop(context);
-                await CategoryService().editCategory(
-                  {
-                    "categorie_id": widget.item.categorieId,
-                    "name": nameCtrl.text,
-                    "type": widget.type
-                  }
-                );
-                widget.onDataChanged();
-              },
-              child: const Text(
-                'Done',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-          ],
-        ),
-      ),
+  void onSubmitEdit() async {
+    await CategoryService().editCategory(
+      {
+        "categorie_id": widget.item.categorieId,
+        "name": nameCtrl.text,
+        "type": widget.type
+      }
     );
+    widget.onDataChanged();
   }
 
-  Future<void> deleteCategory(context) async {
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) => SoftAppearDialog(
-        child: CupertinoAlertDialog(
-          content: const Text('Are you sure you want to delete \nthis data?'),
-          actions: <CupertinoDialogAction>[
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'Cancel',
-                style: TextStyle(color: Colors.blue),
-              ),
-            ),
-            CupertinoDialogAction(
-              isDestructiveAction: false,
-              onPressed: () async {
-                Navigator.pop(context);
-                await CategoryService().deleteCategory({"categorie_id" : widget.item.categorieId});
-                widget.onDataChanged();
-              },
-              child: const Text(
-                'Delete',
-                style: TextStyle(color: Colors.red),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  void onSubmitDelete() async {
+    await CategoryService().deleteCategory({"categorie_id" : widget.item.categorieId});
+    widget.onDataChanged();
   }
 
   @override
@@ -125,7 +50,8 @@ class _ListCategoryState extends State<ListCategory> {
           children: [
             SlidableAction(
               onPressed: (_) async {
-                await editCategory(context);
+                nameCtrl.text = widget.item.name;
+                CustomDialog().inputDialog(context, nameCtrl, onSubmitEdit, 'Edit');
               },
               backgroundColor: Colors.black,
               foregroundColor: Colors.white,
@@ -133,7 +59,7 @@ class _ListCategoryState extends State<ListCategory> {
             ),
             SlidableAction(
               onPressed: (_) async {
-                await deleteCategory(context);
+                CustomDialog().alertDialog(context, onSubmitDelete, 'Delete', 'Are you sure you want to delete \nthis data?');
               },
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,

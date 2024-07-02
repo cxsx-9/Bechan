@@ -46,7 +46,7 @@ class _InputNumberState extends State<InputNumber> {
           height: 50,
           child: TextField(
             textAlignVertical: TextAlignVertical.bottom,
-            textAlign: TextAlign.end,
+            textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 20),
             controller: widget.controller,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),

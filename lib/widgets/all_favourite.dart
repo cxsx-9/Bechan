@@ -15,17 +15,30 @@ class AllFavourite extends StatelessWidget{
       height: 415,
       child: Container(
         decoration: cardDecoration(context),
-        child: FutureBuilder<dynamic>(
-          future: TransactionService().fetchFav(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if ( snapshot.connectionState == ConnectionState.waiting ){
-              return const Center(child: CircularProgressIndicator());
-            } else {
-              return Padding(
-                padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
-                child: Column(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
+          child: FutureBuilder<dynamic>(
+            future: TransactionService().fetchFav(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  Text(
+                    "offline",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  Text(textAlign: TextAlign.center,'You are Not Connected to the Internet'),
+                ]
+              );
+              } else if ( snapshot.connectionState == ConnectionState.waiting ){
+                return const Center(child: CircularProgressIndicator());
+              } else {
+                return Column(
                   children: [
                     SizedBox(
                       height: 40,
@@ -61,10 +74,10 @@ class AllFavourite extends StatelessWidget{
                       ),
                     )
                   ],
-                ),
-              );
-            }
-          },
+                );
+              }
+            },
+          ),
         ),
       ),
     );

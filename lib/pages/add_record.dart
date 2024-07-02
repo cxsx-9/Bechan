@@ -172,7 +172,6 @@ class _AddRecordState extends State<AddRecord> {
         }
         noteCtrl.text = favouritItem.note;
       }
-      widget.isEdit = true;
     });
   }
 
@@ -432,7 +431,7 @@ class _AddRecordState extends State<AddRecord> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Row(
+                    !widget.isEdit ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text ('from your favourite bill', style: TextStyle(color: Theme.of(context).colorScheme.secondary),),
@@ -452,7 +451,7 @@ class _AddRecordState extends State<AddRecord> {
                             icon : Icon(Icons.arrow_drop_down_rounded, color: Theme.of(context).colorScheme.secondary),
                           ),
                         ],
-                      ),
+                      ) : const SizedBox(),
                     SubmitButton(
                       btnText: widget.isEdit
                         ? 'Edit'

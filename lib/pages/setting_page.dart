@@ -38,7 +38,6 @@ class _SettingPageState extends State<SettingPage> {
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 50,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 17),
               child: Column(

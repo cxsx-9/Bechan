@@ -1,6 +1,6 @@
 import 'package:bechan/models/tag_model.dart';
 import 'package:bechan/services/tag_service.dart';
-import 'package:bechan/widgets/soft_appear_dialog.dart';
+import 'package:bechan/widgets/custom_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -22,94 +22,19 @@ class ListTag extends StatefulWidget {
 class _ListTagState extends State<ListTag> {
   TextEditingController nameCtrl = TextEditingController();
 
-  Future<void> editTag(context) async {
-    nameCtrl.text = widget.item.name;
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) => SoftAppearDialog(
-        child: CupertinoAlertDialog(
-          content: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                const Text(
-                  'Enter new Tag name'
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                CupertinoTextField(
-                  controller: nameCtrl,
-                  placeholder: "Tag name",
-                ),
-            ],
-          ),
-          actions: <CupertinoDialogAction>[
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'Cancel',
-                style: TextStyle(color: Colors.blue),
-              ),
-            ),
-            CupertinoDialogAction(
-              isDestructiveAction: false,
-              onPressed: () async {
-                Navigator.pop(context);
-                await TagService().editTag(
-                  {
-                    "tag_id": widget.item.tagId,
-                    "tag_name": nameCtrl.text,
-                  }
-                );
-                widget.onDataChanged();
-              },
-              child: const Text(
-                'Done',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-          ],
-        ),
-      ),
+  void onSubmitEdit() async {
+    await TagService().editTag(
+      {
+        "tag_id": widget.item.tagId,
+        "tag_name": nameCtrl.text,
+      }
     );
+    widget.onDataChanged();
   }
 
-  Future<void> deleteTag(context) async {
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) => SoftAppearDialog(
-        child: CupertinoAlertDialog(
-          content: const Text('Are you sure you want to delete \nthis data?'),
-          actions: <CupertinoDialogAction>[
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'Cancel',
-                style: TextStyle(color: Colors.blue),
-              ),
-            ),
-            CupertinoDialogAction(
-              isDestructiveAction: false,
-              onPressed: () async {
-                Navigator.pop(context);
-                await TagService().deleteTag({"tag_id" : widget.item.tagId});
-                widget.onDataChanged();
-              },
-              child: const Text(
-                'Delete',
-                style: TextStyle(color: Colors.red),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  void onSubmitDelete() async {
+    await TagService().deleteTag({"tag_id" : widget.item.tagId});
+    widget.onDataChanged();
   }
 
   @override
@@ -122,7 +47,8 @@ class _ListTagState extends State<ListTag> {
           children: [
             SlidableAction(
               onPressed: (_) async {
-                await editTag(context);
+                nameCtrl.text = widget.item.name;
+                CustomDialog().inputDialog(context, nameCtrl, onSubmitEdit, 'Edit');
               },
               backgroundColor: Colors.black,
               foregroundColor: Colors.white,
@@ -130,7 +56,7 @@ class _ListTagState extends State<ListTag> {
             ),
             SlidableAction(
               onPressed: (_) async {
-                await deleteTag(context);
+                CustomDialog().alertDialog(context, onSubmitDelete, 'Delete', 'Are you sure you want to delete \nthis data?');
               },
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,

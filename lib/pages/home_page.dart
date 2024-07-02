@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
   DateTime? _start;
   DateTime? _end;
   bool _isLoading = true;
-  late Future<dynamic> _data = Future.value(TransactionService().fetchTransaction(_startDate, _endDate));
+  late Future<dynamic> _data = Future.value(TransactionService().fetchTransaction(_startDate, _endDate, context));
 
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
@@ -44,14 +44,14 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _fetchData() async {
     setState(() {_isLoading = true;});
-    _data = await Future.value(TransactionService().fetchTransaction(_startDate, _endDate));
+    _data = await Future.value(TransactionService().fetchTransaction(_startDate, _endDate, context));
     setState(() {});
   }
 
   Future<void> _reload() async {
     print("-- ---  -----   -------    RELOAD");
     setState(() {_isLoading = false;});
-    _data = await Future.value(TransactionService().fetchTransaction(_startDate, _endDate));
+    _data = await Future.value(TransactionService().fetchTransaction(_startDate, _endDate, context));
     _refreshController.refreshCompleted();
     setState(() {});
   }
@@ -94,12 +94,11 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
-                  // Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SmallProfileCard(firstname: _user.firstname, email: _user.email, greeting: "Welcome back!"),
                           const SizedBox(width: 10),
@@ -132,16 +131,13 @@ class _HomePageState extends State<HomePage> {
                       FutureBuilder<dynamic>(
                         future: _data,
                         builder: (context, snapshot) {
-                          if (snapshot.hasError) {
-                            return Center(child: Text('Error: ${snapshot.error}'));
-                          } else {
-                            return AllDataCard(
-                              data: snapshot.data,
-                              start: _start ?? _now,
-                              waiting: (snapshot.connectionState == ConnectionState.waiting) && _isLoading,
-                              onDataChanged: _reload,
-                            );
-                          }
+                          return AllDataCard(
+                            data: snapshot.data,
+                            start: _start ?? _now,
+                            waiting: (snapshot.connectionState == ConnectionState.waiting) && _isLoading,
+                            onDataChanged: _reload,
+                            snapshot: snapshot
+                          );
                         },
                       )
                     ],

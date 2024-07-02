@@ -1,9 +1,9 @@
 import 'package:bechan/services/category_service.dart';
 import 'package:bechan/services/tag_service.dart';
 import 'package:bechan/widgets/card_decoration.dart';
+import 'package:bechan/widgets/custom_dialog.dart';
 import 'package:bechan/widgets/list_category.dart';
 import 'package:bechan/widgets/list_tag.dart';
-import 'package:bechan/widgets/soft_appear_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bechan/config.dart' as config;
@@ -54,62 +54,12 @@ class _CategoryPageState extends State<CategoryPage> {
     });
   }
 
-
-
-  void addNew() {
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) => SoftAppearDialog(
-        child: CupertinoAlertDialog(
-          content: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                const Text(
-                  'Enter new category name'
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                CupertinoTextField(
-                  controller: textCtrl,
-                  placeholder: "name",
-                ),
-            ],
-          ),
-          actions: <CupertinoDialogAction>[
-            CupertinoDialogAction(
-              // isDefaultAction: true,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'Cancel',
-                style: TextStyle(color: Colors.blue),
-              ),
-            ),
-            CupertinoDialogAction(
-              // isDestructiveAction: false,
-              onPressed: () {
-                if (textCtrl.text != '') {
-                  if (_type == 'tag') {
-                    createTag();
-                  } else {
-                    createCategory();
-                  }
-                }
-                print("Done ? type $_type - ${textCtrl.text}");
-                textCtrl.text = '';
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'Done',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  void onSubmit() {
+    if (_type == 'tag') {
+      createTag();
+    } else {
+      createCategory();
+    }
   }
 
   @override
@@ -135,18 +85,15 @@ class _CategoryPageState extends State<CategoryPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: 44,
-                    child:
-                      Text(
-                        'Category',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Theme.of(context).colorScheme.secondary,
-                        )
-                      ),
+                  Text(
+                    'Category',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.secondary,
+                    )
                   ),
+                  const SizedBox(height: 20,),
                   Center(
                     child : CupertinoSlidingSegmentedControl(
                       groupValue: _type,
@@ -165,13 +112,13 @@ class _CategoryPageState extends State<CategoryPage> {
                   const SizedBox(height: 15,),
                   SizedBox(
                     width: double.infinity,
-                    height: 584,
+                    height: 582,
                     child: Container(
                       decoration: cardDecoration(context),
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                            padding: const EdgeInsets.only(left: 30, top: 10, bottom: 10, right: 20),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -185,7 +132,11 @@ class _CategoryPageState extends State<CategoryPage> {
                                   )
                                 ),
                                 TextButton(
-                                  onPressed: addNew,
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: Theme.of(context).colorScheme.primary,
+                                    foregroundColor: Theme.of(context).colorScheme.onPrimary
+                                  ),
+                                  onPressed: () => {CustomDialog().inputDialog(context, textCtrl, onSubmit, 'Create new')},
                                   child: const SizedBox(
                                     width: 60,
                                     child: Row(

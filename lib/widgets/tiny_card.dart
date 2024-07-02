@@ -22,7 +22,7 @@ class TinyCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 110,
+      width: 113,
       height: 90,
       child: Container(
         decoration: BoxDecoration(

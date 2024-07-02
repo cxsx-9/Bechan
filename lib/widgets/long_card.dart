@@ -17,7 +17,7 @@ class LongCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 360,
+      width: double.infinity,
       height: 60,
       child: Container(
         decoration: cardDecoration(context),
