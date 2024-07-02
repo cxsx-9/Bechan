@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class TinyCards extends StatelessWidget {
   final String topic;
@@ -41,7 +40,7 @@ class TinyCards extends StatelessWidget {
           children: [
             Text(
               topic,
-              style: GoogleFonts.inter(
+              style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: color,
@@ -49,7 +48,7 @@ class TinyCards extends StatelessWidget {
             ),
             Text(
               data,
-              style: GoogleFonts.inter(
+              style: TextStyle(
                 fontSize: data.length < 10 ? 18 : 14,
                 color: color,
               ),

@@ -79,7 +79,7 @@ class _ListCategoryState extends State<ListCategory> {
                 style: TextStyle(
                   color: widget.item.userId != null ? Theme.of(context).colorScheme.primary
                   : Colors.black45,
-                  fontSize: 14
+                  fontSize: 15
                 ),
               ),
             ),

@@ -1,6 +1,5 @@
 import 'package:bechan/widgets/card_decoration.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class SmallCard extends StatelessWidget {
   final String topic;
@@ -27,7 +26,7 @@ class SmallCard extends StatelessWidget {
           children: [
             Text(
               topic,
-              style: GoogleFonts.inter(
+              style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.primary,
@@ -35,7 +34,7 @@ class SmallCard extends StatelessWidget {
             ),
             Text(
               data,
-              style: GoogleFonts.inter(
+              style: TextStyle(
                 fontSize: 20,
                 color: Theme.of(context).colorScheme.primary,
               ),

@@ -75,7 +75,7 @@ class _ListTagState extends State<ListTag> {
                 widget.item.name,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
-                  fontSize: 14
+                  fontSize: 15
                 ),
               ),
             ),

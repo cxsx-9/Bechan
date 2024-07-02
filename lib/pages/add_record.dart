@@ -378,6 +378,7 @@ class _AddRecordState extends State<AddRecord> {
                             ),
                             SizedBox(
                               height: 40,
+                              width: 200,
                               child: TextButton(
                                 onPressed: () async {
                                   ShowDatePickerFunction().showDatePicker(context, _onSubmit);
@@ -385,7 +386,7 @@ class _AddRecordState extends State<AddRecord> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Icon(Icons.date_range_rounded),
+                                    const Icon(Icons.date_range_rounded, size: 20,),
                                     const SizedBox(width: 10,),
                                     Text(
                                       _selectedDate,
@@ -432,8 +433,7 @@ class _AddRecordState extends State<AddRecord> {
                     !widget.isEdit ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text ('from your favourite bill', style: TextStyle(color: Theme.of(context).colorScheme.secondary),),
-                          IconButton(
+                          TextButton(
                             onPressed: () async {
                               dynamic favouritItem = await showModalBottomSheet(
                                 isScrollControlled: true,
@@ -446,7 +446,12 @@ class _AddRecordState extends State<AddRecord> {
                                 _setFavourite(favouritItem);
                               }
                             },
-                            icon : Icon(Icons.arrow_drop_down_rounded, color: Theme.of(context).colorScheme.secondary),
+                            child: Row(
+                              children : [
+                                Text ('from your favourite bill', style: TextStyle(color: Theme.of(context).colorScheme.secondary),),
+                                Icon(Icons.arrow_drop_down_rounded, color: Theme.of(context).colorScheme.secondary),
+                              ]
+                            )
                           ),
                         ],
                       ) : const SizedBox(),

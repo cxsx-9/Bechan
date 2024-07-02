@@ -52,6 +52,96 @@ class ShowDatePickerFunction {
     );
   }
 
+  void showMonthPicker(context, Function onSubmit) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SizedBox(
+            height: 300,
+            width: double.maxFinite,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  child: SfDateRangePicker(
+                    showNavigationArrow: true,
+                    allowViewNavigation: false,
+                    view: DateRangePickerView.year,
+                    backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                    headerStyle: DateRangePickerHeaderStyle(
+                      backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                      textAlign: TextAlign.center,
+                      textStyle: TextStyle(
+                        fontStyle: FontStyle.normal,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      )
+                    ),
+                    onCancel: (){ Navigator.of(context).pop(); },
+                    showActionButtons: true,
+                    onSubmit:(value) {
+                      if (value != null) {
+                        onSubmit(value);
+                      }
+                    },
+                    selectionMode: DateRangePickerSelectionMode.single,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void showYearPicker(context, Function onSubmit) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SizedBox(
+            height: 300,
+            width: double.maxFinite,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  child: SfDateRangePicker(
+                    showNavigationArrow: true,
+                    allowViewNavigation: false,
+                    view: DateRangePickerView.decade,
+                    backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                    headerStyle: DateRangePickerHeaderStyle(
+                      backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                      textAlign: TextAlign.center,
+                      textStyle: TextStyle(
+                        fontStyle: FontStyle.normal,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      )
+                    ),
+                    onCancel: (){ Navigator.of(context).pop(); },
+                    showActionButtons: true,
+                    onSubmit:(value) {
+                      if (value != null) {
+                        onSubmit(value);
+                      }
+                    },
+                    selectionMode: DateRangePickerSelectionMode.single,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   void showDateRange(context, DateTime? start, DateTime? end, Function onSubmit) {
     showDialog(
       context: context,

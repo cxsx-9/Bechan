@@ -4,7 +4,6 @@ import 'package:bechan/services/user_service.dart';
 import 'package:bechan/widgets/submit_button.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:bechan/theme/theme.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -177,7 +176,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             const SizedBox(width: 6),
                             Text(
                               'Back to log in',
-                              style: GoogleFonts.inter(
+                              style: TextStyle(
                                 color: Theme.of(context).colorScheme.primary,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ThemeProvider with ChangeNotifier {
   ThemeData _themeData = lightMode;
@@ -21,6 +22,7 @@ class ThemeProvider with ChangeNotifier {
 }
 
 ThemeData lightMode = ThemeData(
+  textTheme: GoogleFonts.interTextTheme(),
   brightness: Brightness.light,
   colorScheme: ColorScheme.light(
     primary: Colors.black,
@@ -35,6 +37,7 @@ ThemeData lightMode = ThemeData(
 );
 
 ThemeData darkMode = ThemeData(
+  textTheme: GoogleFonts.interTextTheme(),
   brightness: Brightness.dark,
   colorScheme: ColorScheme.dark(
     primary: Colors.grey.shade200,

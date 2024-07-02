@@ -4,7 +4,6 @@ import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/widgets/submit_button.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:bechan/config.dart' as config;
 
 class ForgotPasswordPage extends StatefulWidget {
@@ -61,7 +60,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     children: [
                       Text(
                         'Forgot password?',
-                        style: GoogleFonts.inter(
+                        style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
@@ -70,7 +69,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       const SizedBox(height: 10),
                       Text(
                         'We\'ll send you reset instructions.',
-                        style: GoogleFonts.inter(
+                        style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -119,7 +118,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         const SizedBox(width: 6),
                         Text(
                           'Back to log in',
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontSize: 14,
                           fontWeight: FontWeight.w400,

@@ -88,7 +88,7 @@ class _CategoryPageState extends State<CategoryPage> {
                   Text(
                     'Category',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.w600,
                       color: Theme.of(context).colorScheme.secondary,
                     )
@@ -112,44 +112,53 @@ class _CategoryPageState extends State<CategoryPage> {
                   const SizedBox(height: 15,),
                   SizedBox(
                     width: double.infinity,
-                    height: 582,
+                    height: 70,
                     child: Container(
                       decoration: cardDecoration(context),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 30, top: 10, bottom: 10, right: 20),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              _type! == 'income' ? 'Income' : _type! == 'expenses' ? 'Expense' : 'Tags',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w600,
+                                color: Theme.of(context).colorScheme.primary,
+                              )
+                            ),
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: Theme.of(context).colorScheme.primary,
+                                foregroundColor: Theme.of(context).colorScheme.onPrimary
+                              ),
+                              onPressed: () => {CustomDialog().inputDialog(context, textCtrl, onSubmit, 'Create new')},
+                              child: const SizedBox(
+                                width: 60,
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.add),
+                                    Text('Add'),
+                                  ],
+                                ),
+                              )
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 15,),
+                  Container(
+                    width: double.infinity,
+                    height: 450,
+                    decoration: cardDecoration(context),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 30, top: 10, bottom: 10, right: 20),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  _type! == 'income' ? 'Income' : _type! == 'expenses' ? 'Expense' : 'Tags',
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w600,
-                                    color: Theme.of(context).colorScheme.primary,
-                                  )
-                                ),
-                                TextButton(
-                                  style: TextButton.styleFrom(
-                                    backgroundColor: Theme.of(context).colorScheme.primary,
-                                    foregroundColor: Theme.of(context).colorScheme.onPrimary
-                                  ),
-                                  onPressed: () => {CustomDialog().inputDialog(context, textCtrl, onSubmit, 'Create new')},
-                                  child: const SizedBox(
-                                    width: 60,
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.add),
-                                        Text('Add'),
-                                      ],
-                                    ),
-                                  )
-                                ),
-                              ],
-                            ),
-                          ),
                           Expanded(
                             child: ListView.separated(
                               itemCount: count,
@@ -161,14 +170,16 @@ class _CategoryPageState extends State<CategoryPage> {
                                 }
                               },
                               separatorBuilder: (context, index) {
-                                return Divider(
-                                  color: Theme.of(context).colorScheme.shadow,
-                                  height: 0,
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                  child: Divider(
+                                    color: Theme.of(context).colorScheme.shadow,
+                                    height: 0,
+                                  ),
                                 );
                               },
                             ),
                           ),
-                          const SizedBox(height: 40),
                         ],
                       ),
                     ),

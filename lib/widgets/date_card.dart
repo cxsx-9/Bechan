@@ -1,6 +1,5 @@
 import 'package:bechan/widgets/card_decoration.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class DateCard extends StatelessWidget {
@@ -28,7 +27,7 @@ class DateCard extends StatelessWidget {
             children: [
               Text(
                 date,
-                style: GoogleFonts.inter(
+                style: TextStyle(
                   fontSize: 48,
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).colorScheme.primary,
@@ -40,7 +39,7 @@ class DateCard extends StatelessWidget {
                 children: [
                   Text(
                     month,
-                    style: GoogleFonts.inter(
+                    style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.primary,
@@ -48,7 +47,7 @@ class DateCard extends StatelessWidget {
                   ),
                   Text(
                     year,
-                    style: GoogleFonts.inter(
+                    style: TextStyle(
                       fontSize: 20,
                       color: Theme.of(context).colorScheme.primary,
                     ),

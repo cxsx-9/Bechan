@@ -3,7 +3,6 @@ import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/widgets/submit_button.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:bechan/config.dart' as config;
 
 class SetPasswordPage extends StatefulWidget {
@@ -58,7 +57,7 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
                     children: [
                       Text(
                         'Set new password',
-                        style: GoogleFonts.inter(
+                        style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
@@ -67,7 +66,7 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
                       const SizedBox(height: 10),
                       Text(
                         'Must be at least 8 characters.',
-                        style: GoogleFonts.inter(
+                        style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
@@ -136,7 +135,7 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
                         const SizedBox(width: 6),
                         Text(
                           'Back to log in',
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontSize: 14,
                           fontWeight: FontWeight.w400,

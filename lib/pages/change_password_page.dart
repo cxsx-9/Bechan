@@ -4,7 +4,6 @@ import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/widgets/submit_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({super.key});
@@ -65,7 +64,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   children: [
                     Text(
                       'Change the password',
-                      style: GoogleFonts.inter(
+                      style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -74,7 +73,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     const SizedBox(height: 10),
                     Text(
                       'Must be at least 8 characters.',
-                      style: GoogleFonts.inter(
+                      style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 12,
                         fontWeight: FontWeight.w400,

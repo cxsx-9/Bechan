@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gravatar/flutter_gravatar.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class SmallProfileCard extends StatelessWidget {
   final String firstname;
@@ -52,7 +51,7 @@ class SmallProfileCard extends StatelessWidget {
                   children: [
                     Text(
                       firstname,
-                      style: GoogleFonts.inter(
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.onPrimary,
@@ -60,7 +59,7 @@ class SmallProfileCard extends StatelessWidget {
                     ),
                     Text(
                       greeting,
-                      style: GoogleFonts.inter(
+                      style: TextStyle(
                         fontSize: 12,
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),

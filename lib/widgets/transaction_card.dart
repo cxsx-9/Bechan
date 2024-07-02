@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class TransactionCard extends StatelessWidget {
   final String amount;
@@ -64,14 +63,14 @@ class TransactionCard extends StatelessWidget {
                       children: [
                         Text(
                           note,
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                             fontSize: 16,
                             color: Theme.of(context).colorScheme.primary,
                           )
                         ),
                         Text(
                           (type == 'none' ? '?' : type == 'income' ? '+' : '-') + amount,
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                             fontSize: 16,
                             color: Theme.of(context).colorScheme.primary,
                           )
@@ -83,7 +82,7 @@ class TransactionCard extends StatelessWidget {
                       children: [
                         Text(
                           date,
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                             fontSize: 12,
                             color: Theme.of(context).colorScheme.secondary,
                           )
@@ -91,7 +90,7 @@ class TransactionCard extends StatelessWidget {
                         SizedBox(width: date != '' ? 10 : 0,),
                         Text(
                           category, 
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                             fontSize: 13,
                             color: Theme.of(context).colorScheme.secondary,
                           )
