@@ -98,9 +98,9 @@ class _CategoryPageState extends State<CategoryPage> {
                     child : CupertinoSlidingSegmentedControl(
                       groupValue: _type,
                       children: const {
-                        'income' : SizedBox(width: 80, child: Center(child: Text('Income'))),
-                        'expenses' : SizedBox(width: 80, child: Center(child: Text('Expense'))),
-                        'tag' : SizedBox(width: 80, child: Center(child: Text('Tags'))),
+                        'income' : SizedBox(width:100, child: Center(child: Text('Income'))),
+                        'expenses' : SizedBox(width:100, child: Center(child: Text('Expense'))),
+                        'tag' : SizedBox(width:100, child: Center(child: Text('Tags'))),
                       },
                       onValueChanged: (name) {
                         setState(() {

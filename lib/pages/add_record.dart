@@ -75,19 +75,15 @@ class _AddRecordState extends State<AddRecord> {
     void setIsFull() {
       isFeildFull = amountCtrl.text.isNotEmpty && noteCtrl.text.isNotEmpty;
     }
-    _sendDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(widget.date);
-    _selectedDate = DateFormat('dd MMMM yyyy').format(widget.date);
     amountCtrl.addListener(() { setIsFull();});
     noteCtrl.addListener(() { setIsFull();});
-    if (widget.isEdit) {
-      _isShowTags = false;
-    }
-    if (widget.fav == 1) {
-      _fav = true;
-    }
-    if (widget.type == 'income') {
-      _selectedType = [true, false];
-    }
+  
+    _sendDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(widget.date);
+    _selectedDate = DateFormat('dd MMMM yyyy').format(widget.date);
+    _fav = widget.fav == 1;
+    _isShowTags = !widget.isEdit;
+    bool t = widget.type == 'income';
+    _selectedType = [t, !t];
     if (widget.tags != []) {
       for (var tag in widget.tags) {
         selectedTags.add(tag.tagId);
@@ -225,32 +221,11 @@ class _AddRecordState extends State<AddRecord> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
 
-                    // Amount
-                    Container(
-                      decoration: cardDecoration(context),
-                      child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Column(
-                          children: [
-                            // Amount
-                            InputNumber(
-                              initialValue: widget.amount,
-                              controller: amountCtrl,
-                              hintText: '00.00',
-                              infoText: '',
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-
                     // Type
                     Container(
                       decoration: cardDecoration(context),
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 20, right: 20, top: 30, bottom: 20),
+                        padding: const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
                         child: Column(
                           children: [
                             Center(
@@ -364,7 +339,30 @@ class _AddRecordState extends State<AddRecord> {
                         ),
                       ),
                     ),
+
                     const SizedBox(height: 10),
+
+                   // Amount
+                    Container(
+                      decoration: cardDecoration(context),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Column(
+                          children: [
+                            // Amount
+                            InputNumber(
+                              initialValue: widget.amount,
+                              controller: amountCtrl,
+                              hintText: '00.00',
+                              infoText: 'Amount',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
+
                     Container(
                       decoration: cardDecoration(context),
                       child: Padding(
@@ -375,7 +373,7 @@ class _AddRecordState extends State<AddRecord> {
                               initialValue: widget.note,
                               controller: noteCtrl,
                               infoText: "",
-                              hintText: "note",
+                              hintText: "Name",
                               obscureText: false
                             ),
                             SizedBox(
