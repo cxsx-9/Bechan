@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:bechan/models/favourite_transaction_model.dart';
+import 'package:bechan/models/sum_month_model.dart';
+import 'package:bechan/models/sum_year_model.dart';
 import 'package:bechan/models/transaction_model.dart';
 import 'package:bechan/models/user_model.dart';
 import 'package:bechan/services/api_service.dart';
@@ -7,6 +9,22 @@ import 'package:bechan/services/user_service.dart';
 
 
 class TransactionService {
+  Future<dynamic> fetchSumM(String selectedMonth, dynamic context) async {
+    dynamic response = await ApiService().callApi('get', 'summarymonth', '?selected_month=$selectedMonth');
+    if (response == null) {
+      return null;
+    }
+    return SumMonthResponse.fromJson(jsonDecode(response.body));
+  }
+
+  Future<dynamic> fetchSumY(String selectedYear, dynamic context) async {
+    dynamic response = await ApiService().callApi('get', 'summaryyear', '?selected_year=$selectedYear');
+    if (response == null) {
+      return null;
+    }
+    return SumYearResponse.fromJson(jsonDecode(response.body));
+  }
+
   Future<dynamic> fetchTransaction(String startDate, String endDate, dynamic context) async {
     print('[TSVC] : transaction calling');
     dynamic response = await ApiService().callApi('get', 'summaryday', '?selected_date_start=$startDate&selected_date_end=$endDate');
@@ -15,8 +33,9 @@ class TransactionService {
       print('[TSVC] : transaction Error');
       Status res = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
       print(res.message);
-      if (res.message == 'Invalid or expired token')
+      if (res.message == 'Invalid or expired token') {
         UserService().logout(context);
+      }
       return null;
     }
     // print(response.body);
@@ -68,8 +87,6 @@ class TransactionService {
     if (response == null) {
       return errorApiService();
     }
-    // Status res = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
-    // print(res.message);
     return response;
   }
 }

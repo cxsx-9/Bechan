@@ -1,3 +1,5 @@
+import 'package:bechan/services/transaction_service.dart';
+import 'package:bechan/widgets/all_sum.dart';
 import 'package:bechan/widgets/card_decoration.dart';
 import 'package:bechan/widgets/show_date_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,14 +16,19 @@ class ChartPage extends StatefulWidget {
 class _ChartPageState extends State<ChartPage> {
   String _selectedMonth = DateFormat('MMMM yyyy').format(DateTime.now());
   String _selectedYear = DateFormat('yyyy').format(DateTime.now());
-  String ? _sendDate;
+  String _sendMonth = DateFormat('yyyy-MM').format(DateTime.now());
   String? _type = 'month';
+  late Future<dynamic> _mres = Future.value(TransactionService().fetchSumM(_sendMonth, context));
+  late Future<dynamic> _yres = Future.value(TransactionService().fetchSumY(_selectedYear, context));
 
   void onSubmitMonth(Object value) {
     if (value is DateTime) {
       setState(() {
-          _selectedMonth = DateFormat('MMMM yyyy').format(value);
-          _sendDate = DateFormat("yyyy MM").format(value);
+        _selectedMonth = DateFormat('MMMM yyyy').format(value);
+        if (_sendMonth != DateFormat("yyyy-MM").format(value)) {
+          _sendMonth = DateFormat("yyyy-MM").format(value);
+          fetchMSum();
+        }
       });
     }
     Navigator.of(context).pop();
@@ -30,11 +37,25 @@ class _ChartPageState extends State<ChartPage> {
   void onSubmitYear(Object value) {
     if (value is DateTime) {
       setState(() {
+        if (_selectedYear != DateFormat('yyyy').format(value)) {
           _selectedYear = DateFormat('yyyy').format(value);
-          _sendDate = DateFormat("yyyy").format(value);
+          fetchYSum();
+        }
       });
     }
     Navigator.of(context).pop();
+  }
+
+  void fetchMSum () async {
+    print('FETCH mmmmmmmmmmmm');
+    _mres = await Future.value(TransactionService().fetchSumM(_sendMonth, context));
+    setState(() {});
+  }
+
+  void fetchYSum () async {
+    print('FETCH yyyyyyyyyyyy');
+    _yres = await Future.value(TransactionService().fetchSumY(_selectedYear, context));
+    setState(() {});
   }
 
   @override
@@ -129,14 +150,17 @@ class _ChartPageState extends State<ChartPage> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 10),
                 Container(
-                  width: double.infinity,
-                  height: 350,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
+
+                  child: FutureBuilder<dynamic>(
+                    future: _type == 'month' ? _mres : _yres,
+                    builder: (context, snapshot) {
+                      return AllSum(snapshot: snapshot, type: _type!);
+                    },
+                  )
                 ),
+                const SizedBox(height: 40),
               ],
             ),
           ),
