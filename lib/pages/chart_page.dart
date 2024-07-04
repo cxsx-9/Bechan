@@ -14,22 +14,37 @@ class ChartPage extends StatefulWidget {
 }
 
 class _ChartPageState extends State<ChartPage> {
-  String _selectedMonth = DateFormat('MMMM yyyy').format(DateTime.now());
-  String _selectedYear = DateFormat('yyyy').format(DateTime.now());
-  String _sendMonth = DateFormat('yyyy-MM').format(DateTime.now());
-  String? _type = 'month';
-  late Future<dynamic> _mres = Future.value(TransactionService().fetchSumM(_sendMonth, context));
-  late Future<dynamic> _yres = Future.value(TransactionService().fetchSumY(_selectedYear, context));
+  String selectedMonth = DateFormat('MMMM yyyy').format(DateTime.now());
+  String selectedYear = DateFormat('yyyy').format(DateTime.now());
+  String sendMonth = DateFormat('yyyy-MM').format(DateTime.now());
+  String? type = 'month';
+  // String startDate = DateFormat('yyyy-MM-dd').format(DateTime(DateTime.now().year, DateTime.now().month, 1));
+  // String endDate = DateFormat('yyyy-MM-dd').format(DateTime(DateTime.now().year, DateTime.now().month + 1, 0));
+
+  // String _startDate = DateFormat('yyyy-MM-dd').format(DateTime(DateTime.now().year, DateTime.now().month, 1));
+  // String _endDate = DateFormat('yyyy-MM-dd').format(DateTime(DateTime.now().year, DateTime.now().month + 1, 0));
+
+  late Future<dynamic> _mres = Future.value(TransactionService().fetchSumM(sendMonth, context));
+  late Future<dynamic> _yres = Future.value(TransactionService().fetchSumY(selectedYear, context));
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _details = Future.value(TransactionService().fetchTransaction(startDate, endDate, context));
+  // }
 
   void onSubmitMonth(Object value) {
     if (value is DateTime) {
       setState(() {
-        _selectedMonth = DateFormat('MMMM yyyy').format(value);
-        if (_sendMonth != DateFormat("yyyy-MM").format(value)) {
-          _sendMonth = DateFormat("yyyy-MM").format(value);
+        selectedMonth = DateFormat('MMMM yyyy').format(value);
+        if (sendMonth != DateFormat("yyyy-MM").format(value)) {
+          sendMonth = DateFormat("yyyy-MM").format(value);
           fetchMSum();
         }
+        // startDate = DateFormat('yyyy-MM-dd').format(DateTime(value.year, value.month, 1));
+        // endDate = DateFormat('yyyy-MM-dd').format(DateTime(value.year, value.month + 1, 0));
       });
+      // fetchTransaction();
     }
     Navigator.of(context).pop();
   }
@@ -37,8 +52,8 @@ class _ChartPageState extends State<ChartPage> {
   void onSubmitYear(Object value) {
     if (value is DateTime) {
       setState(() {
-        if (_selectedYear != DateFormat('yyyy').format(value)) {
-          _selectedYear = DateFormat('yyyy').format(value);
+        if (selectedYear != DateFormat('yyyy').format(value)) {
+          selectedYear = DateFormat('yyyy').format(value);
           fetchYSum();
         }
       });
@@ -47,16 +62,19 @@ class _ChartPageState extends State<ChartPage> {
   }
 
   void fetchMSum () async {
-    print('FETCH mmmmmmmmmmmm');
-    _mres = await Future.value(TransactionService().fetchSumM(_sendMonth, context));
+    _mres = await Future.value(TransactionService().fetchSumM(sendMonth, context));
     setState(() {});
   }
 
   void fetchYSum () async {
-    print('FETCH yyyyyyyyyyyy');
-    _yres = await Future.value(TransactionService().fetchSumY(_selectedYear, context));
+    _yres = await Future.value(TransactionService().fetchSumY(selectedYear, context));
     setState(() {});
   }
+
+  // void fetchTransaction () async {
+  //   _details = await Future.value(TransactionService().fetchTransaction(startDate, endDate, context));
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -90,14 +108,14 @@ class _ChartPageState extends State<ChartPage> {
                     children: [
                       Center(
                         child : CupertinoSlidingSegmentedControl(
-                          groupValue: _type,
+                          groupValue: type,
                           children: const {
                             'month' : SizedBox(width:160, child: Center(child: Text('Month'))),
                             'year' : SizedBox(width:160, child: Center(child: Text('Year'))),
                           },
                           onValueChanged: (name) {
                             setState(() {
-                              _type = name;
+                              type = name;
                             });
                           },
                         )
@@ -114,7 +132,7 @@ class _ChartPageState extends State<ChartPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                _type! == 'month' ? 'Month' : 'Year',
+                                type! == 'month' ? 'Month' : 'Year',
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w600,
@@ -123,7 +141,7 @@ class _ChartPageState extends State<ChartPage> {
                               ),
                               TextButton(
                                 onPressed: () => {
-                                  if ( _type! == 'month') {
+                                  if ( type! == 'month') {
                                     ShowDatePickerFunction().showMonthPicker(context, onSubmitMonth)
                                   } else {
                                     ShowDatePickerFunction().showYearPicker(context, onSubmitYear)
@@ -133,7 +151,7 @@ class _ChartPageState extends State<ChartPage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                       _type! == 'month' ? _selectedMonth : _selectedYear,
+                                       type! == 'month' ? selectedMonth : selectedYear,
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
@@ -151,12 +169,11 @@ class _ChartPageState extends State<ChartPage> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Container(
-
+                SizedBox(
                   child: FutureBuilder<dynamic>(
-                    future: _type == 'month' ? _mres : _yres,
+                    future: type == 'month' ? _mres : _yres,
                     builder: (context, snapshot) {
-                      return AllSum(snapshot: snapshot, type: _type!);
+                      return AllSum(snapshot: snapshot, type: type!);
                     },
                   )
                 ),

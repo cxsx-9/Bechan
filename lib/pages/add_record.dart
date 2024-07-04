@@ -73,7 +73,8 @@ class _AddRecordState extends State<AddRecord> {
   void initState() {
     super.initState();
     void setIsFull() {
-      isFeildFull = amountCtrl.text.isNotEmpty && noteCtrl.text.isNotEmpty;
+      isFeildFull = amountCtrl.text.isNotEmpty;
+      // isFeildFull = amountCtrl.text.isNotEmpty && noteCtrl.text.isNotEmpty;
     }
     amountCtrl.addListener(() { setIsFull();});
     noteCtrl.addListener(() { setIsFull();});

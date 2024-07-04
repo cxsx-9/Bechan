@@ -1,13 +1,13 @@
 class SummaryM {
   int userId;
-  String year;
+  String month;
   double totalIncome;
   double totalExpense;
   double balance;
 
   SummaryM({
     this.userId = 0,
-    this.year = '',
+    this.month = '',
     this.totalIncome = 0.0,
     this.totalExpense = 0.0,
     this.balance = 0.0,
@@ -16,7 +16,7 @@ class SummaryM {
   factory SummaryM.fromJson(Map<String, dynamic> json) {
     return SummaryM(
       userId: json['user_id'] ?? 0,
-      year: json['year'] ?? '',
+      month: json['month'] ?? '',
       totalIncome: json['total_income'].toDouble() ?? 0.0,
       totalExpense: json['total_expense'].toDouble() ?? 0.0,
       balance: json['balance'].toDouble() ?? 0.0,
@@ -26,7 +26,7 @@ class SummaryM {
   Map<String, dynamic> toJson() {
     return {
       'user_id': userId,
-      'year': year,
+      'month': month,
       'total_income': totalIncome,
       'total_expense': totalExpense,
       'balance': balance,
@@ -35,7 +35,7 @@ class SummaryM {
 
   @override
   String toString() {
-    return 'SummaryM{userId: $userId, year: $year, totalIncome: $totalIncome, totalExpense: $totalExpense, balance: $balance}';
+    return 'SummaryM{userId: $userId, year: $month, totalIncome: $totalIncome, totalExpense: $totalExpense, balance: $balance}';
   }
 }
 

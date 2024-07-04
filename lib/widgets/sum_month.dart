@@ -20,6 +20,7 @@ class SumMonth extends StatelessWidget {
     final List<SumCategory> sumExpense = data != null ? data.getCategories('expense') : [];
     final String income = data != null ? config.NUM_FORMAT.format(data.summary.totalIncome) : '';
     final String expense = data != null ? config.NUM_FORMAT.format(data.summary.totalExpense) : '';
+    final List<SumTags> sumTags = data != null ? data.summaryTags : [];
     return Column(
       children: [
         DoughnutChart(data: sumIncome, topic: 'Income', mid: income),
@@ -40,18 +41,18 @@ class SumMonth extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Tag', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                        Text('Income', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                        Text('Expense', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        SizedBox(width:70, child: Text('Tag', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+                        SizedBox(width:80, child: Text('Income', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), textAlign: TextAlign.end,)),
+                        SizedBox(width:80, child: Text('Expense', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), textAlign: TextAlign.end,)),
                       ],
                     ),
                   ),
                 ),
                 Expanded(
                   child: ListView.separated(
-                    itemCount: data.summaryTags.length,
+                    itemCount: sumTags.length,
                     itemBuilder: (context, index) {
-                      final item = data.summaryTags[index];
+                      final item = sumTags[index];
                       return Center(
                         child: SizedBox(
                           width: double.infinity,
@@ -59,9 +60,9 @@ class SumMonth extends StatelessWidget {
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(item.name,style: const TextStyle(fontSize: 15),),
-                                Text(config.NUM_FORMAT.format(item.income), style: const TextStyle(fontSize: 15),),
-                                Text(config.NUM_FORMAT.format(item.expense), style: const TextStyle(fontSize: 15),),
+                                SizedBox(width:70, child: Text(item.name,style: const TextStyle(fontSize: 15),)),
+                                SizedBox(width:80, child: Text(config.NUM_FORMAT.format(item.income), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
+                                SizedBox(width:80, child: Text(config.NUM_FORMAT.format(item.expense), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
                               ],
                             ),
                           ),

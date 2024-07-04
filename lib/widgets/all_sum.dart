@@ -32,12 +32,7 @@ class AllSum extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10,),
-          ( snapshot.connectionState == ConnectionState.waiting )
-          ? Container(
-              constraints: const BoxConstraints(minHeight: 300),
-              child: const Center(child: CircularProgressIndicator())
-            )
-          : snapshot.hasError
+          snapshot.hasError
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -51,6 +46,11 @@ class AllSum extends StatelessWidget {
                 ),
                 Text(textAlign: TextAlign.center,'You are Not Connected to the Internet\n${snapshot.error}'),
               ]
+            )
+          : ( snapshot.connectionState == ConnectionState.waiting )
+          ? Container(
+              constraints: const BoxConstraints(minHeight: 300),
+              child: const Center(child: CircularProgressIndicator())
             )
           : type == 'month'
           ? SumMonth(data: snapshot.data)

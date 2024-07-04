@@ -40,13 +40,13 @@ class SummaryY {
 }
 
 class MonthData {
-  String month;
+  int month;
   double totalIncome;
   double totalExpense;
   double balance;
 
   MonthData({
-    this.month = '',
+    this.month = 0,
     this.totalIncome = 0.0,
     this.totalExpense = 0.0,
     this.balance = 0.0,  

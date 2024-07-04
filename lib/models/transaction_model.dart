@@ -1,5 +1,5 @@
-
 import 'package:bechan/models/tag_model.dart';
+import 'package:intl/intl.dart';
 
 class Transaction {
   final int transactionsId;
@@ -7,6 +7,7 @@ class Transaction {
   final String note;
   final DateTime transactionDatetime;
   final int categorieId;
+  final int date;
   final String categorieName;
   final String categorieType;
   final int fav;
@@ -17,6 +18,7 @@ class Transaction {
     required this.amount,
     required this.note,
     required this.transactionDatetime,
+    required this.date,
     required this.categorieId,
     required this.categorieName,
     required this.categorieType,
@@ -29,8 +31,9 @@ class Transaction {
     return Transaction(
       transactionsId: json['transactions_id'],
       amount: json['amount'].toDouble(),
-      note: json['note'],
+      note: json['note'] ?? '',
       transactionDatetime: DateTime.parse(json['transaction_datetime']),
+      date: int.parse(DateFormat('dd').format(DateTime.parse(json['transaction_datetime']))),
       categorieId: json['categorie_id'],
       categorieName: json['categorie_name'],
       categorieType: json['categorie_type'],
