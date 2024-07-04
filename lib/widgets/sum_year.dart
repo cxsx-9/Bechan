@@ -3,6 +3,7 @@ import 'package:bechan/widgets/card_decoration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bechan/config.dart' as config;
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class SumYear extends StatelessWidget {
@@ -20,32 +21,37 @@ class SumYear extends StatelessWidget {
       children: [
         Container(
           width: double.infinity,
-          height: 300,
+          height: months.length != 0 ? 300 : 200,
           decoration: cardDecoration(context),
-          child: Padding(
+          child: months.length != 0 ? Padding(
             padding: const EdgeInsets.all(15.0),
             child: SfCartesianChart(
+              tooltipBehavior: TooltipBehavior(
+                enable: true,
+              ),
+              primaryXAxis: CategoryAxis(),
               series: <CartesianSeries>[
-                  ColumnSeries<MonthData, int>(
+                  ColumnSeries<MonthData, String>(
+                      name: 'Income',
                       dataSource: months,
-                      // splineType: SplineType.cardinal,
-                      xValueMapper: (MonthData data, _) => data.month,
+                      xValueMapper: (MonthData data, _) => DateFormat('MMMM').format(DateTime(0, data.month)),
+                      // xValueMapper: (MonthData data, _) => data.month,
                       yValueMapper: (MonthData data, _) => data.totalIncome,
                       color: const Color.fromRGBO(0, 189, 174, 1),
                   ),
-                  ColumnSeries<MonthData, int>(
+                  ColumnSeries<MonthData, String>(
+                      name: 'Expense',
                       dataSource: months,
-                      // splineType: SplineType.cardinal,
-                      xValueMapper: (MonthData data, _) => data.month,
+                      xValueMapper: (MonthData data, _) => DateFormat('MMMM').format(DateTime(0, data.month)),
                       yValueMapper: (MonthData data, _) => data.totalExpense,
                       color: const Color.fromRGBO(229, 101, 144, 1),
                   ),
               ]
             ),
-          ),
+          ) : Center(child: Text('No Year data'),),
         ),
         const SizedBox(height: 10,),
-        Container(
+        months.length != 0 ? Container(
           width: double.infinity,
           constraints: const BoxConstraints(maxHeight: 300, minHeight: 100),
           decoration: cardDecoration(context),
@@ -79,7 +85,7 @@ class SumYear extends StatelessWidget {
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox(width:70, child: Text(item.month.toString(), style: const TextStyle(fontSize: 15),)),
+                                SizedBox(width:70, child: Text(DateFormat('MMMM').format(DateTime(0, item.month)), style: const TextStyle(fontSize: 18),)),
                                 SizedBox(width:100, child: Text(config.NUM_FORMAT.format(item.totalIncome), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
                                 SizedBox(width:100, child: Text(config.NUM_FORMAT.format(item.totalExpense), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
                               ],
@@ -102,7 +108,7 @@ class SumYear extends StatelessWidget {
               ],
             ),
           ),
-        ),
+        ) : const SizedBox(),
       ],
     );
   }

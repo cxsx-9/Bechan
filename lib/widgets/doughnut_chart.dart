@@ -23,10 +23,10 @@ class DoughnutChart extends StatelessWidget {
     return Container(
       decoration: cardDecoration(context),
       width: double.infinity,
-      height: data.length != 0 ? 460 : 200,
+      height: data.length != 0 ? 460 : 70,
       child: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Column(
+        child: data.length != 0 ? Column(
           children: [
             SizedBox(
               height: data.length != 0 ? 300 : 80,
@@ -113,7 +113,7 @@ class DoughnutChart extends StatelessWidget {
               ),
             ),
           ],
-        ),
+        ) : Center(child:Text('No $topic data')),
       ),
     );
   }

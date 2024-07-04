@@ -15,7 +15,6 @@ class SumMonth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('SUM MONTH');
     final List<SumCategory> sumIncome = data != null ? data.getCategories('income') : [];
     final List<SumCategory> sumExpense = data != null ? data.getCategories('expense') : [];
     final String income = data != null ? config.NUM_FORMAT.format(data.summary.totalIncome) : '';
@@ -28,11 +27,11 @@ class SumMonth extends StatelessWidget {
         DoughnutChart(data: sumExpense, topic: 'Expense', mid: expense),
         const SizedBox(height: 10,),
         Container(
-          constraints: const BoxConstraints(maxHeight: 300, minHeight: 100),
+          constraints: BoxConstraints(maxHeight: sumTags.length != 0 ? 300 : 70, minHeight: 50),
           decoration: cardDecoration(context),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: Column(
+            child: sumTags.length != 0 ? Column(
               children: [
                 const SizedBox(
                   height: 50,
@@ -81,7 +80,7 @@ class SumMonth extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
+            ) : Center(child: Text('No tags data'),),
           ),
         )
       ],
