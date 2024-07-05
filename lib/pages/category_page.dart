@@ -143,7 +143,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 20),
                                   child: Divider(
-                                    color: Theme.of(context).colorScheme.shadow,
+                                    color: Theme.of(context).colorScheme.onSecondary,
                                     height: 0,
                                   ),
                                 );
