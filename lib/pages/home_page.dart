@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(Icons.calendar_month_rounded),
+                                const Icon(Icons.calendar_month_rounded, size: 17),
                                 const SizedBox(width: 10,),
                                 Text(_range),
                                 const Icon(Icons.arrow_drop_down_rounded),

@@ -2,6 +2,7 @@ import 'package:bechan/services/transaction_service.dart';
 import 'package:bechan/widgets/all_sum.dart';
 import 'package:bechan/widgets/card_decoration.dart';
 import 'package:bechan/widgets/show_date_picker.dart';
+import 'package:bechan/widgets/custom_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -19,20 +20,9 @@ class _ChartPageState extends State<ChartPage> {
   String selectedYear = DateFormat('yyyy').format(DateTime.now());
   String sendMonth = DateFormat('yyyy-MM').format(DateTime.now());
   String? type = 'month';
-  // String startDate = DateFormat('yyyy-MM-dd').format(DateTime(DateTime.now().year, DateTime.now().month, 1));
-  // String endDate = DateFormat('yyyy-MM-dd').format(DateTime(DateTime.now().year, DateTime.now().month + 1, 0));
-
-  // String _startDate = DateFormat('yyyy-MM-dd').format(DateTime(DateTime.now().year, DateTime.now().month, 1));
-  // String _endDate = DateFormat('yyyy-MM-dd').format(DateTime(DateTime.now().year, DateTime.now().month + 1, 0));
 
   late Future<dynamic> _mres = Future.value(TransactionService().fetchSumM(sendMonth, context));
   late Future<dynamic> _yres = Future.value(TransactionService().fetchSumY(selectedYear, context));
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _details = Future.value(TransactionService().fetchTransaction(startDate, endDate, context));
-  // }
 
   void onSubmitMonth(Object value) {
     if (value is DateTime) {
@@ -42,10 +32,7 @@ class _ChartPageState extends State<ChartPage> {
           sendMonth = DateFormat("yyyy-MM").format(value);
           fetchMSum();
         }
-        // startDate = DateFormat('yyyy-MM-dd').format(DateTime(value.year, value.month, 1));
-        // endDate = DateFormat('yyyy-MM-dd').format(DateTime(value.year, value.month + 1, 0));
       });
-      // fetchTransaction();
     }
     Navigator.of(context).pop();
   }
@@ -97,20 +84,34 @@ class _ChartPageState extends State<ChartPage> {
           enableTwoLevel: false,
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
-              child: Column(
-                children: [
-                  Text(
-                    'Summary',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.secondary,
-                    )
-                  ),
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Column(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Summary',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w900,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () => {
+                              CustomDialog().importDialog(context, 'Improt file', 'Download template file')
+                            },
+                            icon: const Icon(Icons.add),
+                          )
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Column(
                       children: [
                         Center(
                           child : CupertinoSlidingSegmentedControl(
@@ -129,62 +130,41 @@ class _ChartPageState extends State<ChartPage> {
                         const SizedBox(height: 15),
                         Container(
                           width: double.infinity,
-                          height: 70,
+                          height: 45,
                           decoration: cardDecoration(context),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 30, top: 10, bottom: 10, right: 20),
+                          child: TextButton(
+                            onPressed: () => {
+                              if ( type! == 'month') {
+                                ShowDatePickerFunction().showMonthPicker(context, onSubmitMonth)
+                              } else {
+                                ShowDatePickerFunction().showYearPicker(context, onSubmitYear)
+                              }
+                            },
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  type! == 'month' ? 'Month' : 'Year',
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w600,
-                                    color: Theme.of(context).colorScheme.primary,
-                                  )
-                                ),
-                                TextButton(
-                                  onPressed: () => {
-                                    if ( type! == 'month') {
-                                      ShowDatePickerFunction().showMonthPicker(context, onSubmitMonth)
-                                    } else {
-                                      ShowDatePickerFunction().showYearPicker(context, onSubmitYear)
-                                    }
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                         type! == 'month' ? selectedMonth : selectedYear,
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      const Icon(Icons.arrow_drop_down_rounded),
-                                    ],
-                                  ),
-                                )
+                                const Icon(Icons.calendar_month_rounded, size: 17),
+                                const SizedBox(width: 10,),
+                                Text(type! == 'month' ? selectedMonth : selectedYear,),
+                                const Icon(Icons.arrow_drop_down_rounded),
                               ],
                             ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    child: FutureBuilder<dynamic>(
-                      future: type == 'month' ? _mres : _yres,
-                      builder: (context, snapshot) {
-                        return AllSum(snapshot: snapshot, type: type!);
-                      },
-                    )
-                  ),
-                  const SizedBox(height: 40),
-                ],
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      child: FutureBuilder<dynamic>(
+                        future: type == 'month' ? _mres : _yres,
+                        builder: (context, snapshot) {
+                          return AllSum(snapshot: snapshot, type: type!);
+                        },
+                      )
+                    ),
+                    const SizedBox(height: 40),
+                  ],
+                ),
               ),
             ),
           ),

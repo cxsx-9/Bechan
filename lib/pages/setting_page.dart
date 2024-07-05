@@ -1,9 +1,12 @@
 import 'package:bechan/models/user_model.dart';
+import 'package:bechan/services/transaction_service.dart';
 import 'package:bechan/services/user_service.dart';
 import 'package:bechan/widgets/card_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:bechan/config.dart' as config;
 import 'package:flutter_gravatar/flutter_gravatar.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class SettingPage extends StatefulWidget {
@@ -107,6 +110,55 @@ class _SettingPageState extends State<SettingPage> {
                         ),
                       )
                     ),
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    height: 170,
+                    width: double.infinity,
+                    decoration: cardDecoration(context),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 60,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                              Text('Import Data', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),),
+                              Text('Import Your Transcripts', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.secondary),),
+                            ],),
+                          ),
+                          const SizedBox(height:20 ,),
+                          Divider(height: 1, color: Theme.of(context).colorScheme.shadow,),
+                          ListTile(
+                            leading: const FaIcon(FontAwesomeIcons.fileZipper, size: 20,),
+                            trailing: IconButton(
+                              onPressed: () async {
+                                dynamic res = await TransactionService().getTemplate(context);
+                                print(res.url);
+                              },
+                              icon: const FaIcon(FontAwesomeIcons.arrowDown, size: 15,),
+                            ),
+                            title : const Text('Download template file',style: TextStyle(fontWeight: FontWeight.w500),),
+                            dense: true,
+                            visualDensity: const VisualDensity(horizontal: -3),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // child: Padding(
+                      // padding: const EdgeInsets.symmetric(horizontal: 5),
+                      // child: ListView(
+                      //   physics: const NeverScrollableScrollPhysics(),
+                      //   children: <Widget>[
+                      //     Divider(indent: 45,height: 0, color: Theme.of(context).colorScheme.shadow,),
+                      //     const ListTile(title : Text('Upload .xlsx file'), dense: true,),
+                      //   ]
+                      // ),
+                    // ),
                   ),
                   const SizedBox(height: 10),
                   Container(

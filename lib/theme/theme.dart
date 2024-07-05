@@ -22,7 +22,7 @@ class ThemeProvider with ChangeNotifier {
 }
 
 ThemeData lightMode = ThemeData(
-  textTheme: GoogleFonts.interTextTheme(),
+  textTheme: GoogleFonts.notoSansThaiTextTheme(),
   brightness: Brightness.light,
   colorScheme: ColorScheme.light(
     primary: Colors.black,

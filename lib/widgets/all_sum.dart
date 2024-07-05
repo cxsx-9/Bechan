@@ -19,44 +19,41 @@ class AllSum extends StatelessWidget {
     final String income = snapshot.data != null ? config.NUM_FORMAT.format(snapshot.data.summary.totalIncome) : '0.00';
     final String expense = snapshot.data != null ? config.NUM_FORMAT.format(snapshot.data.summary.totalExpense) : '0.00';
     final String balance = snapshot.data != null ? config.NUM_FORMAT.format(snapshot.data.summary.balance) : '0.00';
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TinyCards(topic: 'Income', data: income),
+            TinyCards(topic: 'Expense', data: expense),
+            TinyCards(topic: 'Balance',color: Colors.white,backgroundColor: Colors.blue,data: balance),
+          ],
+        ),
+        const SizedBox(height: 10,),
+        snapshot.hasError
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TinyCards(topic: 'Income', data: income),
-              TinyCards(topic: 'Expense', data: expense),
-              TinyCards(topic: 'Balance',color: Colors.white,backgroundColor: Colors.blue,data: balance),
-            ],
-          ),
-          const SizedBox(height: 10,),
-          snapshot.hasError
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  "offline",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
+              const Text(
+                "offline",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
                 ),
-                Text(textAlign: TextAlign.center,'You are Not Connected to the Internet\n${snapshot.error}'),
-              ]
-            )
-          : ( snapshot.connectionState == ConnectionState.waiting )
-          ? Container(
-              constraints: const BoxConstraints(minHeight: 300),
-              child: const Center(child: CircularProgressIndicator())
-            )
-          : type == 'month'
-          ? SumMonth(data: snapshot.data)
-          : SumYear(data: snapshot.data)
-        ],
-      ),
+              ),
+              Text(textAlign: TextAlign.center,'You are Not Connected to the Internet\n${snapshot.error}'),
+            ]
+          )
+        : ( snapshot.connectionState == ConnectionState.waiting )
+        ? Container(
+            constraints: const BoxConstraints(minHeight: 300),
+            child: const Center(child: CircularProgressIndicator())
+          )
+        : type == 'month'
+        ? SumMonth(data: snapshot.data)
+        : SumYear(data: snapshot.data)
+      ],
     );
   }
 }

@@ -70,18 +70,18 @@ class _ListCategoryState extends State<ListCategory> {
       child: Center(
         child: SizedBox(
           width: double.infinity,
-          child: CupertinoListTile(
-            title:
-              Padding(
-                padding: const EdgeInsets.only(left: 16, top: 10, bottom: 10),
-                child: Text(
-                widget.item.name,
-                style: TextStyle(
-                  color: widget.item.userId != null ? Theme.of(context).colorScheme.primary
-                  : Colors.black45,
-                  fontSize: 15
+          child: ListTile(
+            visualDensity: const VisualDensity(vertical: -3),
+            title: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                  widget.item.name,
+                  style: TextStyle(
+                    color: widget.item.userId != null ? Theme.of(context).colorScheme.primary
+                    : Colors.black45,
+                    fontSize: 15
+                  ),
                 ),
-              ),
             ),
           ),
         ),

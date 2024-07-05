@@ -67,10 +67,11 @@ class _ListTagState extends State<ListTag> {
       child: Center(
         child: SizedBox(
           width: double.infinity,
-          child: CupertinoListTile(
+          child: ListTile(
+            visualDensity: const VisualDensity(vertical: -3),
             title:
               Padding(
-                padding: const EdgeInsets.only(left: 16, top: 10, bottom: 10),
+                padding: const EdgeInsets.symmetric(horizontal : 10),
                 child: Text(
                 widget.item.name,
                 style: TextStyle(

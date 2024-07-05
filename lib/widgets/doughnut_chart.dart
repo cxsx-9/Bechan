@@ -23,19 +23,19 @@ class DoughnutChart extends StatelessWidget {
     return Container(
       decoration: cardDecoration(context),
       width: double.infinity,
-      height: data.length != 0 ? 460 : 70,
+      height: data.length != 0 ? 440 : 70,
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: data.length != 0 ? Column(
           children: [
             SizedBox(
-              height: data.length != 0 ? 300 : 80,
+              height: data.length != 0 ? 280 : 80,
               child: SfCircularChart(
                 tooltipBehavior: TooltipBehavior(enable: true),
                 annotations: <CircularChartAnnotation>[
                   CircularChartAnnotation(
                     angle: 270,
-                    radius: '8%',
+                    radius: '5%',
                     widget: Text(
                       mid,
                       style: TextStyle(
@@ -48,35 +48,21 @@ class DoughnutChart extends StatelessWidget {
                     angle: 90,
                     radius: '20%',
                     widget: Text(
-                      data.length != 0 ? 'total' : '',
+                      data.length != 0 ? topic : '',
                       style: const TextStyle(
                         color: Color.fromRGBO(0, 0, 0, 0.5),
-                        fontSize: 18
+                        fontSize: 20
                       )
                     )
                   )
                 ],
-                title: ChartTitle(
-                  text: topic,
-                  textStyle: const TextStyle(
-                    // fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                  alignment: ChartAlignment.near,
-                ),
-                // legend: const Legend(
-                //   overflowMode: LegendItemOverflowMode.scroll,
-                //   position: LegendPosition.bottom,
-                //   isVisible: true,
-                //   padding: 5
-                // ),
                 series: <CircularSeries>[
                   DoughnutSeries<dynamic, String>(
                     dataSource: data,
                     xValueMapper: (dynamic data, _) => data.name,
                     yValueMapper: (dynamic data, _) => data.amount,
                     innerRadius: '80%',
-                    radius: '100%',
+                    radius: '90%',
                   )
                 ]
               ),
@@ -89,12 +75,13 @@ class DoughnutChart extends StatelessWidget {
                   return Center(
                     child: SizedBox(
                       width: double.infinity,
-                      child: CupertinoListTile(
+                      child: ListTile(
+                        visualDensity: const VisualDensity(vertical: -3),
                         title: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(width:120, child: Text(item.name, style: const TextStyle(fontSize: 15,),)),
-                            SizedBox(width:120, child: Text(config.NUM_FORMAT.format(item.amount), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
+                            SizedBox(width:130, child: Text(item.name, style: const TextStyle(fontSize: 15,),)),
+                            SizedBox(width:130, child: Text(config.NUM_FORMAT.format(item.amount), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
                           ],
                         ),
                       ),

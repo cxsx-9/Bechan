@@ -24,7 +24,7 @@ class ApiService {
       if (response.statusCode != 200) {
         print('[API] : status Error');
         print(response.statusCode);
-        print(response.body);
+        // print(response.body);
         return null;
       }
       return response;

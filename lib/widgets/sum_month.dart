@@ -27,22 +27,22 @@ class SumMonth extends StatelessWidget {
         DoughnutChart(data: sumExpense, topic: 'Expense', mid: expense),
         const SizedBox(height: 10,),
         Container(
-          constraints: BoxConstraints(maxHeight: sumTags.length != 0 ? 300 : 70, minHeight: 50),
+          constraints: BoxConstraints(maxHeight: sumTags.isNotEmpty ? 300 : 70, minHeight: 50),
           decoration: cardDecoration(context),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: sumTags.length != 0 ? Column(
+            padding: const EdgeInsets.all(15),
+            child: sumTags.isNotEmpty ? Column(
               children: [
-                const SizedBox(
-                  height: 50,
+                SizedBox(
+                  height: 30,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 20, right: 10),
+                    padding: const EdgeInsets.symmetric(horizontal : 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(width:70, child: Text('Tag', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
-                        SizedBox(width:80, child: Text('Income', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), textAlign: TextAlign.end,)),
-                        SizedBox(width:80, child: Text('Expense', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), textAlign: TextAlign.end,)),
+                        SizedBox(width:70, child: Text('Tag', style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary))),
+                          SizedBox(width:80, child: Text('Income', style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary), textAlign: TextAlign.end, )),
+                          SizedBox(width:80, child: Text('Expense', style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary), textAlign: TextAlign.end, )),
                       ],
                     ),
                   ),
@@ -52,18 +52,17 @@ class SumMonth extends StatelessWidget {
                     itemCount: sumTags.length,
                     itemBuilder: (context, index) {
                       final item = sumTags[index];
-                      return Center(
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: CupertinoListTile(
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(width:70, child: Text(item.name,style: const TextStyle(fontSize: 15),)),
-                                SizedBox(width:80, child: Text(config.NUM_FORMAT.format(item.income), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
-                                SizedBox(width:80, child: Text(config.NUM_FORMAT.format(item.expense), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
-                              ],
-                            ),
+                      return SizedBox(
+                        width: double.infinity,
+                        child: ListTile(
+                          visualDensity: const VisualDensity(vertical: -3),
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(width:70, child: Text(item.name,style: const TextStyle(fontSize: 15),)),
+                              SizedBox(width:80, child: Text(config.NUM_FORMAT.format(item.income), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
+                              SizedBox(width:80, child: Text(config.NUM_FORMAT.format(item.expense), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
+                            ],
                           ),
                         ),
                       );
@@ -80,7 +79,7 @@ class SumMonth extends StatelessWidget {
                   ),
                 ),
               ],
-            ) : Center(child: Text('No tags data'),),
+            ) : const Center(child: Text('No tags data'),),
           ),
         )
       ],

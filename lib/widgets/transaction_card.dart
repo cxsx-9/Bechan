@@ -47,7 +47,7 @@ class TransactionCard extends StatelessWidget {
                 width: 15,
                 height: 15,
                 decoration: BoxDecoration(
-                  color: type == 'none' ? Colors.grey.shade300 : type != 'income' ? Colors.red.shade100 : Colors.green.shade200,
+                  color: type == 'none' ? Colors.grey.shade300 : type != 'income' ? const Color.fromRGBO(229, 101, 144, 1) : const Color.fromRGBO(0, 189, 174, 1),
                   borderRadius: BorderRadius.circular(15)
                 ),
               ),

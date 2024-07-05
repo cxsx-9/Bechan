@@ -21,15 +21,19 @@ class SumYear extends StatelessWidget {
       children: [
         Container(
           width: double.infinity,
-          height: months.length != 0 ? 300 : 200,
+          height: months.isNotEmpty ? 300 : 200,
           decoration: cardDecoration(context),
-          child: months.length != 0 ? Padding(
+          child: months.isNotEmpty ? Padding(
             padding: const EdgeInsets.all(15.0),
             child: SfCartesianChart(
               tooltipBehavior: TooltipBehavior(
                 enable: true,
               ),
-              primaryXAxis: CategoryAxis(),
+              primaryXAxis: const CategoryAxis(),
+              primaryYAxis: NumericAxis(
+                numberFormat:
+                NumberFormat.compactCurrency(decimalDigits: 0, symbol: '')
+              ),
               series: <CartesianSeries>[
                   ColumnSeries<MonthData, String>(
                       name: 'Income',
@@ -48,10 +52,10 @@ class SumYear extends StatelessWidget {
                   ),
               ]
             ),
-          ) : Center(child: Text('No Year data'),),
+          ) : const Center(child: Text('No Year data'),),
         ),
         const SizedBox(height: 10,),
-        months.length != 0 ? Container(
+        months.isNotEmpty ? Container(
           width: double.infinity,
           constraints: const BoxConstraints(maxHeight: 300, minHeight: 100),
           decoration: cardDecoration(context),
@@ -59,16 +63,16 @@ class SumYear extends StatelessWidget {
             padding: const EdgeInsets.all(15.0),
             child: Column(
               children: [
-                const SizedBox(
-                    height: 50,
+                SizedBox(
+                    height: 30,
                     child: Padding(
-                      padding: EdgeInsets.only(left: 20, right: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(width:70, child: Text('Month', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
-                          SizedBox(width:80, child: Text('Income', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), textAlign: TextAlign.end,)),
-                          SizedBox(width:80, child: Text('Expense', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), textAlign: TextAlign.end,)),
+                          SizedBox(width:70, child: Text('Month', style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary))),
+                          SizedBox(width:80, child: Text('Income', style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary), textAlign: TextAlign.end, )),
+                          SizedBox(width:80, child: Text('Expense', style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary), textAlign: TextAlign.end, )),
                         ],
                       ),
                     ),
@@ -78,18 +82,17 @@ class SumYear extends StatelessWidget {
                     itemCount: months.length,
                     itemBuilder: (context, index) {
                       final item = months[index];
-                      return Center(
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: CupertinoListTile(
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(width:70, child: Text(DateFormat('MMMM').format(DateTime(0, item.month)), style: const TextStyle(fontSize: 18),)),
-                                SizedBox(width:100, child: Text(config.NUM_FORMAT.format(item.totalIncome), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
-                                SizedBox(width:100, child: Text(config.NUM_FORMAT.format(item.totalExpense), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
-                              ],
-                            ),
+                      return SizedBox(
+                        width: double.infinity,
+                        child: ListTile(
+                          // padding: const EdgeInsets.all(10),
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(width:70, child: Text(DateFormat('MMMM').format(DateTime(0, item.month)), style: const TextStyle(fontSize: 15),textAlign: TextAlign.start )),
+                              SizedBox(width:100, child: Text(config.NUM_FORMAT.format(item.totalIncome), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
+                              SizedBox(width:100, child: Text(config.NUM_FORMAT.format(item.totalExpense), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
+                            ],
                           ),
                         ),
                       );

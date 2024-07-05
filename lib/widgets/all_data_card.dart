@@ -32,7 +32,7 @@ class AllDataCard extends StatelessWidget {
         const SizedBox(height: 10,),
         SizedBox(
           width: double.infinity,
-          height: 415,
+          height: 425,
           child: Container(
             decoration: cardDecoration(context),
             child: waiting

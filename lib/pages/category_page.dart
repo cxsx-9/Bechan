@@ -83,17 +83,28 @@ class _CategoryPageState extends State<CategoryPage> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    'Category',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.secondary,
-                    )
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Category',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w900,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () => {CustomDialog().inputDialog(context, textCtrl, onSubmit, 'Create new')},
+                          icon: const Icon(Icons.add),
+                        )
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(height: 10,),
                   Center(
                     child : CupertinoSlidingSegmentedControl(
                       groupValue: _type,
@@ -110,50 +121,9 @@ class _CategoryPageState extends State<CategoryPage> {
                     )
                   ),
                   const SizedBox(height: 15,),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 70,
-                    child: Container(
-                      decoration: cardDecoration(context),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 30, top: 10, bottom: 10, right: 20),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              _type! == 'income' ? 'Income' : _type! == 'expenses' ? 'Expense' : 'Tags',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w600,
-                                color: Theme.of(context).colorScheme.primary,
-                              )
-                            ),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: Theme.of(context).colorScheme.primary,
-                                foregroundColor: Theme.of(context).colorScheme.onPrimary
-                              ),
-                              onPressed: () => {CustomDialog().inputDialog(context, textCtrl, onSubmit, 'Create new')},
-                              child: const SizedBox(
-                                width: 60,
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.add),
-                                    Text('Add'),
-                                  ],
-                                ),
-                              )
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 15,),
                   Container(
                     width: double.infinity,
-                    height: 450,
+                    height: 580,
                     decoration: cardDecoration(context),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),

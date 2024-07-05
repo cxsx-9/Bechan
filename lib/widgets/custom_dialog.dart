@@ -64,4 +64,31 @@ class CustomDialog {
       }
     );
   }
+
+  void importDialog (dynamic context, String title, String content){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title, textAlign: TextAlign.center,),
+          content: Text(content),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+              child: const Text('Submit'),
+              onPressed: () {
+                // onSubmit();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      }
+    );
+  }
 }

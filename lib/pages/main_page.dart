@@ -9,6 +9,7 @@ import 'package:bechan/services/tag_service.dart';
 import 'package:bechan/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -74,7 +75,7 @@ class _MainPageState extends State<MainPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       appBar: AppBar(
-        toolbarHeight: 25,
+        toolbarHeight: 10,
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
           statusBarBrightness: Brightness.light, // For iOS (dark icons)
@@ -95,17 +96,17 @@ class _MainPageState extends State<MainPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               TextButton(
-                child: Icon(
-                  Icons.home, 
-                  size: 30,
+                child: FaIcon(
+                  FontAwesomeIcons.house, 
+                  size: 22,
                   color: _selectedIndex == 0 ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary
                 ),
                 onPressed: () {_onItemTapped(0);},
               ),
               TextButton(
-                child: Icon(
-                  Icons.bar_chart_rounded, 
-                  size: 30,
+                child: FaIcon(
+                  FontAwesomeIcons.chartSimple, 
+                  size: 22,
                   color: _selectedIndex == 1 ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary
                 ),
                 onPressed: () {_onItemTapped(1);},
@@ -113,19 +114,24 @@ class _MainPageState extends State<MainPage> {
 
               const SizedBox(width: 50,),
               TextButton(
-                child: Icon(
-                  Icons.note_alt_outlined, 
-                  size: 30,
+                child: FaIcon(
+                  FontAwesomeIcons.tags, 
+                  size: 22,
                   color: _selectedIndex == 2 ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary
                 ),
                 onPressed: () {_onItemTapped(2);},
               ),
               TextButton(
-                child: Icon(
-                  Icons.settings, 
-                  size: 30,
+                child: FaIcon(
+                  FontAwesomeIcons.bars, 
+                  size: 22,
                   color: _selectedIndex == 3 ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary
                 ),
+                // child: Icon(
+                //   Icons.man, 
+                //   size: 30,
+                //   color: _selectedIndex == 3 ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary
+                // ),
                 onPressed: () {_onItemTapped(3);},
               ),
             ],
