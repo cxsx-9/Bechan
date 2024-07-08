@@ -29,13 +29,13 @@ class Transaction {
   factory Transaction.fromJson(Map<String, dynamic> json) {
     var data = json['tags'];
     return Transaction(
-      transactionsId: json['transactions_id'],
+      transactionsId: json['transactions_id'] ?? 0,
       amount: json['amount'].toDouble(),
       note: json['note'] ?? '',
       transactionDatetime: DateTime.parse(json['transaction_datetime']),
       date: int.parse(DateFormat('dd').format(DateTime.parse(json['transaction_datetime']))),
       categorieId: json['categorie_id'],
-      categorieName: json['categorie_name'],
+      categorieName: json['categorie_name'] ?? '',
       categorieType: json['categorie_type'],
       fav: json['fav'],
       tags: data != [] ? (data as List).map((tags)=> Tag.fromJson(tags)).toList() : []

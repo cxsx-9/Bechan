@@ -55,8 +55,8 @@ class CustomDialog {
               TextButton(
               child: const Text('Submit'),
               onPressed: () {
-                onSubmit();
                 Navigator.of(context).pop();
+                onSubmit();
               },
             ),
           ],

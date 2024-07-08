@@ -38,7 +38,7 @@ class SumYear extends StatelessWidget {
                   ColumnSeries<MonthData, String>(
                       name: 'Income',
                       dataSource: months,
-                      xValueMapper: (MonthData data, _) => DateFormat('MMMM').format(DateTime(0, data.month)),
+                      xValueMapper: (MonthData data, _) => DateFormat('MMM').format(DateTime(0, data.month)),
                       // xValueMapper: (MonthData data, _) => data.month,
                       yValueMapper: (MonthData data, _) => data.totalIncome,
                       color: const Color.fromRGBO(0, 189, 174, 1),
@@ -46,7 +46,7 @@ class SumYear extends StatelessWidget {
                   ColumnSeries<MonthData, String>(
                       name: 'Expense',
                       dataSource: months,
-                      xValueMapper: (MonthData data, _) => DateFormat('MMMM').format(DateTime(0, data.month)),
+                      xValueMapper: (MonthData data, _) => DateFormat('MMM').format(DateTime(0, data.month)),
                       yValueMapper: (MonthData data, _) => data.totalExpense,
                       color: const Color.fromRGBO(229, 101, 144, 1),
                   ),

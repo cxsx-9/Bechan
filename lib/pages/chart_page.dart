@@ -20,6 +20,7 @@ class _ChartPageState extends State<ChartPage> {
   String selectedYear = DateFormat('yyyy').format(DateTime.now());
   String sendMonth = DateFormat('yyyy-MM').format(DateTime.now());
   String? type = 'month';
+  DateTime selectDate = DateTime.now();
 
   late Future<dynamic> _mres = Future.value(TransactionService().fetchSumM(sendMonth, context));
   late Future<dynamic> _yres = Future.value(TransactionService().fetchSumY(selectedYear, context));
@@ -27,6 +28,7 @@ class _ChartPageState extends State<ChartPage> {
   void onSubmitMonth(Object value) {
     if (value is DateTime) {
       setState(() {
+        selectDate = value;
         selectedMonth = DateFormat('MMMM yyyy').format(value);
         if (sendMonth != DateFormat("yyyy-MM").format(value)) {
           sendMonth = DateFormat("yyyy-MM").format(value);
@@ -40,6 +42,7 @@ class _ChartPageState extends State<ChartPage> {
   void onSubmitYear(Object value) {
     if (value is DateTime) {
       setState(() {
+        selectDate = value;
         if (selectedYear != DateFormat('yyyy').format(value)) {
           selectedYear = DateFormat('yyyy').format(value);
           fetchYSum();
@@ -135,9 +138,9 @@ class _ChartPageState extends State<ChartPage> {
                           child: TextButton(
                             onPressed: () => {
                               if ( type! == 'month') {
-                                ShowDatePickerFunction().showMonthPicker(context, onSubmitMonth)
+                                ShowDatePickerFunction().showMonthPicker(context, onSubmitMonth, selectDate)
                               } else {
-                                ShowDatePickerFunction().showYearPicker(context, onSubmitYear)
+                                ShowDatePickerFunction().showYearPicker(context, onSubmitYear, selectDate)
                               }
                             },
                             child: Row(

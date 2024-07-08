@@ -3,7 +3,7 @@ import 'package:bechan/pages/category_page.dart';
 import 'package:bechan/pages/chart_page.dart';
 import 'package:bechan/pages/home_page.dart';
 import 'package:bechan/pages/loading_page.dart';
-import 'package:bechan/pages/setting_page.dart';
+import 'package:bechan/pages/more_page.dart';
 import 'package:bechan/services/category_service.dart';
 import 'package:bechan/services/tag_service.dart';
 import 'package:bechan/services/user_service.dart';
@@ -45,7 +45,8 @@ class _MainPageState extends State<MainPage> {
     HomePage(),
     const ChartPage(),
     const CategoryPage(),
-    const SettingPage(),
+    const MorePage(),
+    // const SettingPage(),
   ];
 
   @override
@@ -127,11 +128,6 @@ class _MainPageState extends State<MainPage> {
                   size: 22,
                   color: _selectedIndex == 3 ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary
                 ),
-                // child: Icon(
-                //   Icons.man, 
-                //   size: 30,
-                //   color: _selectedIndex == 3 ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary
-                // ),
                 onPressed: () {_onItemTapped(3);},
               ),
             ],

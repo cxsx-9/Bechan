@@ -3,7 +3,7 @@ import 'package:bechan/models/favourite_transaction_model.dart';
 import 'package:bechan/models/sum_month_model.dart';
 import 'package:bechan/models/sum_year_model.dart';
 import 'package:bechan/models/transaction_model.dart';
-import 'package:bechan/models/transfer_data.dart';
+import 'package:bechan/models/transfer_data_model.dart';
 import 'package:bechan/models/user_model.dart';
 import 'package:bechan/services/api_service.dart';
 import 'package:bechan/services/user_service.dart';
@@ -16,7 +16,15 @@ class TransactionService {
     if (response == null) {
       return null;
     }
-    return FileTransfer.fromJson(jsonDecode(response.body));
+    return ResFileUrl.fromJson(jsonDecode(response.body));
+  }
+
+  Future<dynamic> getAllTransactoin(dynamic context) async {
+    dynamic response = await ApiService().callApi('get', 'getExcelUserTransactions', '');
+    if (response == null) {
+      return null;
+    }
+    return ResFileUrl.fromJson(jsonDecode(response.body));
   }
 
   Future<dynamic> fetchSumM(String selectedMonth, dynamic context) async {

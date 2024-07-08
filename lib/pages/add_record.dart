@@ -379,7 +379,7 @@ class _AddRecordState extends State<AddRecord> {
                             ),
                             SizedBox(
                               height: 40,
-                              width: 200,
+                              width: 250,
                               child: TextButton(
                                 onPressed: () async {
                                   ShowDatePickerFunction().showDatePicker(context, _onSubmit);

@@ -4,6 +4,7 @@ import 'package:bechan/pages/change_password_page.dart';
 import 'package:bechan/pages/enter_otp.dart';
 import 'package:bechan/pages/forgot_password_page.dart';
 import 'package:bechan/pages/main_page.dart';
+import 'package:bechan/pages/more_page.dart';
 import 'package:bechan/pages/set_password_page.dart';
 import 'package:bechan/pages/setting_page.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
         '/homePage': (context) => HomePage(),
         '/mainPage': (context) => const MainPage(),
         '/settingPage': (context) => const SettingPage(),
+        '/morePage': (context) => const MorePage(),
         '/forgotPasswordPage': (context) => const ForgotPasswordPage(),
         '/enterOtp': (context) => const EnterOtp(),
         '/setPasswordPage': (context) => const SetPasswordPage(),

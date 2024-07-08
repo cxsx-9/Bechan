@@ -52,7 +52,7 @@ class ShowDatePickerFunction {
     );
   }
 
-  void showMonthPicker(context, Function onSubmit) {
+  void showMonthPicker(context, Function onSubmit, DateTime selectDate) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -87,6 +87,7 @@ class ShowDatePickerFunction {
                       }
                     },
                     selectionMode: DateRangePickerSelectionMode.single,
+                    initialSelectedDate: selectDate,
                   ),
                 ),
               ],
@@ -97,7 +98,7 @@ class ShowDatePickerFunction {
     );
   }
 
-  void showYearPicker(context, Function onSubmit) {
+  void showYearPicker(context, Function onSubmit, DateTime selectDate) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -132,6 +133,7 @@ class ShowDatePickerFunction {
                       }
                     },
                     selectionMode: DateRangePickerSelectionMode.single,
+                    initialSelectedDate: selectDate,
                   ),
                 ),
               ],
