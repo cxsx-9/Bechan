@@ -37,27 +37,28 @@ class AllDataCard extends StatelessWidget {
             decoration: cardDecoration(context),
             child: waiting
             ? const Center(child: CircularProgressIndicator())
-            : data != null && !snapshot.hasError
-            ? Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(height: 10),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: data.transactions.length,
-                    itemBuilder: (context, revIndex) {
-                      int itemCount = data.transactions.length ?? 0;
-                      int index = itemCount - 1 - revIndex;
-                      final transaction = data.transactions[index];
-                      return ListTransaction(transaction: transaction, onDataChanged: onDataChanged);
-                    },
+            : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: data != null && !snapshot.hasError
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: data.transactions.length,
+                        itemBuilder: (context, revIndex) {
+                          int itemCount = data.transactions.length ?? 0;
+                          int index = itemCount - 1 - revIndex;
+                          final transaction = data.transactions[index];
+                          return ListTransaction(transaction: transaction, onDataChanged: onDataChanged);
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(height: 10),
-              ],
+                ],
+              )
+              : NoTransaction(snapshot: snapshot,),
             )
-            : NoTransaction(snapshot: snapshot,)
           ),
         ),
       ],

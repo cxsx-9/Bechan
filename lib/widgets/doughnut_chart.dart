@@ -23,7 +23,7 @@ class DoughnutChart extends StatelessWidget {
     return Container(
       decoration: cardDecoration(context),
       width: double.infinity,
-      height: data.length != 0 ? 440 : 70,
+      height: data.length != 0 ? 430 : 70,
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: data.length != 0 ? Column(

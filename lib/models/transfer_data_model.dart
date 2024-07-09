@@ -1,5 +1,3 @@
-import 'package:bechan/models/tag_model.dart';
-
 class ResFileUrl {
   String status;
   String message;
@@ -32,7 +30,7 @@ class ErrTransaction {
   final String categorieId;
   final String categorieName;
   final String fav;
-  final List<Tag> tags;
+  final List<dynamic> tags;
 
   ErrTransaction({
     required this.amount,
@@ -49,11 +47,11 @@ class ErrTransaction {
     return ErrTransaction(
       amount: json['amount'].runtimeType == 'String' ? json['amount'] : json['amount'].toString(),
       note: json['note'] ?? '',
-      transactionDatetime: json['transaction_datetime'],
+      transactionDatetime: json['transaction_datetime'] ?? '',
       categorieId: json['categorie_id'].runtimeType == 'String' ? json['categorie_id'] : json['categorie_id'].toString(),
       categorieName: json['categorie_name'] ?? '',
       fav: json['fav'].runtimeType == 'String' ? json['fav'] : json['fav'].toString(),
-      tags: data != [] ? (data as List).map((tags)=> Tag.fromJson(tags)).toList() : []
+      tags: data
     );
   }
 }

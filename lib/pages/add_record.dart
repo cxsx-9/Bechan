@@ -55,6 +55,8 @@ class AddRecord extends StatefulWidget {
   State<AddRecord> createState() => _AddRecordState();
 }
 
+enum Menu { upload }
+
 class _AddRecordState extends State<AddRecord> {
   List<bool> _selectedType = <bool>[false, true];
   TextEditingController amountCtrl = TextEditingController();
@@ -74,7 +76,6 @@ class _AddRecordState extends State<AddRecord> {
     super.initState();
     void setIsFull() {
       isFeildFull = amountCtrl.text.isNotEmpty;
-      // isFeildFull = amountCtrl.text.isNotEmpty && noteCtrl.text.isNotEmpty;
     }
     amountCtrl.addListener(() { setIsFull();});
     noteCtrl.addListener(() { setIsFull();});
@@ -197,19 +198,55 @@ class _AddRecordState extends State<AddRecord> {
 
               // HEAD
               Padding(
-                padding: const EdgeInsets.only(right: 20, left: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(onPressed: () =>  {Navigator.pop(context, false)}, icon: const Icon(Icons.arrow_back_ios_new_rounded)),
-                    Text(
-                      'Transaction',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                        color: Theme.of(context).colorScheme.primary,
-                      )
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        IconButton(onPressed: () =>  {Navigator.pop(context, false)}, icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+                        Text(
+                          'Transaction',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context).colorScheme.primary,
+                          )
+                        ),
+                      ],
+                    ),
+                    PopupMenuButton<Menu>(
+                      elevation: 5,
+                      shadowColor: Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      icon: const Icon(Icons.more_vert_rounded),
+                      onSelected: (Menu item) {},
+                      itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
+                        PopupMenuItem<Menu>(
+                          onTap: () => { Navigator.pushNamed(context, '/morePage') },
+                          value: Menu.upload,
+                          child: const ListTile(
+                            leading: Icon(Icons.upload_file_rounded),
+                            title: Text('Upload .xlsx file'),
+                          ),
+                        ),
+                        // PopupMenuItem<Menu>(
+                        //   onTap: () async {
+                        //     dynamic res = await TransactionService().getTemplate(context);
+                        //     final Uri url = Uri.parse(res.url);
+                        //     if (!await launchUrl(url)) {
+                        //       throw Exception('Could not launch $url');
+                        //     }
+                        //   },
+                        //   value: Menu.download,
+                        //   child: const ListTile(
+                        //     leading: Icon(Icons.download_rounded),
+                        //     title: Text('Download Template'),
+                        //   ),
+                        // ),
+                      ],
                     ),
                   ],
                 ),

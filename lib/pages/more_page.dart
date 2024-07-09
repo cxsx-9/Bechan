@@ -1,12 +1,9 @@
-import 'package:bechan/models/user_model.dart';
 import 'package:bechan/services/filetransfer_service.dart';
 import 'package:bechan/services/transaction_service.dart';
 import 'package:bechan/widgets/card_decoration.dart';
 import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gravatar/flutter_gravatar.dart';
-import 'package:bechan/config.dart' as config;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:open_app_file/open_app_file.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,7 +16,6 @@ class MorePage extends StatefulWidget {
 }
 
 class _MorePageState extends State<MorePage> {
-  User _user = config.USER_DATA;
   PlatformFile? file;
   String? size;
   String? pathFromServer;
@@ -105,78 +101,12 @@ class _MorePageState extends State<MorePage> {
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               children: [
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.tertiary,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(context).colorScheme.secondary,
-                        spreadRadius: 1,
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      )
-                    ]
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: 80,
-                          height: 80,
-                          child: CircleAvatar(
-                            backgroundImage: NetworkImage(
-                              Gravatar(_user.email).imageUrl(),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 20,),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${_user.firstname} ${_user.lastname}",
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold
-                              ),
-                            ),
-                            Text(
-                              _user.email,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    IconButton(onPressed: () =>  {Navigator.pop(context, false)}, icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+                  ],
                 ),
-                const SizedBox(height: 20),
-                Container(
-                  width: double.infinity,
-                  decoration: cardDecoration(context),
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/settingPage');
-                    },
-                    child: Text(
-                      'Setting',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: 14
-                      ),
-                    )
-                  ),
-                ),
-                const SizedBox(height: 20),
                 Container(
                   decoration: cardDecoration(context),
                   child: Padding(
@@ -205,36 +135,13 @@ class _MorePageState extends State<MorePage> {
                             ),
                           ],
                         ),
-                        Divider(height: 10, color: Theme.of(context).colorScheme.onSecondary,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Row(
-                              children: [
-                                SizedBox(width: 40, child: Center(child: FaIcon(FontAwesomeIcons.fileArrowDown, size: 20, color: Colors.deepPurple,))),
-                                Text('Export all Transactions',style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),),
-                              ]
-                            ),
-                            IconButton(
-                              onPressed: () async {
-                                dynamic res = await TransactionService().getAllTransactoin(context);
-                                print(res.url);
-                                final Uri url = Uri.parse(res.url);
-                                if (!await launchUrl(url)) {
-                                  throw Exception('Could not launch $url');
-                                }
-                              },
-                              icon: const FaIcon(FontAwesomeIcons.arrowDown, size: 15,),
-                            ),
-                          ],
-                        ),
                       ],
                     ),
                   ),
                 ),
                 const SizedBox(height: 10,),
                 Container(
-                  height: 200,
+                  height: 250,
                   width: double.infinity,
                   decoration: cardDecoration(context),
                   child: Padding(
@@ -248,9 +155,10 @@ class _MorePageState extends State<MorePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                            Text('Import Data', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),),
-                            Text('Import Your Transactions', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.secondary),),
-                          ],),
+                              Text('Import Data', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),),
+                              Text('Import Your Transactions', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.secondary),),
+                            ],
+                          ),
                         ),
                         Expanded(
                           child: SizedBox(
@@ -331,7 +239,7 @@ class _MorePageState extends State<MorePage> {
                 ? Column(
                   children: [
                     Container(
-                      height: 200,
+                      height: 300,
                       width: double.infinity,
                       decoration: cardDecoration(context),
                       child: Padding(
@@ -340,7 +248,8 @@ class _MorePageState extends State<MorePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('error', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),),
-                            Text('Some data might be invalid.', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.secondary),),
+                            Text('Some data might be invalid. \nConfirm adding valid parts?', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.secondary),),
+                            // Text('Confirm adding valid parts?', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.secondary),),
                             Expanded(
                               child: ListView.separated(
                                   itemCount: errorRes.length,
@@ -372,7 +281,6 @@ class _MorePageState extends State<MorePage> {
                                   }
                                 ),
                             ),
-                            Text('Confirm adding valid parts?', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.secondary),),
                           ],
                         ),
                       ),

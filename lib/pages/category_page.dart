@@ -86,22 +86,25 @@ class _CategoryPageState extends State<CategoryPage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Category',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w900,
-                            color: Theme.of(context).colorScheme.primary,
+                    child: SizedBox(
+                      height: 48,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Category',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w900,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          onPressed: () => {CustomDialog().inputDialog(context, textCtrl, onSubmit, 'Create new')},
-                          icon: const Icon(Icons.add),
-                        )
-                      ],
+                          IconButton(
+                            onPressed: () => {CustomDialog().inputDialog(context, textCtrl, onSubmit, 'Create new')},
+                            icon: const Icon(Icons.add),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10,),

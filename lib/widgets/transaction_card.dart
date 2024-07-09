@@ -6,6 +6,7 @@ class TransactionCard extends StatelessWidget {
   final String date;
   final String type;
   final String category;
+  final int fav;
   const TransactionCard({
     super.key,
     String ? amount,
@@ -13,11 +14,13 @@ class TransactionCard extends StatelessWidget {
     String ? date,
     String ? type,
     String ? category,
+    int ? fav,
   }) : amount = amount ?? '00.00',
     note = note ?? 'nothing',
     date = date ?? '',
     type = type ?? 'none',
-    category = category ?? ''
+    category = category ?? '',
+    fav = fav ?? 0
   ;
 
   @override
@@ -43,15 +46,18 @@ class TransactionCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
             children: [
-              Container(
-                width: 15,
-                height: 15,
-                decoration: BoxDecoration(
-                  color: type == 'none' ? Colors.grey.shade300 : type != 'income' ? const Color.fromRGBO(229, 101, 144, 1) : const Color.fromRGBO(0, 189, 174, 1),
-                  borderRadius: BorderRadius.circular(15)
-                ),
+              fav == 0
+              ? Icon(
+                Icons.circle_rounded,
+                size: 15,
+                color: type == 'none' ? Colors.grey.shade300 : type != 'income' ? const Color.fromRGBO(229, 101, 144, 1) : const Color.fromRGBO(0, 189, 174, 1),
+              )
+              : Icon(
+                Icons.favorite,
+                size: 15,
+                color: type == 'none' ? Colors.grey.shade300 : type != 'income' ? const Color.fromRGBO(229, 101, 144, 1) : const Color.fromRGBO(0, 189, 174, 1),
               ),
-              const SizedBox(width: 20,),
+              const SizedBox(width: 15,),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -116,6 +116,7 @@ class _ListTransactionState extends State<ListTransaction> {
             type: widget.transaction.categorieType,
             date: DateFormat('dd MMMM yyyy').format(widget.transaction.transactionDatetime!),
             category: widget.transaction.categorieName,
+            fav: widget.transaction.fav
           ),
         ),
       ),

@@ -3,7 +3,7 @@ import 'package:bechan/pages/category_page.dart';
 import 'package:bechan/pages/chart_page.dart';
 import 'package:bechan/pages/home_page.dart';
 import 'package:bechan/pages/loading_page.dart';
-import 'package:bechan/pages/more_page.dart';
+import 'package:bechan/pages/setting_page.dart';
 import 'package:bechan/services/category_service.dart';
 import 'package:bechan/services/tag_service.dart';
 import 'package:bechan/services/user_service.dart';
@@ -45,8 +45,7 @@ class _MainPageState extends State<MainPage> {
     HomePage(),
     const ChartPage(),
     const CategoryPage(),
-    const MorePage(),
-    // const SettingPage(),
+    const SettingPage(),
   ];
 
   @override

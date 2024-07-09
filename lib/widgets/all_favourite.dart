@@ -66,6 +66,7 @@ class AllFavourite extends StatelessWidget{
                                   note: transaction.note,
                                   type: transaction.categorieType,
                                   category: transaction.categorieName,
+                                  fav: transaction.fav
                                 ),
                               ),
                             ),

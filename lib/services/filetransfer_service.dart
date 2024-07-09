@@ -35,4 +35,13 @@ class FiletransferService {
     return SubmitFileResponse.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
 
+  Future<dynamic> exportTransaction(String startDate, String endDate) async {
+    dynamic response = await ApiService().callApi('get', 'getExcelUserTransactions', '?selected_date_start=$startDate&selected_date_end=$endDate');
+    final jsonResponse = json.decode(response.body);
+    if (response == null || jsonResponse['status'] == "error") {
+      return null;
+    }
+    return ResFileUrl.fromJson(jsonDecode(response.body));
+  }
+
 }

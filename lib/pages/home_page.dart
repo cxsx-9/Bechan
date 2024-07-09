@@ -1,3 +1,4 @@
+import 'package:bechan/services/filetransfer_service.dart';
 import 'package:bechan/widgets/show_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +11,7 @@ import 'package:bechan/widgets/date_card.dart';
 import 'package:bechan/widgets/small_profile_card.dart';
 import 'package:bechan/config.dart' as config;
 import 'package:bechan/services/transaction_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatefulWidget {
@@ -23,6 +25,8 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
+
+enum Menu { download }
 
 class _HomePageState extends State<HomePage> {
   final User _user = config.USER_DATA;
@@ -49,7 +53,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _reload() async {
-    print("-- ---  -----   -------    RELOAD");
     setState(() {_isLoading = false;});
     _data = await Future.value(TransactionService().fetchTransaction(_startDate, _endDate, context));
     _refreshController.refreshCompleted();
@@ -57,19 +60,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onSubmit(Object value) {
-    setState(() {
-      if (value is PickerDateRange) {
-        _range = value.endDate == null || value.endDate == value.startDate
-            ? DateFormat('dd MMMM yyyy').format(value.startDate!)
-            : '${DateFormat('dd MMMM yyyy').format(value.startDate!)} - ${DateFormat('dd MMMM yyyy').format(value.endDate ?? value.startDate!)}';
-        _startDate = DateFormat('yyyy-MM-dd').format(value.startDate!);
-        _start = value.startDate;
-        _endDate = DateFormat('yyyy-MM-dd').format(value.endDate ?? value.startDate!);
-        _end = value.endDate;
+      if (value is PickerDateRange && value.startDate != null) {
+        setState(() {
+          _range = value.endDate == null || value.endDate == value.startDate
+              ? DateFormat('dd MMMM yyyy').format(value.startDate!)
+              : '${DateFormat('dd MMM yy').format(value.startDate!)} - ${DateFormat('dd MMM yy').format(value.endDate ?? value.startDate!)}';
+          _startDate = DateFormat('yyyy-MM-dd').format(value.startDate!);
+          _start = value.startDate;
+          _endDate = DateFormat('yyyy-MM-dd').format(value.endDate ?? value.startDate!);
+          _end = value.endDate;
+        });
+        _fetchData();
+        Navigator.of(context).pop();
       }
-    });
-    _fetchData();
-    Navigator.of(context).pop();
   }
 
   @override
@@ -107,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const SizedBox(height: 10,),
                       SizedBox(
-                        width: 360,
+                        width: double.infinity,
                         height: 50,
                         child: Container(
                           decoration: cardDecoration(context),
@@ -116,12 +119,44 @@ class _HomePageState extends State<HomePage> {
                               ShowDatePickerFunction().showDateRange(context, _start, _end, _onSubmit);
                             },
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Icon(Icons.calendar_month_rounded, size: 17),
-                                const SizedBox(width: 10,),
-                                Text(_range),
-                                const Icon(Icons.arrow_drop_down_rounded),
+                                const SizedBox(width: 40,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(Icons.calendar_month_rounded, size: 17),
+                                    const SizedBox(width: 10,),
+                                    Text(_range),
+                                    const Icon(Icons.arrow_drop_down_rounded),
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 30,
+                                  child: PopupMenuButton<Menu>(
+                                    elevation: 5,
+                                    shadowColor: Theme.of(context).colorScheme.secondary,
+                                    color: Theme.of(context).colorScheme.onPrimary,
+                                    icon: const Icon(Icons.more_vert_rounded, size: 20,),
+                                    onSelected: (Menu item) {},
+                                    itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
+                                      PopupMenuItem<Menu>(
+                                        onTap: () async {
+                                          dynamic res = await FiletransferService().exportTransaction(_startDate, _endDate);
+                                          final Uri url = Uri.parse(res.url);
+                                          if (!await launchUrl(url)) {
+                                            throw Exception('Could not launch $url');
+                                          }
+                                        },
+                                        value: Menu.download,
+                                        child: const ListTile(
+                                          leading: Icon(Icons.file_download),
+                                          title: Text('Export transactions'),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
