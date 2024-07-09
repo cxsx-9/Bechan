@@ -1,12 +1,18 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:bechan/services/filetransfer_service.dart';
 import 'package:bechan/services/transaction_service.dart';
 import 'package:bechan/widgets/card_decoration.dart';
 import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_client_sse/constants/sse_request_type_enum.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:open_app_file/open_app_file.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:bechan/config.dart' as config;
+import 'package:flutter_client_sse/flutter_client_sse.dart';
 
 class MorePage extends StatefulWidget {
   const MorePage({super.key});
@@ -42,16 +48,61 @@ class _MorePageState extends State<MorePage> {
 
   void onChooseFile () async {
     await picksinglefile();
-    dynamic res = await FiletransferService().importFile(file!);
-    print('PATH ===> ${res.path}');
-    if (res != null && res.status == 'ok') {
-      setState(() {
-        pathFromServer = res.path;
-      });
+    if (file != null){
+      dynamic res = await FiletransferService().importFile(file!);
+      print(res);
+      print('PATH ===> ${res.path}');
+      if (res != null && res.path != null && res.status == 'ok') {
+        setState(() {
+          pathFromServer = res.path;
+        });
+      }
     }
   }
 
+  late StreamSubscription<SSEModel> _sseSubscription;
+  String statusMessage = '';
+  int progress = 0;
+
+  void connectToServer() {
+    String url = '${config.BASE_URL}/status';
+    Map<String, String> headers = {};
+
+    _sseSubscription = SSEClient.subscribeToSSE(
+      method: SSERequestType.GET,
+      url: url,
+      header: headers,
+      ).listen((SSEModel event) {
+        var data = event.data;
+        if (data != null) {
+          var json = jsonDecode(data);
+          if (mounted) {
+            setState(() {
+              if (json['status'] == 'start') {
+                progress = 0;
+              } else if (json['status'] == 'processing') {
+                progress = json['progress'] ?? 100;
+              } else if (json['status'] == 'error' || json['status'] == 'completed') {
+                _sseSubscription.cancel();
+              }
+            });
+          }
+        }
+      }, onError: (error) {
+        print('Error connecting to SSE: $error');
+        _sseSubscription.cancel();
+      }
+    );
+  }
+
+  @override
+  void dispose() {
+    _sseSubscription.cancel();
+    super.dispose();
+  }
+
   void onSubmit () async {
+    connectToServer();
     dynamic res = await FiletransferService().submit({'filepath' : pathFromServer});
     String message = '';
     if (res != null)
@@ -61,6 +112,7 @@ class _MorePageState extends State<MorePage> {
         if (res.status == 'ok') {
           file = null;
           isFileOK = true;
+          progress = 0;
         }
         else {
           errorRes = res.error;
@@ -81,6 +133,7 @@ class _MorePageState extends State<MorePage> {
         if (res.status == 'ok') {
           file = null;
           isFileOK = true;
+          progress = 0;
         }
         else {
           isFileOK = false;
@@ -140,6 +193,7 @@ class _MorePageState extends State<MorePage> {
                   ),
                 ),
                 const SizedBox(height: 10,),
+
                 Container(
                   height: 250,
                   width: double.infinity,
@@ -168,26 +222,35 @@ class _MorePageState extends State<MorePage> {
                               children: [
                                 file == null
                                 ? const Text('No File found yet')
-                                : Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(file!.name),
-                                          Text(size!),
-                                          // Text('Extension -  ${file!.extension}')
-                                        ],
-                                      ),
-                                    IconButton(
-                                      onPressed: (){setState(() {
-                                        file = null;
-                                        isFileOK = true;
-                                      });},
-                                      icon: const Icon(Icons.cancel)
-                                    )
+                                    Row(
+                                      children: [
+                                        Text(file!.name),
+                                        const SizedBox(width: 20,),
+                                        GestureDetector(
+                                          onTap: (){setState(() {
+                                            file = null;
+                                            isFileOK = true;
+                                            progress = 0;
+                                          });},
+                                          child: const Icon(Icons.cancel, size: 18)
+                                        )
+                                      ],
+                                    ),
+                                    Text(size!, style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary),),
                                   ],
                                 ),
+                                progress != 0
+                                ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    LinearProgressIndicator(value : progress.toDouble()),
+                                    Text('$progress%')
+                                  ],
+                                )
+                                : const SizedBox(),
                               ],
                             ),
                           ),
