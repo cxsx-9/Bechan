@@ -143,9 +143,11 @@ class _HomePageState extends State<HomePage> {
                                       PopupMenuItem<Menu>(
                                         onTap: () async {
                                           dynamic res = await FiletransferService().exportTransaction(_startDate, _endDate);
-                                          final Uri url = Uri.parse(res.url);
-                                          if (!await launchUrl(url)) {
-                                            throw Exception('Could not launch $url');
+                                          if (res != null) {
+                                            final Uri url = Uri.parse(res.url);
+                                            if (!await launchUrl(url)) {
+                                              throw Exception('Could not launch $url');
+                                            }
                                           }
                                         },
                                         value: Menu.download,

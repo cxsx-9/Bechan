@@ -26,6 +26,7 @@ class _MorePageState extends State<MorePage> {
   String? size;
   String? pathFromServer;
   bool isFileOK = true;
+  bool uploadSuccess = false;
   dynamic errorRes;
 
   Future<void> picksinglefile() async {
@@ -47,6 +48,10 @@ class _MorePageState extends State<MorePage> {
   }
 
   void onChooseFile () async {
+    setState(() {
+      file = null;
+      progress = 0;
+    });
     await picksinglefile();
     if (file != null){
       dynamic res = await FiletransferService().importFile(file!);
@@ -54,6 +59,7 @@ class _MorePageState extends State<MorePage> {
       print('PATH ===> ${res.path}');
       if (res != null && res.path != null && res.status == 'ok') {
         setState(() {
+          uploadSuccess = false;
           pathFromServer = res.path;
         });
       }
@@ -110,15 +116,14 @@ class _MorePageState extends State<MorePage> {
       message = res.message;
       setState(() {
         if (res.status == 'ok') {
-          file = null;
           isFileOK = true;
-          progress = 0;
+          uploadSuccess = true;
         }
         else {
           errorRes = res.error;
           isFileOK = false;
         }
-        ScaffoldMessenger.of(context).showSnackBar(getSnackBar(message,55,60,isFileOK));
+        ScaffoldMessenger.of(context).showSnackBar(getSnackBar(message,55,100,isFileOK));
       });
     }
   }
@@ -131,14 +136,13 @@ class _MorePageState extends State<MorePage> {
       message = res.message;
       setState(() {
         if (res.status == 'ok') {
-          file = null;
           isFileOK = true;
-          progress = 0;
+          uploadSuccess = true;
         }
         else {
           isFileOK = false;
         }
-        ScaffoldMessenger.of(context).showSnackBar(getSnackBar(message,55,60,isFileOK));
+        ScaffoldMessenger.of(context).showSnackBar(getSnackBar(message,55,100,isFileOK));
       });
     }
   }
@@ -228,7 +232,7 @@ class _MorePageState extends State<MorePage> {
                                     Row(
                                       children: [
                                         Text(file!.name),
-                                        const SizedBox(width: 20,),
+                                        const SizedBox(width: 10,),
                                         GestureDetector(
                                           onTap: (){setState(() {
                                             file = null;
@@ -246,7 +250,12 @@ class _MorePageState extends State<MorePage> {
                                 ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    LinearProgressIndicator(value : progress.toDouble()),
+                                    LinearProgressIndicator(
+                                      value : progress.toDouble(),
+                                      color: uploadSuccess
+                                      ? Colors.green
+                                      : Colors.black,
+                                    ),
                                     Text('$progress%')
                                   ],
                                 )
@@ -260,7 +269,7 @@ class _MorePageState extends State<MorePage> {
                           child: SizedBox(
                             width: 150,
                             child: 
-                            file == null 
+                            file == null || uploadSuccess
                             ? OutlinedButton(
                               onPressed: () async {onChooseFile();},
                               child: const Row(
