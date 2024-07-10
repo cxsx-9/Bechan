@@ -19,6 +19,8 @@ class AllDataCard extends StatelessWidget {
     double expense = data != null ? data.summary.totalExpense : 0.00;
     double income = data != null ? data.summary.totalIncome : 0.00;
     double balance = income - expense;
+    List<dynamic> _allData = data != null ? data.transactions : [];
+
     return Column(
       children: [
         Row(
@@ -46,11 +48,11 @@ class AllDataCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: ListView.builder(
-                        itemCount: data.transactions.length,
+                        itemCount: _allData.length,
                         itemBuilder: (context, revIndex) {
-                          int itemCount = data.transactions.length ?? 0;
+                          int itemCount = _allData.length;
                           int index = itemCount - 1 - revIndex;
-                          final transaction = data.transactions[index];
+                          final transaction = _allData[index];
                           return ListTransaction(transaction: transaction, onDataChanged: onDataChanged);
                       },
                     ),

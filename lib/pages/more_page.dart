@@ -191,7 +191,7 @@ class _MorePageState extends State<MorePage> {
                             ),
                             IconButton(
                               onPressed: () async {
-                                dynamic res = await TransactionService().getTemplate(context);
+                                dynamic res = await TransactionService().getTemplate();
                                 print(res.url);
                                 final Uri url = Uri.parse(res.url);
                                 if (!await launchUrl(url)) {

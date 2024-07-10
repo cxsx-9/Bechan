@@ -28,8 +28,8 @@ class _ChartPageState extends State<ChartPage> {
   DateTime selectDate = DateTime.now();
   bool hasData = false;
 
-  late Future<dynamic> _mres = Future.value(TransactionService().fetchSumM(sendMonth, context));
-  late Future<dynamic> _yres = Future.value(TransactionService().fetchSumY(selectedYear, context));
+  late Future<dynamic> _mres = Future.value(TransactionService().fetchSumM(sendMonth));
+  late Future<dynamic> _yres = Future.value(TransactionService().fetchSumY(selectedYear));
 
   void onSubmitMonth(Object value) {
     if (value is DateTime) {
@@ -59,13 +59,13 @@ class _ChartPageState extends State<ChartPage> {
   }
 
   void fetchMSum () async {
-    _mres = await Future.value(TransactionService().fetchSumM(sendMonth, context));
+    _mres = await Future.value(TransactionService().fetchSumM(sendMonth));
     _refreshController.refreshCompleted();
     setState(() {});
   }
 
   void fetchYSum () async {
-    _yres = await Future.value(TransactionService().fetchSumY(selectedYear, context));
+    _yres = await Future.value(TransactionService().fetchSumY(selectedYear));
     _refreshController.refreshCompleted();
     setState(() {});
   }

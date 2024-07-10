@@ -1,4 +1,5 @@
 import 'package:bechan/services/filetransfer_service.dart';
+import 'package:bechan/services/user_service.dart';
 import 'package:bechan/widgets/show_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -15,12 +16,15 @@ import 'package:url_launcher/url_launcher.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatefulWidget {
-  HomePage({
-    super.key,
-    this.isReload = false
-  });
 
   bool isReload;
+  final Function(DateTime) onDataChanged;
+
+  HomePage({
+    super.key,
+    this.isReload = false,
+    required this.onDataChanged,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -37,9 +41,8 @@ class _HomePageState extends State<HomePage> {
   DateTime? _start;
   DateTime? _end;
   bool _isLoading = true;
-  late Future<dynamic> _data = Future.value(TransactionService().fetchTransaction(_startDate, _endDate, context));
-  bool hasData = false;
-
+  bool _hasData = false;
+  late Future<dynamic> _data = Future.value(TransactionService().fetchTransaction(startDate:  _startDate, endDate: _endDate, onExpired: () => UserService().logout(context)));
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   @override
@@ -47,15 +50,10 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  Future<void> _fetchData() async {
-    setState(() {_isLoading = true;});
-    _data = await Future.value(TransactionService().fetchTransaction(_startDate, _endDate, context));
-    setState(() {});
-  }
-
-  Future<void> _reload() async {
-    setState(() {_isLoading = false;});
-    _data = await Future.value(TransactionService().fetchTransaction(_startDate, _endDate, context));
+  // not show Circle loading for [pull to refresh] and [edit / delete] show just when it start
+  Future<void> _reload({bool loading = false}) async {
+    setState(() {_isLoading = loading;});
+    _data = await Future.value(TransactionService().fetchTransaction(startDate:  _startDate, endDate: _endDate, onExpired: () => UserService().logout(context)));
     _refreshController.refreshCompleted();
     setState(() {});
   }
@@ -70,19 +68,19 @@ class _HomePageState extends State<HomePage> {
           _start = value.startDate;
           _endDate = DateFormat('yyyy-MM-dd').format(value.endDate ?? value.startDate!);
           _end = value.endDate;
+          widget.onDataChanged(value.startDate!);
         });
-        _fetchData();
+        _reload();
         Navigator.of(context).pop();
       }
   }
 
   @override
   Widget build(BuildContext context) {
+    // loading when start the page
     if (widget.isReload) {
-      setState(() {
-        _fetchData();
-        widget.isReload = false;
-      });
+      _reload(loading: true);
+      setState(() {widget.isReload = false;});
     }
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -142,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                                     onSelected: (Menu item) {},
                                     itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
                                       PopupMenuItem<Menu>(
-                                        onTap: hasData ? () async {
+                                        onTap: _hasData ? () async {
                                           dynamic res = await FiletransferService().exportTransaction(_startDate, _endDate);
                                           if (res != null) {
                                             final Uri url = Uri.parse(res.url);
@@ -152,7 +150,7 @@ class _HomePageState extends State<HomePage> {
                                           }
                                         } : null,
                                         value: Menu.download,
-                                        child: hasData
+                                        child: _hasData
                                         ? const ListTile(
                                           leading: Icon(Icons.file_download),
                                           title: Text('Export transactions'),
@@ -173,15 +171,13 @@ class _HomePageState extends State<HomePage> {
                       FutureBuilder<dynamic>(
                         future: _data,
                         builder: (context, snapshot) {
-                          // setState(() {
-                          hasData = snapshot.data != null && !snapshot.hasError;
-                          // });
+                          _hasData = snapshot.data != null && !snapshot.hasError;
                           return AllDataCard(
                             data: snapshot.data,
                             start: _start ?? _now,
                             waiting: (snapshot.connectionState == ConnectionState.waiting) && _isLoading,
                             onDataChanged: _reload,
-                            snapshot: snapshot
+                            snapshot: snapshot,
                           );
                         },
                       )

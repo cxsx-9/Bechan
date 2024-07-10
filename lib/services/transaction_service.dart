@@ -6,12 +6,11 @@ import 'package:bechan/models/transaction_model.dart';
 import 'package:bechan/models/transfer_data_model.dart';
 import 'package:bechan/models/user_model.dart';
 import 'package:bechan/services/api_service.dart';
-import 'package:bechan/services/user_service.dart';
 
 
 class TransactionService {
 
-  Future<dynamic> getTemplate(dynamic context) async {
+  Future<dynamic> getTemplate() async {
     dynamic response = await ApiService().callApi('get', 'getExportTemplate', '');
     if (response == null) {
       return null;
@@ -19,7 +18,7 @@ class TransactionService {
     return ResFileUrl.fromJson(jsonDecode(response.body));
   }
 
-  Future<dynamic> getAllTransactoin(dynamic context) async {
+  Future<dynamic> getAllTransactoin() async {
     dynamic response = await ApiService().callApi('get', 'getExcelUserTransactions', '');
     if (response == null) {
       return null;
@@ -27,7 +26,7 @@ class TransactionService {
     return ResFileUrl.fromJson(jsonDecode(response.body));
   }
 
-  Future<dynamic> fetchSumM(String selectedMonth, dynamic context) async {
+  Future<dynamic> fetchSumM(String selectedMonth) async {
     dynamic response = await ApiService().callApi('get', 'summarymonth', '?selected_month=$selectedMonth');
     if (response == null) {
       return null;
@@ -35,7 +34,7 @@ class TransactionService {
     return SumMonthResponse.fromJson(jsonDecode(response.body));
   }
 
-  Future<dynamic> fetchSumY(String selectedYear, dynamic context) async {
+  Future<dynamic> fetchSumY(String selectedYear) async {
     dynamic response = await ApiService().callApi('get', 'summaryyear', '?selected_year=$selectedYear');
     if (response == null) {
       return null;
@@ -43,60 +42,49 @@ class TransactionService {
     return SumYearResponse.fromJson(jsonDecode(response.body));
   }
 
-  Future<dynamic> fetchTransaction(String startDate, String endDate, dynamic context) async {
-    // print('[TSVC] : transaction calling');
-    dynamic response = await ApiService().callApi('get', 'summaryday', '?selected_date_start=$startDate&selected_date_end=$endDate');
+  Future<dynamic> fetchTransaction({String startDate = '', String endDate = '', int page = 1, int pageSize = 10, required Function onExpired}) async {
+    dynamic response = await ApiService().callApi('get', 'summaryday', '?selected_date_start=$startDate&selected_date_end=$endDate&page=$page&pageSize=$pageSize');
     final jsonResponse = json.decode(response.body);
     if (response == null || jsonResponse['status'] == "error") {
-      // print('[TSVC] : transaction Error');
       Status res = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
       print(res.message);
       if (res.message == 'Invalid or expired token') {
-        UserService().logout(context);
+        onExpired();
+        // UserService().logout(context);
       }
       return null;
     }
-    // print(response.body);
-    // print('[TSVC] : transaction done');
     return TransactionResponse.fromJson(jsonDecode(response.body));
   }
 
   Future<dynamic> fetchFav() async {
-    // print('[TSVC] : transaction calling');
     dynamic response = await ApiService().callApi('get', 'getFavorite', '?fav=1');
     final jsonResponse = json.decode(response.body);
     if (response == null || jsonResponse['status'] == "error") {
-      // print('[TSVC] : transaction Error');
       Status res = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
       print(res.message);
       return null;
     }
-    // print(response.body);
-    // print('[TSVC] : transaction done');
     return FavouriteTransactionResposne.fromJson(jsonDecode(response.body));
   }
 
   Future<dynamic> addTransaction(Object data) async {
-    // print('[TSVC] : transaction Add Data');
     dynamic response = await ApiService().callApi('post', 'record', data);
     if (response == null) {
       return errorApiService();
     }
     Status res = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
     print(res.message);
-    // print('[TSVC] : Add Data success!');
     return response;
   }
 
   Future<dynamic> editTransaction(Object data) async {
-    // print('[TSVC] : transaction Edit Data');
     dynamic response = await ApiService().callApi('put', 'edit-transaction', data);
     if (response == null) {
       return errorApiService();
     }
     Status res = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
     print(res.message);
-    // print('[TSVC] : Edit Data success!');
     return response;
   }
 

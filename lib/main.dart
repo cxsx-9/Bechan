@@ -1,17 +1,14 @@
 import 'package:bechan/models/secure_storage.dart';
-import 'package:bechan/pages/category_page.dart';
 import 'package:bechan/pages/change_password_page.dart';
 import 'package:bechan/pages/enter_otp.dart';
 import 'package:bechan/pages/forgot_password_page.dart';
 import 'package:bechan/pages/main_page.dart';
 import 'package:bechan/pages/more_page.dart';
 import 'package:bechan/pages/set_password_page.dart';
-import 'package:bechan/pages/setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'pages/login_page.dart';
 import 'pages/register_page.dart';
-import 'pages/home_page.dart';
 import 'package:flutter/services.dart';
 import 'theme/theme.dart';
 
@@ -49,10 +46,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/loginPage': (context) => const LoginPage(),
         '/registerPage': (context) => const RegisterPage(),
-        '/categoryPage': (context) => const CategoryPage(),
-        '/homePage': (context) => HomePage(),
         '/mainPage': (context) => const MainPage(),
-        '/settingPage': (context) => const SettingPage(),
         '/morePage': (context) => const MorePage(),
         '/forgotPasswordPage': (context) => const ForgotPasswordPage(),
         '/enterOtp': (context) => const EnterOtp(),

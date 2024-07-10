@@ -20,6 +20,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   bool _isLoading = true;
+  DateTime _selectedDate = DateTime.now();
 
   @override
   void initState() {
@@ -41,15 +42,20 @@ class _MainPageState extends State<MainPage> {
     setState(() { _selectedIndex = index; });
   }
 
-  final List<Widget> _page = <Widget>[
-    HomePage(),
-    const ChartPage(),
-    const CategoryPage(),
-    const SettingPage(),
-  ];
+  void setStartDate(DateTime startDate) {
+    setState(() {
+      _selectedDate = startDate;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> page = <Widget>[
+      HomePage(onDataChanged: setStartDate),
+      const ChartPage(),
+      const CategoryPage(),
+      const SettingPage(),
+    ];
     
     if (_isLoading) {
       return const LoadingPage();
@@ -63,11 +69,11 @@ class _MainPageState extends State<MainPage> {
             isScrollControlled: true,
             context: context,
             builder: (BuildContext context) {
-              return AddRecord(date : DateTime.now());
+              return AddRecord(date : _selectedDate);
             }
           );
           if (isReload == true && _selectedIndex == 0) {
-            _page[0] = HomePage(isReload: true,);
+            page[0] = HomePage(isReload: true, onDataChanged: setStartDate,);
             setState(() {});
             _onItemTapped(0);
           }
@@ -82,7 +88,7 @@ class _MainPageState extends State<MainPage> {
           statusBarBrightness: Brightness.light, // For iOS (dark icons)
         ),
       ),
-      body: _page.elementAt(_selectedIndex),
+      body: page.elementAt(_selectedIndex),
       bottomNavigationBar: BottomAppBar(
         padding: const EdgeInsets.all(0),
         height: 50,
