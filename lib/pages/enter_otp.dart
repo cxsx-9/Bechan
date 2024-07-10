@@ -1,7 +1,6 @@
 import 'package:bechan/services/user_service.dart';
 import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
-import 'package:bechan/widgets/submit_button.dart';
 import 'package:bechan/widgets/text_and_highlight.dart';
 import 'package:flutter/material.dart';
 import 'package:bechan/config.dart' as config;
@@ -77,28 +76,38 @@ class _EnterOtpState extends State<EnterOtp> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 55),
-                  child: InputTextFeild(
-                    controller: otpCtrl,
-                    infoText: 'OTP',
-                    hintText: 'Enter OTP from email',
-                    obscureText: false,
+                  child: Column(
+                    children: [
+                      InputTextFeild(
+                        controller: otpCtrl,
+                        infoText: 'OTP',
+                        hintText: 'Enter OTP from email',
+                        obscureText: false,
+                      ),
+                      const SizedBox(height: 20,),
+                      SizedBox(
+                        height: 50,
+                        width: double.infinity,
+                        child: FilledButton(
+                          onPressed: isFeildFull && enableBtn ? () async {
+                            setState(() {enableBtn = false;});
+                            dynamic res = await UserService().verifyTokenPassword({'email' : config.USER_DATA.email, 'token' : otpCtrl.text});
+                            setState(() {enableBtn = true;});
+                            if (res.status == 'error' || res.status == 'ERR_CONNECTION') {
+                              ScaffoldMessenger.of(context).showSnackBar(getSnackBar(res.message,55,70,false));
+                            } else {
+                              config.STATUS.token = otpCtrl.text;
+                              Navigator.pushReplacementNamed(context, '/setPasswordPage');
+                            }
+                          } : null,
+                          child: const Text(
+                            "Continue",
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                const SizedBox(height: 20,),
-                SubmitButton(
-                  onTap: () async {
-                    setState(() {enableBtn = false;});
-                    dynamic res = await UserService().verifyTokenPassword({'email' : config.USER_DATA.email, 'token' : otpCtrl.text});
-                    setState(() {enableBtn = true;});
-                    if (res.status == 'error' || res.status == 'ERR_CONNECTION') {
-                      ScaffoldMessenger.of(context).showSnackBar(getSnackBar(res.message,55,70,false));
-                    } else {
-                      config.STATUS.token = otpCtrl.text;
-                      Navigator.pushReplacementNamed(context, '/setPasswordPage');
-                    }
-                  },
-                  btnText: 'Continue',
-                  type: isFeildFull && enableBtn ? 1 : 0,
                 ),
                 const SizedBox(height: 40,),
                 TextAndHighlight(

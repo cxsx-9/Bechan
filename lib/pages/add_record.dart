@@ -7,7 +7,6 @@ import 'package:bechan/widgets/custom_chip.dart';
 import 'package:bechan/widgets/input_number.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/widgets/show_date_picker.dart';
-import 'package:bechan/widgets/submit_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -493,16 +492,20 @@ class _AddRecordState extends State<AddRecord> {
                           ),
                         ],
                       ) : const SizedBox(),
-                    SubmitButton(
-                      btnText: widget.isEdit
-                        ? 'Edit'
-                        : 'Create',
-                      type: isFeildFull && noteCtrl.text.length <= 18 && !isSending ? 1 : 0,
-                      onTap: isFeildFull && noteCtrl.text.length <= 18 && !isSending ? () async {
-                        widget.isEdit ? await _edit() : await _create();
-                        Navigator.pop(context, true);
-                      } : null,
-                    ),
+                      SizedBox(
+                        height: 50,
+                        width: 320,
+                        child: FilledButton(
+                          onPressed: isFeildFull && noteCtrl.text.length <= 18 && !isSending ? () async {
+                            widget.isEdit ? await _edit() : await _create();
+                            Navigator.pop(context, true);
+                          } : null,
+                          child: Text(
+                            widget.isEdit ? 'Edit' : 'Create',
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
                     const SizedBox(height: 40,),
                   ],
                 ),

@@ -1,7 +1,6 @@
 import 'package:bechan/services/user_service.dart';
 import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
-import 'package:bechan/widgets/submit_button.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:bechan/config.dart' as config;
@@ -80,29 +79,39 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 55),
-                  child: InputTextFeild(
-                    controller: emailCtrl,
-                    infoText: 'Email',
-                    hintText: 'Enter your email',
-                    obscureText: false,
-                    errorText: "Enter a valid email address",
+                  child: Column(
+                    children: [
+                      InputTextFeild(
+                        controller: emailCtrl,
+                        infoText: 'Email',
+                        hintText: 'Enter your email',
+                        obscureText: false,
+                        errorText: "Enter a valid email address",
+                      ),
+                      const SizedBox(height: 20,),
+                      SizedBox(
+                        height: 50,
+                        width: double.infinity,
+                        child: FilledButton(
+                          onPressed: isFeildFull && enableBtn && validEmail ? () async {
+                            setState(() {enableBtn = false;});
+                            dynamic res = await UserService().forgotPassword({'email' : emailCtrl.text});
+                            if (res.status == 'error' || res.status == 'ERR_CONNECTION') {
+                              ScaffoldMessenger.of(context).showSnackBar(getSnackBar(res.message,55,70,false));
+                            } else {
+                              config.USER_DATA.email = emailCtrl.text;
+                              Navigator.pushReplacementNamed(context, '/enterOtp');
+                            }
+                            setState(() {enableBtn = true;});
+                          } : null,
+                          child: const Text(
+                            "Reset Password",
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                const SizedBox(height: 20,),
-                SubmitButton(
-                  onTap: isFeildFull && enableBtn && validEmail ? () async {
-                    setState(() {enableBtn = false;});
-                    dynamic res = await UserService().forgotPassword({'email' : emailCtrl.text});
-                    if (res.status == 'error' || res.status == 'ERR_CONNECTION') {
-                      ScaffoldMessenger.of(context).showSnackBar(getSnackBar(res.message,55,70,false));
-                    } else {
-                      config.USER_DATA.email = emailCtrl.text;
-                      Navigator.pushReplacementNamed(context, '/enterOtp');
-                    }
-                    setState(() {enableBtn = true;});
-                  } : null,
-                  btnText: 'Reset Password',
-                  type: isFeildFull && enableBtn && validEmail ? 1 : 0,
                 ),
                 const SizedBox(height: 40,),
                 SizedBox(
@@ -119,10 +128,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         Text(
                           'Back to log in',
                           style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ]
                     )

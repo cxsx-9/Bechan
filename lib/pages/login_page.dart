@@ -1,5 +1,4 @@
 import 'package:bechan/widgets/input_textfeild.dart';
-import 'package:bechan/widgets/submit_button.dart';
 import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:bechan/widgets/text_and_highlight.dart';
 import 'package:bechan/services/user_service.dart';
@@ -75,9 +74,9 @@ class _LoginPageState extends State<LoginPage> {
                 height: 70,
               ),
               GestureDetector(
-                  onLongPress: () {
-                      emailCtrl.text = config.ADMIN_EMAIL;
-                      passCtrl.text = config.ADMIN_PASSWD;
+                onLongPress: () {
+                  emailCtrl.text = config.ADMIN_EMAIL;
+                  passCtrl.text = config.ADMIN_PASSWD;
                 },
                 child: Image.asset(
                   Provider.of<ThemeProvider>(context, listen: false).isDarkMode ? 'assets/Banche_logo_dark.png' : 'assets/Banche_logo_light.png',
@@ -119,30 +118,44 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 )
               ),
-              // const SizedBox(height: 200,),
               Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SubmitButton(
-                      onTap: isFeildFull && enableBtn && validEmail ? () async {
-                          setState(() {enableBtn = false;});
-                          await login(context);
-                          setState(() {enableBtn = true;});
-                      } : null,
-                      btnText: "Login",
-                      type: isFeildFull && enableBtn && validEmail ? 1 : 0
-                    ),
-                    const SizedBox(height: 20),
-                    const TextAndHighlight(text: "Don't have an account? ", highlight: "Register", link: false, onTap: null,),
-                    const SizedBox(height: 5),
-                    SubmitButton(
-                      onTap: () { Navigator.pushNamed(context, '/registerPage'); },
-                      btnText: "Register",
-                      type: 2
-                    ),
-                    const SizedBox(height: 50),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 55),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        width: double.infinity,
+                        child: FilledButton(
+                          onPressed: isFeildFull && enableBtn && validEmail ? () async {
+                            setState(() {enableBtn = false;});
+                            await login(context);
+                            setState(() {enableBtn = true;});
+                          } : null,
+                          child: const Text(
+                            "Login",
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      const TextAndHighlight(text: "Don't have an account? ", highlight: "Register", link: false, onTap: null,),
+                      const SizedBox(height: 5),
+                      SizedBox(
+                        height: 50,
+                        width: double.infinity,
+                        child: OutlinedButton(
+                          onPressed: () { Navigator.pushNamed(context, '/registerPage'); },
+                          child: const Text(
+                            "Register",
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 50),
+                    ],
+                  ),
                 ),
               ),
             ],

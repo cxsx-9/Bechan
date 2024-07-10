@@ -1,7 +1,6 @@
 import 'package:bechan/services/user_service.dart';
 import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
-import 'package:bechan/widgets/submit_button.dart';
 import 'package:flutter/material.dart';
 import 'package:bechan/config.dart' as config;
 
@@ -79,47 +78,53 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 55),
                   child: Column(
                     children: [
-                        InputTextFeild(
-                          controller: passCtrl,
-                          infoText: "Password",
-                          hintText: "Enter Password",
-                          obscureText: true,
+                      InputTextFeild(
+                        controller: passCtrl,
+                        infoText: "Password",
+                        hintText: "Enter Password",
+                        obscureText: true,
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      InputTextFeild(
+                        controller: cpassCtrl,
+                        infoText: "Confirm Password",
+                        hintText: "Confirm Password",
+                        obscureText: true
+                      ),
+                      const SizedBox(height: 20,),
+                      SizedBox(
+                        height: 50,
+                        width: double.infinity,
+                        child: FilledButton(
+                          onPressed: isFeildFull && enableBtn ? () async {
+                            if (cpassCtrl.text == passCtrl.text) {
+                              setState(() {enableBtn = false;});
+                              dynamic res = await UserService().setNewPassword({
+                                "email": config.USER_DATA.email,
+                                "token": config.STATUS.token,
+                                "new_password": passCtrl.text
+                              });
+                              setState(() {enableBtn = true;});
+                              if (res.status != 'ERR_CONNECTION' && res.status != 'error') {
+                                ScaffoldMessenger.of(context).showSnackBar(getSnackBar('Changing password success!', 55, 70, true));
+                                Navigator.pop(context);
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(getSnackBar(res.message, 55, 70, false));
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(getSnackBar('Corfirm password does not match.', 55, 70, false));
+                            }
+                          } : null,
+                          child: const Text(
+                            "Reset Password",
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        InputTextFeild(
-                          controller: cpassCtrl,
-                          infoText: "Confirm Password",
-                          hintText: "Confirm Password",
-                          obscureText: true
-                        ),
+                      ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 20,),
-                SubmitButton(
-                  onTap: isFeildFull && enableBtn ? () async {
-                    if (cpassCtrl.text == passCtrl.text) {
-                      setState(() {enableBtn = false;});
-                      dynamic res = await UserService().setNewPassword({
-                        "email": config.USER_DATA.email,
-                        "token": config.STATUS.token,
-                        "new_password": passCtrl.text
-                      });
-                      setState(() {enableBtn = true;});
-                      if (res.status != 'ERR_CONNECTION' && res.status != 'error') {
-                        ScaffoldMessenger.of(context).showSnackBar(getSnackBar('Changing password success!', 55, 70, true));
-                        Navigator.pop(context);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(getSnackBar(res.message, 55, 70, false));
-                      }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(getSnackBar('Corfirm password does not match.', 55, 70, false));
-                    }
-                  } : null,
-                  btnText: 'Reset Password',
-                  type: isFeildFull && enableBtn ? 1 : 0,
                 ),
                 const SizedBox(height: 40,),
                 SizedBox(

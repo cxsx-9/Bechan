@@ -1,7 +1,6 @@
 import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/services/user_service.dart';
-import 'package:bechan/widgets/submit_button.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:bechan/theme/theme.dart';
 import 'package:provider/provider.dart';
@@ -80,115 +79,113 @@ class _RegisterPageState extends State<RegisterPage> {
         body: SafeArea(
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 70,
-                ),
-                Image.asset(
-                  Provider.of<ThemeProvider>(context, listen: false).isDarkMode ? 'assets/Banche_logo_dark.png' : 'assets/Banche_logo_light.png',
-                  height: 83,
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 55.0),
-                  child: Column(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 55.0),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 70,
+                  ),
+                  Image.asset(
+                    Provider.of<ThemeProvider>(context, listen: false).isDarkMode ? 'assets/Banche_logo_dark.png' : 'assets/Banche_logo_light.png',
+                    height: 83,
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  InputTextFeild(
+                    controller: emailCtrl,
+                    infoText: "Email",
+                    hintText: "Enter Email",
+                    obscureText: false,
+                    errorText: "Enter a valid email address",
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Row(
                     children: [
-                      InputTextFeild(
-                        controller: emailCtrl,
-                        infoText: "Email",
-                        hintText: "Enter Email",
-                        obscureText: false,
-                        errorText: "Enter a valid email address",
+                      Expanded(
+                        child: InputTextFeild(
+                          controller: fnameCtrl,
+                          infoText: "Firstname",
+                          hintText: "Enter Firstname",
+                          obscureText: false
+                        ),
                       ),
                       const SizedBox(
-                        height: 5,
+                        width: 10,
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: InputTextFeild(
-                              controller: fnameCtrl,
-                              infoText: "Firstname",
-                              hintText: "Enter Firstname",
-                              obscureText: false
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: InputTextFeild(
-                              controller: lnameCtrl,
-                              infoText: "Lastname",
-                              hintText: "Enter Lastname",
-                              obscureText: false
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      InputTextFeild(
-                        controller: passCtrl,
-                        infoText: "Password",
-                        hintText: "Enter Password",
-                        obscureText: true,
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      InputTextFeild(
-                        controller: cpassCtrl,
-                        infoText: "Confirm Password",
-                        hintText: "Confirm Password",
-                        obscureText: true
+                      Expanded(
+                        child: InputTextFeild(
+                          controller: lnameCtrl,
+                          infoText: "Lastname",
+                          hintText: "Enter Lastname",
+                          obscureText: false
+                        ),
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 70),
-                Column(
-                  children: [
-                    SubmitButton(
-                      onTap: isFeildFull && enableBtn && validEmail ? () async {
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  InputTextFeild(
+                    controller: passCtrl,
+                    infoText: "Password",
+                    hintText: "Enter Password",
+                    obscureText: true,
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  InputTextFeild(
+                    controller: cpassCtrl,
+                    infoText: "Confirm Password",
+                    hintText: "Confirm Password",
+                    obscureText: true
+                  ),
+                  const SizedBox(height: 70),
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: FilledButton(
+                      onPressed: isFeildFull && enableBtn && validEmail ? () async {
                         setState(() { enableBtn = false; });
                         await register(context);
                         setState(() { enableBtn = true; });
                       } : null,
-                      btnText: "Register",
-                      type: isFeildFull && enableBtn && validEmail ? 1 : 0
-                    ),
-                    const SizedBox(height: 30),
-                    SizedBox(
-                      width: 150,
-                      child: TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.arrow_back_ios_new_rounded,
-                              size: 14,
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              'Back to log in',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ]
-                        )
+                      child: const Text(
+                        "Register",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    width: 150,
+                    child: TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            size: 14,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            'Back to log in',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ]
+                      )
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
