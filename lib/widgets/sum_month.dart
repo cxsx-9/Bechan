@@ -59,9 +59,9 @@ class SumMonth extends StatelessWidget {
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              SizedBox(width:70, child: Text(item.name,style: const TextStyle(fontSize: 15),)),
-                              SizedBox(width:80, child: Text(config.NUM_FORMAT.format(item.income), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
-                              SizedBox(width:80, child: Text(config.NUM_FORMAT.format(item.expense), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
+                              SizedBox(width:90, child: Text(item.name,style: const TextStyle(fontSize: 15),)),
+                              SizedBox(width:100, child: Text(config.NUM_FORMAT.format(item.income), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
+                              SizedBox(width:100, child: Text(config.NUM_FORMAT.format(item.expense), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
                             ],
                           ),
                         ),

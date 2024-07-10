@@ -24,22 +24,25 @@ class SumYear extends StatelessWidget {
           height: months.isNotEmpty ? 300 : 200,
           decoration: cardDecoration(context),
           child: months.isNotEmpty ? Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: const EdgeInsets.only(top: 15, bottom: 15, right: 10, left: 5),
             child: SfCartesianChart(
               tooltipBehavior: TooltipBehavior(
                 enable: true,
               ),
-              primaryXAxis: const CategoryAxis(),
+              primaryXAxis: const CategoryAxis(
+                interval: 1,
+                labelRotation: 90,
+                labelStyle: TextStyle(fontSize: 12,)
+              ),
               primaryYAxis: NumericAxis(
-                numberFormat:
-                NumberFormat.compactCurrency(decimalDigits: 0, symbol: '')
+                numberFormat: NumberFormat.compactCurrency(decimalDigits: 0, symbol: ''),
+                labelStyle: const TextStyle(fontSize: 10,)
               ),
               series: <CartesianSeries>[
                   ColumnSeries<MonthData, String>(
                       name: 'Income',
                       dataSource: months,
                       xValueMapper: (MonthData data, _) => DateFormat('MMM').format(DateTime(0, data.month)),
-                      // xValueMapper: (MonthData data, _) => data.month,
                       yValueMapper: (MonthData data, _) => data.totalIncome,
                       color: const Color.fromRGBO(0, 189, 174, 1),
                   ),
@@ -57,7 +60,7 @@ class SumYear extends StatelessWidget {
         const SizedBox(height: 10,),
         months.isNotEmpty ? Container(
           width: double.infinity,
-          constraints: const BoxConstraints(maxHeight: 300, minHeight: 100),
+          constraints: const BoxConstraints(maxHeight: 730, minHeight: 100),
           decoration: cardDecoration(context),
           child: Padding(
             padding: const EdgeInsets.all(15.0),
@@ -89,7 +92,7 @@ class SumYear extends StatelessWidget {
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              SizedBox(width:70, child: Text(DateFormat('MMMM').format(DateTime(0, item.month)), style: const TextStyle(fontSize: 15),textAlign: TextAlign.start )),
+                              SizedBox(width: 90, child: Text(DateFormat('MMMM').format(DateTime(0, item.month)), style: const TextStyle(fontSize: 15),textAlign: TextAlign.start )),
                               SizedBox(width:100, child: Text(config.NUM_FORMAT.format(item.totalIncome), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
                               SizedBox(width:100, child: Text(config.NUM_FORMAT.format(item.totalExpense), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
                             ],

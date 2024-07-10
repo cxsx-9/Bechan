@@ -50,6 +50,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    
     if (_isLoading) {
       return const LoadingPage();
     }

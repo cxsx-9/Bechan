@@ -27,6 +27,7 @@ class _MorePageState extends State<MorePage> {
   String? pathFromServer;
   bool isFileOK = true;
   bool uploadSuccess = false;
+  bool connecting = false;
   dynamic errorRes;
 
   Future<void> picksinglefile() async {
@@ -71,6 +72,9 @@ class _MorePageState extends State<MorePage> {
   int progress = 0;
 
   void connectToServer() {
+    setState(() {
+      connecting = true;
+    });
     String url = '${config.BASE_URL}/status';
     Map<String, String> headers = {};
 
@@ -89,6 +93,7 @@ class _MorePageState extends State<MorePage> {
               } else if (json['status'] == 'processing') {
                 progress = json['progress'] ?? 100;
               } else if (json['status'] == 'error' || json['status'] == 'completed') {
+                connecting = false;
                 _sseSubscription.cancel();
               }
             });
@@ -97,13 +102,18 @@ class _MorePageState extends State<MorePage> {
       }, onError: (error) {
         print('Error connecting to SSE: $error');
         _sseSubscription.cancel();
+        setState(() {
+          connecting = false;
+        });
       }
     );
   }
 
   @override
   void dispose() {
-    _sseSubscription.cancel();
+    if (connecting) {
+      _sseSubscription.cancel();
+    }
     super.dispose();
   }
 
