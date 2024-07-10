@@ -240,17 +240,22 @@ class _MorePageState extends State<MorePage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(file!.name),
-                                        const SizedBox(width: 10,),
-                                        GestureDetector(
-                                          onTap: (){setState(() {
-                                            file = null;
-                                            isFileOK = true;
-                                            progress = 0;
-                                          });},
-                                          child: const Icon(Icons.cancel, size: 18)
-                                        )
+                                        Row(
+                                          children: [
+                                            Text(file!.name),
+                                            const SizedBox(width: 10,),
+                                            GestureDetector(
+                                              onTap: (){setState(() {file = null;isFileOK = true;progress = 0;});},
+                                              child: const Icon(Icons.cancel, size: 18)
+                                            )
+                                          ],
+                                        ),
+                                        Text(
+                                          uploadSuccess ? 'Upload success!' : '',
+                                          style: const TextStyle(fontWeight: FontWeight.w800),
+                                        ),
                                       ],
                                     ),
                                     Text(size!, style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary),),
@@ -277,38 +282,55 @@ class _MorePageState extends State<MorePage> {
                         Container(
                           alignment: Alignment.center,
                           child: SizedBox(
-                            width: 150,
-                            child: 
-                            file == null || uploadSuccess
-                            ? OutlinedButton(
-                              onPressed: () async {onChooseFile();},
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('Choose file'),
-                                  SizedBox(width: 12,),
-                                  FaIcon(FontAwesomeIcons.fileImport, size: 15,),
-                                ],
-                              ),
-                            )
-                            : isFileOK 
-                            ? OutlinedButton(
-                              onPressed: () {onSubmit();},
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('Submit'),
-                                ],
-                              ),
-                            )
-                            : OutlinedButton(
-                              onPressed: () {onConfirm();},
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('Confirm'),
-                                ],
-                              ),
+                            width: double.infinity,
+                            child:
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: file == null || uploadSuccess ? [
+                                OutlinedButton(
+                                  onPressed: () async {onChooseFile();},
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text('Choose file'),
+                                      SizedBox(width: 12,),
+                                      FaIcon(FontAwesomeIcons.fileImport, size: 15,),
+                                    ],
+                                  ),
+                                ),
+                                uploadSuccess ? Row(
+                                  children: [
+                                    const SizedBox(width: 90,),
+                                    FilledButton(
+                                      onPressed: () => {Navigator.pop(context, false)},
+                                      child: const Text('Done'),
+                                    ),
+                                  ],
+                                ) : const SizedBox(),
+                              ]
+                              : isFileOK
+                              ? [
+                                OutlinedButton(
+                                  onPressed: () {onSubmit();},
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text('Submit'),
+                                    ],
+                                  ),
+                                )
+                              ] 
+                              : [
+                                OutlinedButton(
+                                  onPressed: () {onConfirm();},
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text('Confirm'),
+                                    ],
+                                  ),
+                                )
+                              ],
                             )
                           ),
                         ),
