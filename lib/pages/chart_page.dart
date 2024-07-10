@@ -26,6 +26,7 @@ class _ChartPageState extends State<ChartPage> {
   String? endDate;
   String? type = 'month';
   DateTime selectDate = DateTime.now();
+  bool hasData = false;
 
   late Future<dynamic> _mres = Future.value(TransactionService().fetchSumM(sendMonth, context));
   late Future<dynamic> _yres = Future.value(TransactionService().fetchSumY(selectedYear, context));
@@ -119,7 +120,7 @@ class _ChartPageState extends State<ChartPage> {
                               onSelected: (Menu item) {},
                               itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
                                 PopupMenuItem<Menu>(
-                                  onTap: () async {
+                                  onTap: hasData ? () async {
                                     if (type == 'year') {
                                       startDate = DateFormat('yyyy-MM-dd').format(DateTime(selectDate.year, 1, 1));
                                       endDate = DateFormat('yyyy-MM-dd').format(DateTime(selectDate.year + 1, 1, 0));
@@ -133,11 +134,15 @@ class _ChartPageState extends State<ChartPage> {
                                     if (!await launchUrl(url)) {
                                       throw Exception('Could not launch $url');
                                     }
-                                  },
+                                  } : null,
                                   value: Menu.download,
-                                  child: const ListTile(
+                                  child: hasData
+                                  ? const ListTile(
                                     leading: Icon(Icons.file_download),
                                     title: Text('Export transactions'),
+                                  )
+                                  : ListTile(
+                                    title: Text('No Data to Export', style: TextStyle(color: Theme.of(context).colorScheme.secondary),),
                                   ),
                                 ),
                               ],
@@ -194,6 +199,7 @@ class _ChartPageState extends State<ChartPage> {
                       child: FutureBuilder<dynamic>(
                         future: type == 'month' ? _mres : _yres,
                         builder: (context, snapshot) {
+                          hasData = snapshot.data != null ? snapshot.data.isNotEmpty() && !snapshot.hasError : false;
                           return AllSum(snapshot: snapshot, type: type!);
                         },
                       )
@@ -209,26 +215,3 @@ class _ChartPageState extends State<ChartPage> {
     );
   }
 }
-
-// Row(
-//   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//   children: [
-//     const Row(
-//       children: [
-//         SizedBox(width: 40, child: Center(child: FaIcon(FontAwesomeIcons.fileArrowDown, size: 20, color: Colors.deepPurple,))),
-//         Text('Export all Transactions',style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),),
-//       ]
-//     ),
-//     IconButton(
-//       onPressed: () async {
-//         dynamic res = await TransactionService().getAllTransactoin(context);
-//         print(res.url);
-//         final Uri url = Uri.parse(res.url);
-//         if (!await launchUrl(url)) {
-//           throw Exception('Could not launch $url');
-//         }
-//       },
-//       icon: const FaIcon(FontAwesomeIcons.arrowDown, size: 15,),
-//     ),
-//   ],
-// ),

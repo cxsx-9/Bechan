@@ -91,4 +91,7 @@ class SumYearResponse {
     );
   }
   List<dynamic> getCategories(String a) { return [];}
+  bool isNotEmpty() {
+    return (months!.isNotEmpty);
+  }
 }

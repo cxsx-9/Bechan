@@ -1,7 +1,6 @@
 import 'package:bechan/models/sum_month_model.dart';
 import 'package:bechan/widgets/card_decoration.dart';
 import 'package:bechan/widgets/doughnut_chart.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bechan/config.dart' as config;
 

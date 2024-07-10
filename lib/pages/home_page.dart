@@ -38,6 +38,7 @@ class _HomePageState extends State<HomePage> {
   DateTime? _end;
   bool _isLoading = true;
   late Future<dynamic> _data = Future.value(TransactionService().fetchTransaction(_startDate, _endDate, context));
+  bool hasData = false;
 
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
@@ -141,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                                     onSelected: (Menu item) {},
                                     itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
                                       PopupMenuItem<Menu>(
-                                        onTap: () async {
+                                        onTap: hasData ? () async {
                                           dynamic res = await FiletransferService().exportTransaction(_startDate, _endDate);
                                           if (res != null) {
                                             final Uri url = Uri.parse(res.url);
@@ -149,11 +150,15 @@ class _HomePageState extends State<HomePage> {
                                               throw Exception('Could not launch $url');
                                             }
                                           }
-                                        },
+                                        } : null,
                                         value: Menu.download,
-                                        child: const ListTile(
+                                        child: hasData
+                                        ? const ListTile(
                                           leading: Icon(Icons.file_download),
                                           title: Text('Export transactions'),
+                                        )
+                                        : ListTile(
+                                          title: Text('No Data to Export', style: TextStyle(color: Theme.of(context).colorScheme.secondary),),
                                         ),
                                       ),
                                     ],
@@ -168,6 +173,9 @@ class _HomePageState extends State<HomePage> {
                       FutureBuilder<dynamic>(
                         future: _data,
                         builder: (context, snapshot) {
+                          // setState(() {
+                          hasData = snapshot.data != null && !snapshot.hasError;
+                          // });
                           return AllDataCard(
                             data: snapshot.data,
                             start: _start ?? _now,

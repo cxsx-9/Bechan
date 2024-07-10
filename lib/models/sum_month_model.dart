@@ -146,4 +146,7 @@ class SumMonthResponse {
     }
     return [];
   }
+  bool isNotEmpty() {
+    return (summaryType!.isNotEmpty);
+  }
 }
