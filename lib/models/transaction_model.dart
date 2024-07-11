@@ -56,6 +56,29 @@ class Transaction {
   }
 }
 
+class Pagination {
+  final int page;
+  final int pageSize;
+  final int pageTotal;
+  final int totalItem;
+
+  Pagination ({
+    required this.page,
+    required this.pageSize,
+    required this.pageTotal,
+    required this.totalItem,
+  });
+
+  factory Pagination.fromJson(Map<String, dynamic> json) {
+    return Pagination(
+      page: json['page'],
+      pageSize: json['page_size'],
+      pageTotal: json['page_total'],
+      totalItem: json['total_transactions']
+    );
+  }
+}
+
 class Summary {
   final int userId;
   final String selectedDate;
@@ -92,6 +115,7 @@ class TransactionResponse {
   final String status;
   final String message;
   final Summary? summary;
+  final Pagination? pagination;
   final List<Transaction>? transactions;
 
   TransactionResponse({
@@ -99,6 +123,7 @@ class TransactionResponse {
     required this.message,
     this.summary,
     this.transactions,
+    this.pagination,
   });
 
   factory TransactionResponse.fromJson(Map<String, dynamic> json) {
@@ -107,6 +132,7 @@ class TransactionResponse {
       status: json['status'],
       message: json['message'],
       summary: data != null && data['summary'] != null ? Summary.fromJson(data['summary']) : null,
+      pagination: data != null && data['pagination'] != null ? Pagination.fromJson(data['pagination']) : null,
       transactions: data != null && data['transactions'] != null
           ? (data['transactions'] as List).map((transaction) => Transaction.fromJson(transaction)).toList()
           : [],

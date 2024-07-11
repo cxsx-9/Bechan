@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 class NoTransaction extends StatelessWidget{
-  final dynamic snapshot;
-  const NoTransaction({super.key, dynamic snapshot}) : snapshot = snapshot ?? null;
+  // final dynamic snapshot;
+  const NoTransaction({
+    super.key,
+    // dynamic snapshot
+  });
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -16,26 +19,22 @@ class NoTransaction extends StatelessWidget{
             'assets/dance.webp',
             height: 120,
           ),
-          Text(
-            !snapshot.hasError
-            ? "No transactions today?"
-            : "offline",
+          const Text(
+            "No transactions today?",
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
           ),
           const SizedBox(height: 5),
-          Text(
-            style: const TextStyle(
+          const Text(
+            style: TextStyle(
               fontWeight: FontWeight.w300,
               fontSize: 12,
             ),
             textAlign: TextAlign.center,
-            !snapshot.hasError
-            ? "That's awesome!\nMaybe you're saving like a pro!"
-            : 'You are Not Connected to the Internet \n\n${snapshot.error}'
+            "That's awesome!\nMaybe you're saving like a pro!",
           ),
           const Expanded(
             child: Column(

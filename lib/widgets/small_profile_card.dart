@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gravatar/flutter_gravatar.dart';
+import 'package:bechan/config.dart' as config;
 
 class SmallProfileCard extends StatelessWidget {
   final String firstname;
   final String email;
   final String greeting;
+  final String profilePath;
   
   const SmallProfileCard ({
     super.key,
     required this.firstname,
     required this.email,
+    required this.profilePath,
     required this.greeting,
   });
   
   @override
   Widget build(BuildContext context) {
-    Gravatar gravatar = Gravatar(email);
     return SizedBox(
       width: 175,
       height: 90,
@@ -39,7 +40,7 @@ class SmallProfileCard extends StatelessWidget {
                 height: 48,
                 child: CircleAvatar(
                   backgroundImage: NetworkImage(
-                      gravatar.imageUrl(),
+                    '${config.BASE_URL}/$profilePath'
                   ),
                 ),
               ),

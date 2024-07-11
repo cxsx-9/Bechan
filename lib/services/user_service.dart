@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:bechan/models/secure_storage.dart';
+import 'package:bechan/models/transfer_data_model.dart';
 import 'package:bechan/models/user_model.dart';
 import 'package:bechan/services/api_service.dart';
 import 'package:bechan/config.dart' as config;
@@ -85,5 +86,14 @@ class UserService {
     }
     config.STATUS = Status.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
     return config.STATUS;
+  }
+
+  Future<dynamic> importFile(dynamic data) async {
+    dynamic response = await ApiFileService().callApi('put', 'edit-profile-pic', data);
+    if (response == null) {
+      return errorApiService();
+    }
+    ResFilePath res = ResFilePath.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    return res;
   }
 }

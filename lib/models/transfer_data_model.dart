@@ -16,10 +16,35 @@ class ResFileUrl {
 
   factory ResFileUrl.fromJson(Map<String, dynamic> json) {
     return ResFileUrl(
-        status: json['status'].runtimeType == "String" ? json['status']: json['status'].toString(),
-        message: json['message'].runtimeType == "String" ? json['message']: json['message'].toString(),
-        url: json['data'] != null ? json['data']['fileUrl'].runtimeType == "String" ? json['data']['fileUrl']: json['data']['fileUrl'].toString() : '',
-      );
+      status: json['status'].runtimeType == "String" ? json['status']: json['status'].toString(),
+      message: json['message'].runtimeType == "String" ? json['message']: json['message'].toString(),
+      url: json['data'] != null ? json['data']['fileUrl'].runtimeType == "String" ? json['data']['fileUrl']: json['data']['fileUrl'].toString() : '',
+    );
+  }
+}
+
+class ResFilePath {
+  String status;
+  String message;
+  String path;
+
+  ResFilePath({
+    String ? status,
+    String ? message,
+    String ? path,
+  })
+  :
+    status =status ?? "" ,
+    message =message ?? "" ,
+    path =path ?? "" 
+  ;
+
+  factory ResFilePath.fromJson(Map<String, dynamic> json) {
+    return ResFilePath(
+      status: json['status'].runtimeType == "String" ? json['status']: json['status'].toString(),
+      message: json['message'].runtimeType == "String" ? json['message']: json['message'].toString(),
+      path: json['data'] != null ? json['data']['profile_path'].runtimeType == "String" ? json['data']['profile_path']: json['data']['fileUrl'].toString() : '',
+    );
   }
 }
 

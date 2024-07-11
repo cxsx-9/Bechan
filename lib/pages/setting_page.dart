@@ -2,9 +2,12 @@ import 'package:bechan/models/user_model.dart';
 import 'package:bechan/services/user_service.dart';
 import 'package:bechan/widgets/card_decoration.dart';
 import 'package:bechan/widgets/custom_dialog.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:bechan/config.dart' as config;
-import 'package:flutter_gravatar/flutter_gravatar.dart';
+import 'package:flutter/services.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -15,10 +18,96 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage> {
   User _user = config.USER_DATA;
+  dynamic image;
+  dynamic cropfile;
+
+  Future<void> _fetchUserData() async {
+    await UserService().fetch();
+    setState(() {
+      _user = config.USER_DATA;
+    });
+  }
+
+  Future _pickImage() async {
+    print('PICK');
+    try {
+      final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickedFile == null) return;
+
+      setState(() {
+        image = pickedFile;
+      });
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
+  Future<void> _cropImage() async {
+    print('CROP');
+    if (image != null) {
+      print(image.path);
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: image!.path,
+        compressFormat: ImageCompressFormat.jpg,
+        compressQuality: 100,
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.square,
+            lockAspectRatio: false,
+            aspectRatioPresets: [
+              CropAspectRatioPreset.square,
+            ],
+          ),
+          IOSUiSettings(
+            title: 'Cropper',
+            aspectRatioPresets: [
+              CropAspectRatioPreset.square,
+            ]
+          ),
+          WebUiSettings(
+            context: context,
+            presentStyle: WebPresentStyle.dialog,
+            size: const CropperSize(
+              width: 520,
+              height: 520,
+            ),
+          ),
+        ],
+      );
+      if (croppedFile != null) {
+        setState(() {
+          cropfile = croppedFile;
+        });
+      } else {
+        setState(() {
+          image = null;
+        });
+      }
+    }
+  }
+
+  void onChooseFile () async {
+    image = null;
+    cropfile = null;
+    await _pickImage();
+    await _cropImage();
+    if (image != null){
+      PlatformFile file = PlatformFile(
+        name: image.name,
+        size: 1,
+        path: cropfile.path
+      );
+      UserService().importFile(file).then((onValue) => {
+        _fetchUserData()
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // FilePickerResult? result;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
@@ -49,14 +138,34 @@ class _SettingPageState extends State<SettingPage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(
-                              width: 80,
-                              height: 80,
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                  Gravatar(_user.email).imageUrl(),
-                                ),
-                              ),
+                            Stack(
+                              alignment: Alignment.bottomRight,
+                              children: [
+                                  SizedBox(
+                                    width: 150,
+                                    height: 130,
+                                    child: Center(
+                                      child: SizedBox(
+                                        width: 120,
+                                        height: 120,
+                                        child: CircleAvatar(
+                                          radius: 60,
+                                          backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                                          child: CircleAvatar(
+                                            radius: 58,
+                                            backgroundImage: NetworkImage(
+                                              '${config.BASE_URL}/${_user.profilePath}'
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton.filledTonal(
+                                    onPressed: (){onChooseFile();},
+                                    icon: const Icon(Icons.edit_rounded),
+                                  ),
+                              ],
                             ),
                             const SizedBox(height: 20,),
                             Text(

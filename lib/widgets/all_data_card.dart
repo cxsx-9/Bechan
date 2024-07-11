@@ -8,19 +8,30 @@ import 'package:bechan/config.dart' as config;
 class AllDataCard extends StatelessWidget {
   final dynamic data;
   final bool waiting;
-  final DateTime start;
-  final dynamic snapshot;
+  final double income;
+  final double expense;
+  final int totalItem;
   final VoidCallback onDataChanged;
-  const AllDataCard({super.key, required this.data, bool ? waiting, dynamic snapshot, required this.onDataChanged, required this.start}) 
-  : waiting = waiting ?? false, snapshot = snapshot ?? null;
+  final dynamic scrollController;
+  
+  const AllDataCard({
+    super.key,
+    required this.data,
+    required this.income,
+    required this.expense,
+    required this.totalItem,
+    bool ? waiting,
+    bool ? hasError,
+    required this.onDataChanged,
+    required this.scrollController,
+  }) 
+  : 
+  waiting = waiting ?? false
+  ;
 
   @override
   Widget build(BuildContext context) {
-    double expense = data != null ? data.summary.totalExpense : 0.00;
-    double income = data != null ? data.summary.totalIncome : 0.00;
     double balance = income - expense;
-    List<dynamic> _allData = data != null ? data.transactions : [];
-
     return Column(
       children: [
         Row(
@@ -41,25 +52,29 @@ class AllDataCard extends StatelessWidget {
             ? const Center(child: CircularProgressIndicator())
             : Padding(
               padding: const EdgeInsets.all(8.0),
-              child: data != null && !snapshot.hasError
+              child: 
+              data.length != 0
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Expanded(
                       child: ListView.builder(
-                        itemCount: _allData.length,
-                        itemBuilder: (context, revIndex) {
-                          int itemCount = _allData.length;
-                          int index = itemCount - 1 - revIndex;
-                          final transaction = _allData[index];
+                        controller: scrollController,
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          int itemCount = data.length;
+                          final transaction = data[index];
+                          if (index + 1 == itemCount && itemCount != totalItem){
+                            return const Center(child: RefreshProgressIndicator());
+                          }
                           return ListTransaction(transaction: transaction, onDataChanged: onDataChanged);
                       },
                     ),
                   ),
                 ],
               )
-              : NoTransaction(snapshot: snapshot,),
+              : const NoTransaction(),
             )
           ),
         ),

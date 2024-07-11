@@ -14,15 +14,12 @@ import 'package:bechan/config.dart' as config;
 import 'package:bechan/services/transaction_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// ignore: must_be_immutable
 class HomePage extends StatefulWidget {
 
-  bool isReload;
   final Function(DateTime) onDataChanged;
 
-  HomePage({
+  const HomePage({
     super.key,
-    this.isReload = false,
     required this.onDataChanged,
   });
 
@@ -42,20 +39,60 @@ class _HomePageState extends State<HomePage> {
   DateTime? _end;
   bool _isLoading = true;
   bool _hasData = false;
-  late Future<dynamic> _data = Future.value(TransactionService().fetchTransaction(startDate:  _startDate, endDate: _endDate, onExpired: () => UserService().logout(context)));
+  double _income = 0;
+  double _expense = 0;
+  int _currentPage = 1;
+  int _totalPages = 1;
+  int _totalItem = 1;
+  bool _morePage = false;
+  List<dynamic> _listData = [];
+  final ScrollController _scrollController = ScrollController();
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   @override
   void initState() {
+    _reload(loading: true);
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent &&
+          !_isLoading &&
+          _currentPage < _totalPages) 
+      {
+        _currentPage += 1;
+        _morePage = true;
+        _reload();
+      }
+      else {
+        _morePage = false;
+      }
+    });
     super.initState();
   }
 
   // not show Circle loading for [pull to refresh] and [edit / delete] show just when it start
   Future<void> _reload({bool loading = false}) async {
     setState(() {_isLoading = loading;});
-    _data = await Future.value(TransactionService().fetchTransaction(startDate:  _startDate, endDate: _endDate, onExpired: () => UserService().logout(context)));
+    dynamic response = await TransactionService().fetchTransaction(startDate:  _startDate, page: _currentPage, endDate: _endDate, onExpired: () => UserService().logout(context));
+    if (response == null) {
+      _listData = [];
+    } else {
+      if (_morePage) {
+        _listData.addAll(response.transactions);
+      } else {
+        _listData = response.transactions;
+      }
+      if (_listData.isNotEmpty) {
+        _hasData = true;
+        _income = response.summary.totalIncome;
+        _expense = response.summary.totalExpense;
+        _totalPages = response.pagination.pageTotal;
+        _totalItem = response.pagination.totalItem;
+        print(_currentPage);
+        print(_totalPages);
+      }
+    }
     _refreshController.refreshCompleted();
-    setState(() {});
+    setState(() {_isLoading = false;});
   }
 
   void _onSubmit(Object value) {
@@ -69,6 +106,8 @@ class _HomePageState extends State<HomePage> {
           _endDate = DateFormat('yyyy-MM-dd').format(value.endDate ?? value.startDate!);
           _end = value.endDate;
           widget.onDataChanged(value.startDate!);
+          _currentPage = 1;
+          _morePage = false;
         });
         _reload();
         Navigator.of(context).pop();
@@ -77,17 +116,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // loading when start the page
-    if (widget.isReload) {
-      _reload(loading: true);
-      setState(() {widget.isReload = false;});
-    }
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: SmartRefresher(
           controller: _refreshController,
-          onRefresh: _reload,
+          onRefresh: () => {_reload(loading: true)},
           enablePullDown: true,
           enablePullUp: false,
           enableTwoLevel: false,
@@ -102,7 +136,7 @@ class _HomePageState extends State<HomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SmallProfileCard(firstname: _user.firstname, email: _user.email, greeting: "Welcome back!"),
+                          SmallProfileCard(firstname: _user.firstname, email: _user.email, profilePath: _user.profilePath, greeting: "Welcome back!"),
                           const SizedBox(width: 10),
                           DateCard(time: _now)
                         ],
@@ -168,18 +202,14 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       const SizedBox(height: 10,),
-                      FutureBuilder<dynamic>(
-                        future: _data,
-                        builder: (context, snapshot) {
-                          _hasData = snapshot.data != null && !snapshot.hasError;
-                          return AllDataCard(
-                            data: snapshot.data,
-                            start: _start ?? _now,
-                            waiting: (snapshot.connectionState == ConnectionState.waiting) && _isLoading,
-                            onDataChanged: _reload,
-                            snapshot: snapshot,
-                          );
-                        },
+                      AllDataCard(
+                        data: _listData,
+                        income: _income,
+                        expense: _expense,
+                        totalItem: _totalItem,
+                        onDataChanged: _reload,
+                        waiting: _isLoading,
+                        scrollController : _scrollController
                       )
                     ],
                   ),

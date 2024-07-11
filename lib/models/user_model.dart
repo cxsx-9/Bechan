@@ -39,6 +39,7 @@ class User {
   String email;
   String firstname;
   String lastname;
+  String profilePath;
   String token;
   // int exp;
 
@@ -49,6 +50,7 @@ class User {
     String ? email,
     String ? firstname,
     String ? lastname,
+    String ? profilePath,
     String ? token,
     // int ? exp,
   })
@@ -59,6 +61,7 @@ class User {
     email = email ?? "" ,
     firstname = firstname ?? "" ,
     lastname = lastname ?? "" ,
+    profilePath = profilePath ?? "" ,
     token = token ?? ""
     // exp = exp ?? 0
   ;
@@ -71,7 +74,7 @@ class User {
       email: json['data'] != null ? (json['data']['user']['email'] as String) : "",
       firstname: json['data'] != null ? (json['data']['user']['firstname'] as String) : "",
       lastname: json['data'] != null ? (json['data']['user']['lastname'] as String) : "",
-      // exp: json['data'] != null ? (json['data']['user'] != null ? (json['data']['user']['exp'] != null ? json['data']['user']['exp'] as int : 0): 0) : 0,
+      profilePath: json['data'] != null ? (json['data']['user']['profile_path'] as String) : "",
       token: json['data'] != null ? (json['data']['token'] as String) : "",
     );
   }
@@ -84,7 +87,6 @@ class User {
       'firstname' : firstname,
       'lastname' : lastname,
       'token' : token,
-      // 'exp' : exp,
     };
   }
 }

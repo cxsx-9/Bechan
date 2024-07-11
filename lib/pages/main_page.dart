@@ -1,3 +1,4 @@
+import 'package:bechan/config.dart' as config;
 import 'package:bechan/pages/add_record.dart';
 import 'package:bechan/pages/category_page.dart';
 import 'package:bechan/pages/chart_page.dart';
@@ -60,6 +61,9 @@ class _MainPageState extends State<MainPage> {
     if (_isLoading) {
       return const LoadingPage();
     }
+    if (config.USER_DATA.email == '') {
+      UserService().logout(context);
+    }
     return Scaffold(
       extendBody: true,
       floatingActionButton: FloatingActionButton(
@@ -73,7 +77,7 @@ class _MainPageState extends State<MainPage> {
             }
           );
           if (isReload == true && _selectedIndex == 0) {
-            page[0] = HomePage(isReload: true, onDataChanged: setStartDate,);
+            page[0] = HomePage(onDataChanged: setStartDate,);
             setState(() {});
             _onItemTapped(0);
           }

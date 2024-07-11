@@ -2,8 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:bechan/theme/theme.dart';
 import 'package:provider/provider.dart';
 
-class LoadingPage extends StatelessWidget {
+import 'dart:async';
+
+class LoadingPage extends StatefulWidget {
   const LoadingPage({super.key});
+
+  @override
+  State<LoadingPage> createState() => _LoadingPageState();
+}
+
+class _LoadingPageState extends State<LoadingPage> {
+  bool _showButton = false;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer(const Duration(seconds: 3), () {
+      setState(() {
+        _showButton = true;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +46,29 @@ class LoadingPage extends StatelessWidget {
                     : 'assets/Banche_logo_light.png',
                 height: 83,
               ),
-              const SizedBox(height: 350,),
+              SizedBox(
+                height: 350,
+                child : Padding(
+                  padding: const EdgeInsets.only(top: 50.0),
+                  child: Column(
+                    children: [
+                      if (_showButton)
+                        const Text('This process is taking longer than expected.'),
+                      if (_showButton)
+                        FilledButton(
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(context, '/loginPage');
+                          },
+                          child: const Text('Go Back'),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
               const CircularProgressIndicator(),
-              // const RefreshProgressIndicator(),
-            ]
+            ],
           ),
-        )
+        ),
       ),
     );
   }
