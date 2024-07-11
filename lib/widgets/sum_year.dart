@@ -1,6 +1,5 @@
 import 'package:bechan/models/sum_year_model.dart';
 import 'package:bechan/widgets/card_decoration.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bechan/config.dart' as config;
 import 'package:intl/intl.dart';
@@ -29,14 +28,27 @@ class SumYear extends StatelessWidget {
               tooltipBehavior: TooltipBehavior(
                 enable: true,
               ),
-              primaryXAxis: const CategoryAxis(
+              primaryXAxis: CategoryAxis(
                 interval: 1,
                 labelRotation: 90,
-                labelStyle: TextStyle(fontSize: 12,)
+                labelStyle: TextStyle(
+                  fontSize: 12,
+                  color: Theme.of(context).colorScheme.secondary
+                ),
+                axisLine: AxisLine(color: Theme.of(context).colorScheme.secondary,),
+                majorTickLines: MajorTickLines(color: Theme.of(context).colorScheme.secondary,),
               ),
               primaryYAxis: NumericAxis(
                 numberFormat: NumberFormat.compactCurrency(decimalDigits: 0, symbol: ''),
-                labelStyle: const TextStyle(fontSize: 10,)
+                labelStyle: TextStyle(
+                  fontSize: 10,
+                  color: Theme.of(context).colorScheme.secondary
+                ),
+                axisLine: AxisLine(color: Theme.of(context).colorScheme.secondary,),
+                majorTickLines: MajorTickLines(color: Theme.of(context).colorScheme.secondary,),
+                majorGridLines: MajorGridLines(
+                  color: Theme.of(context).colorScheme.secondary
+                ),
               ),
               series: <CartesianSeries>[
                   ColumnSeries<MonthData, String>(

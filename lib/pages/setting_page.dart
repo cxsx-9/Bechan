@@ -124,7 +124,7 @@ class _SettingPageState extends State<SettingPage> {
                       children: [
                         Column(
                           children: [
-                            const SizedBox(height: 60,),
+                            const SizedBox(height: 50,),
                             Container(
                               width: double.infinity,
                               decoration: BoxDecoration(
@@ -144,7 +144,7 @@ class _SettingPageState extends State<SettingPage> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const SizedBox(height: 45,),
+                                    const SizedBox(height: 35,),
                                     Text(
                                       "${_user.firstname} ${_user.lastname}",
                                       style: TextStyle(
@@ -171,12 +171,12 @@ class _SettingPageState extends State<SettingPage> {
                           alignment: Alignment.bottomRight,
                           children: [
                               SizedBox(
-                                width: 120,
-                                height: 120,
+                                width: 100,
+                                height: 100,
                                 child: Center(
                                   child: SizedBox(
-                                    width: 120,
-                                    height: 120,
+                                    width: 100,
+                                    height: 100,
                                     child: CircleAvatar(
                                       radius: 60,
                                       backgroundColor: Theme.of(context).colorScheme.onPrimary,
