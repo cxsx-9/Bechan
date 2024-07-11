@@ -119,74 +119,92 @@ class _SettingPageState extends State<SettingPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
                   children: [
-                    Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.tertiary,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Theme.of(context).colorScheme.secondary,
-                            spreadRadius: 1,
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          )
-                        ]
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(30.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                    Stack(
+                      alignment: Alignment.topCenter,
+                      children: [
+                        Column(
                           children: [
-                            Stack(
-                              alignment: Alignment.bottomRight,
-                              children: [
-                                  SizedBox(
-                                    width: 150,
-                                    height: 130,
-                                    child: Center(
-                                      child: SizedBox(
-                                        width: 120,
-                                        height: 120,
-                                        child: CircleAvatar(
-                                          radius: 60,
-                                          backgroundColor: Theme.of(context).colorScheme.onPrimary,
-                                          child: CircleAvatar(
-                                            radius: 58,
-                                            backgroundImage: NetworkImage(
-                                              '${config.BASE_URL}/${_user.profilePath}'
-                                            ),
-                                          ),
-                                        ),
+                            const SizedBox(height: 60,),
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.tertiary,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Theme.of(context).colorScheme.shadow,
+                                    spreadRadius: 2,
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2),
+                                  )
+                                ]
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(30.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(height: 45,),
+                                    Text(
+                                      "${_user.firstname} ${_user.lastname}",
+                                      style: TextStyle(
+                                        color: Theme.of(context).colorScheme.onPrimary,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold
                                       ),
                                     ),
-                                  ),
-                                  IconButton.filledTonal(
-                                    onPressed: (){onChooseFile();},
-                                    icon: const Icon(Icons.edit_rounded),
-                                  ),
-                              ],
-                            ),
-                            const SizedBox(height: 20,),
-                            Text(
-                              "${_user.firstname} ${_user.lastname}",
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold
-                              ),
-                            ),
-                            Text(
-                              _user.email,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400
+                                    Text(
+                                      _user.email,
+                                      style: TextStyle(
+                                        color: Theme.of(context).colorScheme.onPrimary,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
                         ),
-                      ),
+                        Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                              SizedBox(
+                                width: 120,
+                                height: 120,
+                                child: Center(
+                                  child: SizedBox(
+                                    width: 120,
+                                    height: 120,
+                                    child: CircleAvatar(
+                                      radius: 60,
+                                      backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                                      child: CircleAvatar(
+                                        radius: 56,
+                                        backgroundImage: NetworkImage(
+                                          '${config.BASE_URL}/${_user.profilePath}'
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 35,
+                                height: 35,
+                                child: IconButton.filled(
+                                  style: IconButton.styleFrom(
+                                      backgroundColor: Theme.of(context).colorScheme.surface,
+                                      foregroundColor: Theme.of(context).colorScheme.primary,
+                                  ),
+                                  onPressed: (){onChooseFile();},
+                                  icon: const Icon(Icons.mode_edit_outline_rounded, size: 20,),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 20),
                     Container(
