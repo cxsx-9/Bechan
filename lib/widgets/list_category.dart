@@ -1,7 +1,6 @@
 import 'package:bechan/models/category_model.dart';
 import 'package:bechan/services/category_service.dart';
 import 'package:bechan/widgets/custom_dialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -51,7 +50,7 @@ class _ListCategoryState extends State<ListCategory> {
             SlidableAction(
               onPressed: (_) async {
                 nameCtrl.text = widget.item.name;
-                CustomDialog().inputDialog(context, nameCtrl, onSubmitEdit, 'Edit');
+                CustomDialog().inputDialog(context: context, controller: nameCtrl, onSubmit: onSubmitEdit, title: 'Edit', hint: 'category');
               },
               backgroundColor: Colors.black,
               foregroundColor: Colors.white,

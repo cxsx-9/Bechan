@@ -2,7 +2,7 @@ import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:flutter/material.dart';
 
 class CustomDialog {
-  void inputDialog (dynamic context, dynamic textCtrl, Function onSubmit, String title) {
+  void inputDialog ({dynamic context, dynamic controller, required Function onSubmit, required String title, required String hint}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -11,9 +11,9 @@ class CustomDialog {
           content: SizedBox(
             height: 50,
               child: InputTextFeild(
-                controller: textCtrl,
+                controller: controller,
                 infoText: '',
-                hintText: 'category',
+                hintText: hint,
                 obscureText: false),
             ),
             actions: <Widget>[
@@ -26,7 +26,7 @@ class CustomDialog {
               TextButton(
               child: const Text('Submit'),
               onPressed: () {
-                if (textCtrl.text != '') {
+                if (controller.text != '') {
                   onSubmit();
                   Navigator.of(context).pop();
                 }

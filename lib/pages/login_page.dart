@@ -1,3 +1,4 @@
+import 'package:bechan/widgets/custom_dialog.dart';
 import 'package:bechan/widgets/input_textfeild.dart';
 import 'package:bechan/widgets/custom_snackbar.dart';
 import 'package:bechan/widgets/text_and_highlight.dart';
@@ -18,6 +19,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
+  final urlCtrl = TextEditingController();
   bool enableBtn = true;
   bool isFeildFull = false;
   bool validEmail = false;
@@ -78,6 +80,21 @@ class _LoginPageState extends State<LoginPage> {
                   emailCtrl.text = config.ADMIN_EMAIL;
                   passCtrl.text = config.ADMIN_PASSWD;
                 },
+
+                // -------------Debug
+                onDoubleTap: () {
+                  CustomDialog().inputDialog(
+                    context : context,
+                    controller : urlCtrl,
+                    onSubmit : () {
+                      config.BASE_URL = urlCtrl.text;
+                      setState(() {});},
+                      title: 'Base URL',
+                      hint: config.BASE_URL
+                    );
+                },
+                // -------------Debug
+
                 child: Image.asset(
                   Provider.of<ThemeProvider>(context, listen: false).isDarkMode ? 'assets/Banche_logo_dark.png' : 'assets/Banche_logo_light.png',
                   height: 83,
@@ -115,48 +132,38 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 160,),
+                    SizedBox(
+                      height: 50,
+                      width: double.infinity,
+                      child: FilledButton(
+                        onPressed: isFeildFull && enableBtn && validEmail ? () async {
+                          setState(() {enableBtn = false;});
+                          await login(context);
+                          setState(() {enableBtn = true;});
+                        } : null,
+                        child: const Text(
+                          "Login",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const TextAndHighlight(text: "Don't have an account? ", highlight: "Register", link: false, onTap: null,),
+                    const SizedBox(height: 5),
+                    SizedBox(
+                      height: 50,
+                      width: double.infinity,
+                      child: OutlinedButton(
+                        onPressed: () { Navigator.pushNamed(context, '/registerPage'); },
+                        child: const Text(
+                          "Register",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
                   ],
                 )
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 55),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SizedBox(
-                        height: 50,
-                        width: double.infinity,
-                        child: FilledButton(
-                          onPressed: isFeildFull && enableBtn && validEmail ? () async {
-                            setState(() {enableBtn = false;});
-                            await login(context);
-                            setState(() {enableBtn = true;});
-                          } : null,
-                          child: const Text(
-                            "Login",
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      const TextAndHighlight(text: "Don't have an account? ", highlight: "Register", link: false, onTap: null,),
-                      const SizedBox(height: 5),
-                      SizedBox(
-                        height: 50,
-                        width: double.infinity,
-                        child: OutlinedButton(
-                          onPressed: () { Navigator.pushNamed(context, '/registerPage'); },
-                          child: const Text(
-                            "Register",
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 50),
-                    ],
-                  ),
-                ),
               ),
             ],
           ),

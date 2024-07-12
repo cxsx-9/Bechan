@@ -100,7 +100,9 @@ class _CategoryPageState extends State<CategoryPage> {
                             ),
                           ),
                           IconButton(
-                            onPressed: () => {CustomDialog().inputDialog(context, textCtrl, onSubmit, 'Create new')},
+                            onPressed: () {
+                              CustomDialog().inputDialog(context: context, controller: textCtrl, onSubmit: onSubmit, title: 'Create new', hint: 'category');
+                            },
                             icon: const Icon(Icons.add),
                           )
                         ],

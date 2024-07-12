@@ -1,7 +1,6 @@
 import 'package:bechan/models/tag_model.dart';
 import 'package:bechan/services/tag_service.dart';
 import 'package:bechan/widgets/custom_dialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -48,7 +47,7 @@ class _ListTagState extends State<ListTag> {
             SlidableAction(
               onPressed: (_) async {
                 nameCtrl.text = widget.item.name;
-                CustomDialog().inputDialog(context, nameCtrl, onSubmitEdit, 'Edit');
+                CustomDialog().inputDialog(context: context, controller: nameCtrl, onSubmit: onSubmitEdit, title: 'Edit', hint: '');
               },
               backgroundColor: Colors.black,
               foregroundColor: Colors.white,
