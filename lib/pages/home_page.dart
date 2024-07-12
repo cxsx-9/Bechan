@@ -14,12 +14,14 @@ import 'package:bechan/config.dart' as config;
 import 'package:bechan/services/transaction_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// ignore: must_be_immutable
 class HomePage extends StatefulWidget {
 
   final Function(DateTime) onDataChanged;
-
-  const HomePage({
+  bool loadStart;
+  HomePage({
     super.key,
+    this.loadStart = false,
     required this.onDataChanged,
   });
 
@@ -75,6 +77,8 @@ class _HomePageState extends State<HomePage> {
     dynamic response = await TransactionService().fetchTransaction(startDate:  _startDate, page: _currentPage, endDate: _endDate, onExpired: () => UserService().logout(context));
     if (response == null) {
       _listData = [];
+      _income = 0;
+      _expense = 0;
     } else {
       if (_morePage) {
         _listData.addAll(response.transactions);
@@ -87,8 +91,6 @@ class _HomePageState extends State<HomePage> {
         _expense = response.summary.totalExpense;
         _totalPages = response.pagination.pageTotal;
         _totalItem = response.pagination.totalItem;
-        print(_currentPage);
-        print(_totalPages);
       }
     }
     _refreshController.refreshCompleted();
@@ -105,7 +107,16 @@ class _HomePageState extends State<HomePage> {
           _start = value.startDate;
           _endDate = DateFormat('yyyy-MM-dd').format(value.endDate ?? value.startDate!);
           _end = value.endDate;
-          widget.onDataChanged(value.startDate!);
+          widget.onDataChanged(
+            DateTime(
+              value.startDate!.year,
+              value.startDate!.month,
+              value.startDate!.day,
+              _now.hour,
+              _now.minute,
+              _now.second,
+            )
+          );
           _currentPage = 1;
           _morePage = false;
         });
@@ -116,6 +127,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.loadStart) {
+      _reload(loading: true);
+      setState(() {widget.loadStart = false;});
+    }
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(

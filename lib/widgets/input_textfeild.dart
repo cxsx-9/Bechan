@@ -12,6 +12,7 @@ class InputTextFeild extends StatefulWidget {
   bool obscure;
   String errorText;
   double width;
+  double height;
 
   InputTextFeild(
       {super.key,
@@ -22,12 +23,14 @@ class InputTextFeild extends StatefulWidget {
       bool ? obscure,
       String ? errorText,
       String ? initialValue,
-      double ? width
+      double ? width,
+      double ? height
       })
       : obscure = obscureText,
         initialValue = initialValue ?? "",
         errorText = errorText ?? "",
-        width = width ?? double.infinity;
+        width = width ?? double.infinity,
+        height = height ?? 50;
 
   @override
   State<InputTextFeild> createState() => _InputTextFeildState();
@@ -64,7 +67,7 @@ class _InputTextFeildState extends State<InputTextFeild> {
         )
         : const SizedBox(width: 1),
         SizedBox(
-          height: 50,
+          height: widget.height,
           width: widget.width,
           child: TextFormField(
             onChanged: (value) => {

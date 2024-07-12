@@ -25,6 +25,7 @@ class AddRecord extends StatefulWidget {
   final String categorieName;
   final String amount;
   final String note;
+  final String detail;
   final String type;
   final DateTime date;
   final int fav;
@@ -38,12 +39,14 @@ class AddRecord extends StatefulWidget {
     String ? categorieName,
     String ? amount,
     String ? note,
+    String ? detail,
     String ? type,
     List<Tag> ? tags,
     required this.date,
   }) : amount = amount ?? '',
     isEdit = isEdit ?? false,
     note = note ?? '',
+    detail = detail ?? '',
     type = type ?? 'expense',
     transactionsId = transactionsId ?? 0,
     fav = fav ?? 0,
@@ -60,6 +63,7 @@ class _AddRecordState extends State<AddRecord> {
   List<bool> _selectedType = <bool>[false, true];
   TextEditingController amountCtrl = TextEditingController();
   TextEditingController noteCtrl = TextEditingController();
+  TextEditingController detailCtrl = TextEditingController();
   bool isFeildFull = false;
   bool isSending = false;
   String _selectedDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
@@ -69,6 +73,7 @@ class _AddRecordState extends State<AddRecord> {
   bool _isShowTags = true;
   List<int> selectedTags = [];
   bool _fav = false;
+  final DateTime _now = DateTime.now();
 
   @override
   void initState() {
@@ -123,6 +128,7 @@ class _AddRecordState extends State<AddRecord> {
       "categorie_id": categoryData[selectedCategory].categorieId,
       "amount": double.parse(amountCtrl.text),
       "note": noteCtrl.text,
+      "detail": noteCtrl.text,
       "transaction_datetime" : _sendDate,
       "fav": _fav ? 1 : 0,
       "tag_id" : selectedTags
@@ -137,6 +143,7 @@ class _AddRecordState extends State<AddRecord> {
       "categorie_id": categoryData[selectedCategory].categorieId,
       "amount": double.parse(amountCtrl.text),
       "note": noteCtrl.text,
+      "detail": detailCtrl.text,
       "transaction_datetime" : _sendDate,
       "fav": _fav ? 1 : 0,
       "tag_id" : selectedTags
@@ -149,7 +156,16 @@ class _AddRecordState extends State<AddRecord> {
     if (value is DateTime) {
       setState(() {
           _selectedDate = DateFormat('dd MMMM yyyy').format(value);
-          _sendDate = DateFormat("yyyy-MM-dd HH:mm:ss").format(value);
+          _sendDate = DateFormat("yyyy-MM-dd HH:mm:ss").format(
+            DateTime(
+              value.year,
+              value.month,
+              value.day,
+              _now.hour,
+              _now.minute,
+              _now.second,
+            )
+          );
       });
     }
     Navigator.of(context).pop();
@@ -231,20 +247,6 @@ class _AddRecordState extends State<AddRecord> {
                             title: Text('Upload .xlsx file'),
                           ),
                         ),
-                        // PopupMenuItem<Menu>(
-                        //   onTap: () async {
-                        //     dynamic res = await TransactionService().getTemplate(context);
-                        //     final Uri url = Uri.parse(res.url);
-                        //     if (!await launchUrl(url)) {
-                        //       throw Exception('Could not launch $url');
-                        //     }
-                        //   },
-                        //   value: Menu.download,
-                        //   child: const ListTile(
-                        //     leading: Icon(Icons.download_rounded),
-                        //     title: Text('Download Template'),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ],
@@ -262,7 +264,7 @@ class _AddRecordState extends State<AddRecord> {
                     Container(
                       decoration: cardDecoration(context),
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+                        padding: const EdgeInsets.all(15),
                         child: Column(
                           children: [
                             Center(
@@ -286,17 +288,78 @@ class _AddRecordState extends State<AddRecord> {
                                 // color: _selectedType[1] ? Colors.red[400] : Colors.green[400],
                                 constraints: const BoxConstraints(
                                   minHeight: 35.0,
-                                  minWidth: 140.0,
+                                  minWidth: 160.0,
                                 ),
                                 isSelected: _selectedType,
                                 children: transactionType,
                               ),
                             ),
+                            SizedBox(
+                              height: 40,
+                              width: 250,
+                              child: TextButton(
+                                onPressed: () async {
+                                  ShowDatePickerFunction().showDatePicker(context, _onSubmit);
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(Icons.date_range_rounded, size: 20,),
+                                    const SizedBox(width: 10,),
+                                    Text(
+                                      _selectedDate,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    const Icon(Icons.arrow_drop_down_rounded),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            
+                            // Amount
+                            InputNumber(
+                              initialValue: widget.amount,
+                              controller: amountCtrl,
+                              hintText: '00.00',
+                              infoText: 'Amount',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      decoration: cardDecoration(context),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          children: [
+                            InputTextFeild(
+                              initialValue: widget.note,
+                              controller: noteCtrl,
+                              infoText: "Name",
+                              hintText: "name",
+                              obscureText: false
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      decoration: cardDecoration(context),
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
+                        child: Column(
+                          children: [
                             CupertinoButton(
                               child: 
                               Container(
                                 height: 35,
-                                width: double.infinity,
+                                width: 260,
                                 decoration: BoxDecoration(
                                   borderRadius: const BorderRadius.all(Radius.circular(8)),
                                   border: Border.all(
@@ -371,77 +434,19 @@ class _AddRecordState extends State<AddRecord> {
                                 ),
                               ),
                             ),
-                            widget.isEdit ? GestureDetector(onTap: _showTag, child: _isShowTags ? const Text('show less') : const Text('show more')) : const SizedBox()
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                   // Amount
-                    Container(
-                      decoration: cardDecoration(context),
-                      child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Column(
-                          children: [
-                            // Amount
-                            InputNumber(
-                              initialValue: widget.amount,
-                              controller: amountCtrl,
-                              hintText: '00.00',
-                              infoText: 'Amount',
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    Container(
-                      decoration: cardDecoration(context),
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Column(
-                          children: [
+                            widget.isEdit ? GestureDetector(onTap: _showTag, child: _isShowTags ? const Text('show less') : const Text('show more')) : const SizedBox(),
                             InputTextFeild(
-                              initialValue: widget.note,
-                              controller: noteCtrl,
-                              infoText: "",
-                              hintText: "Name",
+                              initialValue: widget.detail,
+                              controller: detailCtrl,
+                              infoText: "Note",
+                              hintText: "note",
                               obscureText: false
                             ),
-                            SizedBox(
-                              height: 40,
-                              width: 250,
-                              child: TextButton(
-                                onPressed: () async {
-                                  ShowDatePickerFunction().showDatePicker(context, _onSubmit);
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(Icons.date_range_rounded, size: 20,),
-                                    const SizedBox(width: 10,),
-                                    Text(
-                                      _selectedDate,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    const Icon(Icons.arrow_drop_down_rounded),
-                                  ],
-                                ),
-                              ),
-                            ),
                           ],
                         ),
                       ),
                     ),
-                    const SizedBox(height: 30,),
+                    const SizedBox(height: 20,),
                     SizedBox(
                       width: 135,
                       child: TextButton(

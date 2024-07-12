@@ -2,6 +2,7 @@ import 'package:bechan/models/secure_storage.dart';
 import 'package:bechan/pages/change_password_page.dart';
 import 'package:bechan/pages/enter_otp.dart';
 import 'package:bechan/pages/forgot_password_page.dart';
+import 'package:bechan/pages/log_page.dart';
 import 'package:bechan/pages/main_page.dart';
 import 'package:bechan/pages/more_page.dart';
 import 'package:bechan/pages/set_password_page.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
         '/enterOtp': (context) => const EnterOtp(),
         '/setPasswordPage': (context) => const SetPasswordPage(),
         '/changePasswordPage': (context) => const ChangePasswordPage(),
+        '/logPage': (context) => const LogPage(),
       },
     );
   }

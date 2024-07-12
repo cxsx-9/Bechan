@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bechan/models/user_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:bechan/config.dart' as config;
+import 'package:intl/intl.dart';
 
 class ApiService {
 
@@ -26,11 +27,13 @@ class ApiService {
         print('[API] : status Error');
         print(response.statusCode);
         // print(response.body);
+        config.LOG = '${DateFormat('HH:mm:ss').format(DateTime.now())}  :  ${response.statusCode}\n${response.body}\n----------\n${config.LOG}';
         return null;
       }
       return response;
     } catch (e) {
       print('[API] : Error during API call >> \n"$e"\n\n');
+      config.LOG = '${DateFormat('HH:mm:ss').format(DateTime.now())}  :  $e\n----------\n${config.LOG}';
       return null;
     }
   }

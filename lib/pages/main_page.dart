@@ -22,6 +22,8 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   bool _isLoading = true;
   DateTime _selectedDate = DateTime.now();
+  final DateTime _now = DateTime.now();
+  late List page;
 
   @override
   void initState() {
@@ -29,6 +31,12 @@ class _MainPageState extends State<MainPage> {
     _fetchUserData();
     CategoryService().fetchCategory();
     TagService().fetchTag();
+    page = [
+      HomePage(onDataChanged: setStartDate),
+      const ChartPage(),
+      const CategoryPage(),
+      const SettingPage(),
+    ];
   }
 
   Future<void> _fetchUserData() async {
@@ -40,6 +48,7 @@ class _MainPageState extends State<MainPage> {
   
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
+    if (index == 0) setStartDate(_now);
     setState(() { _selectedIndex = index; });
   }
 
@@ -51,13 +60,6 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> page = <Widget>[
-      HomePage(onDataChanged: setStartDate),
-      const ChartPage(),
-      const CategoryPage(),
-      const SettingPage(),
-    ];
-    
     if (_isLoading) {
       return const LoadingPage();
     }
@@ -77,9 +79,8 @@ class _MainPageState extends State<MainPage> {
             }
           );
           if (isReload == true && _selectedIndex == 0) {
-            page[0] = HomePage(onDataChanged: setStartDate,);
+            page[0] = HomePage(onDataChanged: setStartDate, loadStart: true,);
             setState(() {});
-            _onItemTapped(0);
           }
         },
         child: const Icon(Icons.add),

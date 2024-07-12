@@ -52,6 +52,7 @@ class _ListTransactionState extends State<ListTransaction> {
           transactionsId: transaction.transactionsId,
           amount: transaction.amount.toString(),
           note: transaction.note,
+          detail: transaction.detail,
           type: transaction.categorieType,
           date: transaction.transactionDatetime,
           categorieName: transaction.categorieName,

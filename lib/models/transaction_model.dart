@@ -5,6 +5,7 @@ class Transaction {
   final int transactionsId;
   final double amount;
   final String note;
+  final String detail;
   final DateTime transactionDatetime;
   final int categorieId;
   final int date;
@@ -17,6 +18,7 @@ class Transaction {
     required this.transactionsId,
     required this.amount,
     required this.note,
+    required this.detail,
     required this.transactionDatetime,
     required this.date,
     required this.categorieId,
@@ -32,6 +34,7 @@ class Transaction {
       transactionsId: json['transactions_id'] ?? 0,
       amount: json['amount'].toDouble(),
       note: json['note'] ?? '',
+      detail: json['detail'] ?? '',
       transactionDatetime: DateTime.parse(json['transaction_datetime']),
       date: int.parse(DateFormat('dd').format(DateTime.parse(json['transaction_datetime']))),
       categorieId: json['categorie_id'],

@@ -172,6 +172,14 @@ class _MorePageState extends State<MorePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     IconButton(onPressed: () =>  {Navigator.pop(context, false)}, icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+                    Text(
+                      'Import Transaction',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color: Theme.of(context).colorScheme.primary,
+                      )
+                    ),
                   ],
                 ),
                 Container(
