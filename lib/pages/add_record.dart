@@ -128,7 +128,7 @@ class _AddRecordState extends State<AddRecord> {
       "categorie_id": categoryData[selectedCategory].categorieId,
       "amount": double.parse(amountCtrl.text),
       "note": noteCtrl.text,
-      "detail": noteCtrl.text,
+      "detail": detailCtrl.text,
       "transaction_datetime" : _sendDate,
       "fav": _fav ? 1 : 0,
       "tag_id" : selectedTags
@@ -321,10 +321,11 @@ class _AddRecordState extends State<AddRecord> {
                             
                             // Amount
                             InputNumber(
+                              width: 260,
                               initialValue: widget.amount,
                               controller: amountCtrl,
                               hintText: '00.00',
-                              infoText: 'Amount',
+                              infoText: '* Amount',
                             ),
                           ],
                         ),
@@ -332,16 +333,27 @@ class _AddRecordState extends State<AddRecord> {
                     ),
                     const SizedBox(height: 10),
                     Container(
+                      width: double.infinity,
                       decoration: cardDecoration(context),
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: Column(
                           children: [
                             InputTextFeild(
+                              width: 260,
                               initialValue: widget.note,
                               controller: noteCtrl,
-                              infoText: "Name",
+                              infoText: "* Name",
                               hintText: "name",
+                              obscureText: false
+                            ),
+                            // const SizedBox(height: 10),
+                            InputTextFeild(
+                              // width: 260,
+                              initialValue: widget.detail,
+                              controller: detailCtrl,
+                              infoText: "Note",
+                              hintText: "note",
                               obscureText: false
                             ),
                           ],
@@ -350,6 +362,7 @@ class _AddRecordState extends State<AddRecord> {
                     ),
                     const SizedBox(height: 10),
                     Container(
+                      width: double.infinity,
                       decoration: cardDecoration(context),
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
@@ -435,18 +448,11 @@ class _AddRecordState extends State<AddRecord> {
                               ),
                             ),
                             widget.isEdit ? GestureDetector(onTap: _showTag, child: _isShowTags ? const Text('show less') : const Text('show more')) : const SizedBox(),
-                            InputTextFeild(
-                              initialValue: widget.detail,
-                              controller: detailCtrl,
-                              infoText: "Note",
-                              hintText: "note",
-                              obscureText: false
-                            ),
                           ],
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20,),
+                    const SizedBox(height: 10,),
                     SizedBox(
                       width: 135,
                       child: TextButton(
@@ -468,52 +474,55 @@ class _AddRecordState extends State<AddRecord> {
                   ],
                 ),
               ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    !widget.isEdit ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton(
-                            onPressed: () async {
-                              dynamic favouritItem = await showModalBottomSheet(
-                                isScrollControlled: true,
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const AllFavourite();
-                                }
-                              );
-                              if (favouritItem != null) {
-                                _setFavourite(favouritItem);
+
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  SizedBox(
+                    height: 35,
+                    child:
+                  !widget.isEdit ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed: () async {
+                            dynamic favouritItem = await showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const AllFavourite();
                               }
-                            },
-                            child: Row(
-                              children : [
-                                Text ('from your favourite bill', style: TextStyle(color: Theme.of(context).colorScheme.secondary),),
-                                Icon(Icons.arrow_drop_down_rounded, color: Theme.of(context).colorScheme.secondary),
-                              ]
-                            )
-                          ),
-                        ],
-                      ) : const SizedBox(),
-                      SizedBox(
-                        height: 50,
-                        width: 320,
-                        child: FilledButton(
-                          onPressed: isFeildFull && noteCtrl.text.length <= 18 && !isSending ? () async {
-                            widget.isEdit ? await _edit() : await _create();
-                            Navigator.pop(context, true);
-                          } : null,
-                          child: Text(
-                            widget.isEdit ? 'Edit' : 'Create',
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
+                            );
+                            if (favouritItem != null) {
+                              _setFavourite(favouritItem);
+                            }
+                          },
+                          child: Row(
+                            children : [
+                              Text ('from your favourite bill', style: TextStyle(color: Theme.of(context).colorScheme.secondary),),
+                              Icon(Icons.arrow_drop_down_rounded, color: Theme.of(context).colorScheme.secondary),
+                            ]
+                          )
+                        ),
+                      ],
+                    ) : const SizedBox(),
+                  ),
+                    SizedBox(
+                      height: 50,
+                      width: 320,
+                      child: FilledButton(
+                        onPressed: isFeildFull && noteCtrl.text.length <= 18 && !isSending ? () async {
+                          widget.isEdit ? await _edit() : await _create();
+                          Navigator.pop(context, true);
+                        } : null,
+                        child: Text(
+                          widget.isEdit ? 'Edit' : 'Create',
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ),
-                    const SizedBox(height: 40,),
-                  ],
-                ),
+                    ),
+                  const SizedBox(height: 40,),
+                ],
               ),
             ],
           ),

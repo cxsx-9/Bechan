@@ -1,6 +1,7 @@
 import 'package:bechan/pages/add_record.dart';
 import 'package:bechan/services/transaction_service.dart';
 import 'package:bechan/widgets/custom_dialog.dart';
+import 'package:bechan/widgets/detail_transaction.dart';
 import 'package:bechan/widgets/transaction_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -111,13 +112,24 @@ class _ListTransactionState extends State<ListTransaction> {
       child: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 5),
-          child: TransactionCard(
-            amount: config.NUM_FORMAT.format(widget.transaction.amount),
-            note: widget.transaction.note,
-            type: widget.transaction.categorieType,
-            date: DateFormat('dd MMMM yyyy').format(widget.transaction.transactionDatetime!),
-            category: widget.transaction.categorieName,
-            fav: widget.transaction.fav
+          child: GestureDetector(
+            onTap: () async {
+              showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                builder: (BuildContext context) {
+                  return DetailTransaction(transaction: widget.transaction,);
+                }
+              );
+            },
+            child: TransactionCard(
+              amount: config.NUM_FORMAT.format(widget.transaction.amount),
+              note: widget.transaction.note,
+              type: widget.transaction.categorieType,
+              date: DateFormat('dd MMMM yyyy').format(widget.transaction.transactionDatetime!),
+              category: widget.transaction.categorieName,
+              fav: widget.transaction.fav
+            ),
           ),
         ),
       ),

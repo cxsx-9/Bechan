@@ -94,6 +94,7 @@ class _HomePageState extends State<HomePage> {
       }
     }
     _refreshController.refreshCompleted();
+    if (!mounted) return;
     setState(() {_isLoading = false;});
   }
 

@@ -5,9 +5,10 @@ class InputNumber extends StatefulWidget{
   final String hintText;
   final String infoText;
   final String initialValue;
+  final double width;
 
-  const InputNumber({super.key, required this.controller, String ? hintText, String ? infoText, String ? initialValue}) 
-  : hintText = hintText ?? "", infoText = infoText ?? "", initialValue = initialValue ?? "";
+  const InputNumber({super.key, required this.controller, String ? hintText, String ? infoText, String ? initialValue, double ? width}) 
+  : hintText = hintText ?? "", infoText = infoText ?? "", initialValue = initialValue ?? "", width = width ?? double.infinity;
 
   @override
   State<InputNumber> createState() => _InputNumberState();
@@ -44,6 +45,7 @@ class _InputNumberState extends State<InputNumber> {
         : const SizedBox(width: 1),
         SizedBox(
           height: 50,
+          width: widget.width,
           child: TextField(
             textAlignVertical: TextAlignVertical.bottom,
             textAlign: TextAlign.center,
