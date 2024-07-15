@@ -72,8 +72,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   // not show Circle loading for [pull to refresh] and [edit / delete] show just when it start
-  Future<void> _reload({bool loading = false}) async {
-    setState(() {_isLoading = loading;});
+  Future<void> _reload({bool loading = false, bool reset = false}) async {
+    setState(() {
+      _isLoading = loading;
+      if (reset) {
+          _morePage = false;
+          _currentPage = 1;
+      }
+    });
     dynamic response = await TransactionService().fetchTransaction(startDate:  _startDate, page: _currentPage, endDate: _endDate, onExpired: () => UserService().logout(context));
     if (response == null) {
       _listData = [];
@@ -137,7 +143,7 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: SmartRefresher(
           controller: _refreshController,
-          onRefresh: () => {_reload(loading: true)},
+          onRefresh: () => {_reload(loading: true ,reset: true)},
           enablePullDown: true,
           enablePullUp: false,
           enableTwoLevel: false,
@@ -223,7 +229,7 @@ class _HomePageState extends State<HomePage> {
                         income: _income,
                         expense: _expense,
                         totalItem: _totalItem,
-                        onDataChanged: _reload,
+                        onDataChanged: () => _reload(reset: true),
                         waiting: _isLoading,
                         scrollController : _scrollController
                       )
