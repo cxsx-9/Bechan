@@ -56,6 +56,14 @@ class DetailTransaction extends StatelessWidget {
                   ),
                 ],
               ),
+              const SizedBox(height: 10,),
+              Text(
+                DateFormat('dd MMMM yyyy  HH:mm').format(transaction.transactionDatetime!),
+                style: const TextStyle(
+                  fontSize: 12,
+                ),
+              ),
+              const SizedBox(height: 5,),
               Text(
                 transaction.categorieName,
                 style: const TextStyle(
@@ -63,11 +71,11 @@ class DetailTransaction extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              const SizedBox(height: 30,),
+              const SizedBox(height: 35,),
               Text(
                 transaction.note,
                 style: const TextStyle(
-                  fontSize: 20,
+                  fontSize: 24,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -78,17 +86,7 @@ class DetailTransaction extends StatelessWidget {
                   fontWeight: FontWeight.w300,
                 ),
               ),
-              SizedBox(
-                height: 60,
-                width: 270,
-                child: transaction.detail != '' ? Center(
-                  child: Text(
-                    'note :  ${transaction.detail}',
-                    textAlign: TextAlign.center,
-                  )
-                ) : const SizedBox(),
-              ),
-              const SizedBox(height: 20,),
+              const SizedBox(height: 10,),
               SizedBox(
                 height: 40,
                 child: SingleChildScrollView(
@@ -108,8 +106,17 @@ class DetailTransaction extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 20,),
-              Text(DateFormat('EEE, dd MMMM yyyy  HH:mm').format(transaction.transactionDatetime!)),
+              const SizedBox(height: 10,),
+              SizedBox(
+                height: 60,
+                width: 270,
+                child: Center(
+                  child: Text(
+                    'note :  ${transaction.detail}',
+                    textAlign: TextAlign.center,
+                  )
+                )
+              ),
             ],
           ),
         ),

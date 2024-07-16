@@ -71,6 +71,7 @@ class _AddRecordState extends State<AddRecord> {
   late dynamic categoryData = _selectedType[0] ? config.CATEGORY.income : config.CATEGORY.expenses;
   late int selectedCategory = widget.categorieName == '' ? 0 : categoryData.indexWhere((category) => category.name == widget.categorieName) ;
   bool _isShowTags = true;
+  bool isFromFav = false;
   List<int> selectedTags = [];
   bool _fav = false;
   final DateTime _now = DateTime.now();
@@ -173,12 +174,12 @@ class _AddRecordState extends State<AddRecord> {
 
   void _setFavourite(Favourite favouritItem) {
     setState(() {
+      isFromFav = true;
       amountCtrl.text = favouritItem.amount.toString();
-      if (favouritItem.categorieType == 'income') {
-        _selectedType = [true, false];
-      }
+      bool isIncome = favouritItem.categorieType == 'income';
+      _selectedType = [isIncome, !isIncome];
       categoryData = _selectedType[0] ? config.CATEGORY.income : config.CATEGORY.expenses;
-      selectedCategory = categoryData.indexWhere((category) => category.name == favouritItem.categorieName) ;
+      selectedCategory = categoryData.indexWhere((category) => category.categorieId == favouritItem.categorieId) ;
       if (favouritItem.tags != []) {
         for (var tag in favouritItem.tags) {
           selectedTags.add(tag.tagId);
@@ -198,7 +199,7 @@ class _AddRecordState extends State<AddRecord> {
         }
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -207,324 +208,322 @@ class _AddRecordState extends State<AddRecord> {
             statusBarBrightness: Brightness.light, // For iOS (dark icons)
           ),
         ),
-        body: SafeArea(
-          child: Column(
-            children: [
-
-              // HEAD
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        IconButton(onPressed: () =>  {Navigator.pop(context, false)}, icon: const Icon(Icons.arrow_back_ios_new_rounded)),
-                        Text(
-                          'Transaction',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w600,
-                            color: Theme.of(context).colorScheme.primary,
-                          )
-                        ),
-                      ],
-                    ),
-                    PopupMenuButton<Menu>(
-                      elevation: 5,
-                      shadowColor: Theme.of(context).colorScheme.secondary,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      icon: const Icon(Icons.more_vert_rounded),
-                      onSelected: (Menu item) {},
-                      itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
-                        PopupMenuItem<Menu>(
-                          onTap: () => { Navigator.pushNamed(context, '/morePage') },
-                          value: Menu.upload,
-                          child: const ListTile(
-                            leading: Icon(Icons.upload_file_rounded),
-                            title: Text('Upload .xlsx file'),
+        body: SingleChildScrollView(
+          child: SafeArea(
+            child: Column(
+              children: [
+                // HEAD
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          IconButton(onPressed: () =>  {Navigator.pop(context, false)}, icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+                          Text(
+                            'Transaction',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).colorScheme.primary,
+                            )
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                      PopupMenuButton<Menu>(
+                        elevation: 5,
+                        shadowColor: Theme.of(context).colorScheme.secondary,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        icon: const Icon(Icons.more_vert_rounded),
+                        onSelected: (Menu item) {},
+                        itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
+                          PopupMenuItem<Menu>(
+                            onTap: () => { Navigator.pushNamed(context, '/morePage') },
+                            value: Menu.upload,
+                            child: const ListTile(
+                              leading: Icon(Icons.upload_file_rounded),
+                              title: Text('Upload .xlsx file'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-
-              // ALL
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-
-                    // Type
-                    Container(
-                      decoration: cardDecoration(context),
-                      child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Column(
-                          children: [
-                            Center(
-                              child: ToggleButtons(
-                                direction: Axis.horizontal,
-                                onPressed: (int index) {
-                                  setState(() {
-                                    for (int i = 0; i < _selectedType.length; i++) {
-                                      _selectedType[i] = i == index;
-                                    }
-                                    categoryData = _selectedType[0] ? config.CATEGORY.income : config.CATEGORY.expenses;
-                                    selectedCategory = 0;
-                                  });
-                                },
-                                borderRadius: const BorderRadius.all(Radius.circular(8)),
-                                borderColor: Theme.of(context).colorScheme.secondary,
-                                selectedBorderColor: _selectedType[1] ? Colors.red[700] : Colors.green[700],
-                                selectedColor: Colors.white,
-                                fillColor: _selectedType[1] ? Colors.red[200] : Colors.green[200],
-                                color: Theme.of(context).colorScheme.secondary,
-                                // color: _selectedType[1] ? Colors.red[400] : Colors.green[400],
-                                constraints: const BoxConstraints(
-                                  minHeight: 35.0,
-                                  minWidth: 160.0,
-                                ),
-                                isSelected: _selectedType,
-                                children: transactionType,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 40,
-                              width: 250,
-                              child: TextButton(
-                                onPressed: () async {
-                                  ShowDatePickerFunction().showDatePicker(context, _onSubmit);
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(Icons.date_range_rounded, size: 20,),
-                                    const SizedBox(width: 10,),
-                                    Text(
-                                      _selectedDate,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    const Icon(Icons.arrow_drop_down_rounded),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            
-                            // Amount
-                            InputNumber(
-                              width: 260,
-                              initialValue: widget.amount,
-                              controller: amountCtrl,
-                              hintText: '00.00',
-                              infoText: '* Amount',
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Container(
-                      width: double.infinity,
-                      decoration: cardDecoration(context),
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Column(
-                          children: [
-                            InputTextFeild(
-                              width: 260,
-                              initialValue: widget.note,
-                              controller: noteCtrl,
-                              infoText: "* Name",
-                              hintText: "name",
-                              obscureText: false
-                            ),
-                            // const SizedBox(height: 10),
-                            InputTextFeild(
-                              // width: 260,
-                              initialValue: widget.detail,
-                              controller: detailCtrl,
-                              infoText: "Note",
-                              hintText: "note",
-                              obscureText: false
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Container(
-                      width: double.infinity,
-                      decoration: cardDecoration(context),
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
-                        child: Column(
-                          children: [
-                            CupertinoButton(
-                              child: 
-                              Container(
-                                height: 35,
-                                width: 260,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                                  border: Border.all(
-                                    color: Theme.of(context).colorScheme.secondary,
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 50),
-                                  child: Row(
-                                    children: [
-                                      Expanded(child: Center(child: Text(categoryData[selectedCategory].name))),
-                                      SizedBox(
-                                        width: 50,
-                                        child: Icon(
-                                          Icons.arrow_drop_down_rounded,
-                                          color: Theme.of(context).colorScheme.secondary,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ),
-                              onPressed: () => _showDialog(
-                                CupertinoPicker(
-                                  magnification: 1.22,
-                                  squeeze: 1.2,
-                                  useMagnifier: true,
-                                  itemExtent: 32.0,
-                                  scrollController: FixedExtentScrollController(
-                                    initialItem: selectedCategory,
-                                  ),
-                                  onSelectedItemChanged: (int selectedItem) {
+          
+                // ALL
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                
+                      // Type
+                      Container(
+                        decoration: cardDecoration(context),
+                        child: Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Column(
+                            children: [
+                              Center(
+                                child: ToggleButtons(
+                                  direction: Axis.horizontal,
+                                  onPressed: (int index) {
                                     setState(() {
-                                      selectedCategory = selectedItem;
+                                      for (int i = 0; i < _selectedType.length; i++) {
+                                        _selectedType[i] = i == index;
+                                      }
+                                      categoryData = _selectedType[0] ? config.CATEGORY.income : config.CATEGORY.expenses;
+                                      selectedCategory = 0;
                                     });
                                   },
-                                  children:
-                                    List<Widget>.generate(categoryData.length, (int index) {
-                                    return Center(child: Text(categoryData[index].name));
-                                  }),
+                                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                  borderColor: Theme.of(context).colorScheme.secondary,
+                                  selectedBorderColor: _selectedType[1] ? Colors.red[700] : Colors.green[700],
+                                  selectedColor: Colors.white,
+                                  fillColor: _selectedType[1] ? Colors.red[200] : Colors.green[200],
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  // color: _selectedType[1] ? Colors.red[400] : Colors.green[400],
+                                  constraints: const BoxConstraints(
+                                    minHeight: 35.0,
+                                    minWidth: 160.0,
+                                  ),
+                                  isSelected: _selectedType,
+                                  children: transactionType,
                                 ),
                               ),
-                            ),
-                            // TAG
-                            SizedBox(
-                              height: 40,
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Wrap(
-                                  children: config.TAG.tags.map((Tag tag) {
-                                    return _isShowTags || selectedTags.contains(tag.tagId) ? Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 2),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            if (selectedTags.contains(tag.tagId)) {
-                                              selectedTags.remove(tag.tagId);
-                                            } else {
-                                              selectedTags.add(tag.tagId);
-                                            }
-                                          });
-                                        },
-                                        child: CustomChip(
-                                          text: tag.name,
-                                          selected: selectedTags.contains(tag.tagId),
-                                          backgroundColor: const Color.fromARGB(255, 227, 227, 227),
-                                          selectedColor: Colors.grey.shade600,
-                                        )
+                              SizedBox(
+                                height: 40,
+                                width: 250,
+                                child: TextButton(
+                                  onPressed: () async {
+                                    ShowDatePickerFunction().showDatePicker(context, _onSubmit);
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(Icons.date_range_rounded, size: 20,),
+                                      const SizedBox(width: 10,),
+                                      Text(
+                                        _selectedDate,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
-                                    ) : const SizedBox();
-                                  }).toList(),
+                                      const Icon(Icons.arrow_drop_down_rounded),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            widget.isEdit ? GestureDetector(onTap: _showTag, child: _isShowTags ? const Text('show less') : const Text('show more')) : const SizedBox(),
-                          ],
+                              
+                              // Amount
+                              InputNumber(
+                                initialValue: widget.amount,
+                                controller: amountCtrl,
+                                hintText: '00.00',
+                                infoText: '* Amount',
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 10,),
-                    SizedBox(
-                      width: 135,
-                      child: TextButton(
-                        onPressed: () {
-                              setState(() {
-                                _fav = !_fav;
-                              });
-                            },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text('Favourite'),
-                            const SizedBox(width: 10,),
-                            Icon(_fav ? Icons.favorite_rounded : Icons.favorite_border_rounded)
-                          ],
+                      const SizedBox(height: 10),
+                      Container(
+                        width: double.infinity,
+                        decoration: cardDecoration(context),
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Column(
+                            children: [
+                              InputTextFeild(
+                                initialValue: widget.note,
+                                controller: noteCtrl,
+                                infoText: "* Name",
+                                hintText: "name",
+                                obscureText: false
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    )
-                  ],
-                ),
-              ),
-
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    height: 35,
-                    child:
-                  !widget.isEdit ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextButton(
-                          onPressed: () async {
-                            dynamic favouritItem = await showModalBottomSheet(
-                              isScrollControlled: true,
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const AllFavourite();
-                              }
-                            );
-                            if (favouritItem != null) {
-                              _setFavourite(favouritItem);
-                            }
+                      const SizedBox(height: 10),
+                      Container(
+                        width: double.infinity,
+                        decoration: cardDecoration(context),
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
+                          child: Column(
+                            children: [
+                              CupertinoButton(
+                                child: 
+                                Container(
+                                  height: 35,
+                                  width: 260,
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                    border: Border.all(
+                                      color: Theme.of(context).colorScheme.secondary,
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 50),
+                                    child: Row(
+                                      children: [
+                                        Expanded(child: Center(child: Text(categoryData[selectedCategory].name))),
+                                        SizedBox(
+                                          width: 50,
+                                          child: Icon(
+                                            Icons.arrow_drop_down_rounded,
+                                            color: Theme.of(context).colorScheme.secondary,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ),
+                                onPressed: () => _showDialog(
+                                  CupertinoPicker(
+                                    magnification: 1.22,
+                                    squeeze: 1.2,
+                                    useMagnifier: true,
+                                    itemExtent: 32.0,
+                                    scrollController: FixedExtentScrollController(
+                                      initialItem: selectedCategory,
+                                    ),
+                                    onSelectedItemChanged: (int selectedItem) {
+                                      setState(() {
+                                        selectedCategory = selectedItem;
+                                      });
+                                    },
+                                    children:
+                                      List<Widget>.generate(categoryData.length, (int index) {
+                                      return Center(child: Text(categoryData[index].name));
+                                    }),
+                                  ),
+                                ),
+                              ),
+                              // TAG
+                              SizedBox(
+                                height: 40,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Wrap(
+                                    children: config.TAG.tags.map((Tag tag) {
+                                      return _isShowTags || selectedTags.contains(tag.tagId) ? Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 2),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              if (selectedTags.contains(tag.tagId)) {
+                                                selectedTags.remove(tag.tagId);
+                                              } else {
+                                                selectedTags.add(tag.tagId);
+                                              }
+                                            });
+                                          },
+                                          child: CustomChip(
+                                            text: tag.name,
+                                            selected: selectedTags.contains(tag.tagId),
+                                            backgroundColor: const Color.fromARGB(255, 227, 227, 227),
+                                            selectedColor: Colors.grey.shade600,
+                                          )
+                                        ),
+                                      ) : const SizedBox();
+                                    }).toList(),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 5,),
+                              widget.isEdit || isFromFav ? GestureDetector(onTap: _showTag, child: _isShowTags ? const Text('show less') : const Text('show more')) : const SizedBox(),
+                              InputTextFeild(
+                                initialValue: widget.detail,
+                                controller: detailCtrl,
+                                infoText: "Note",
+                                hintText: "note",
+                                obscureText: false
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10,),
+                      SizedBox(
+                        width: 135,
+                        child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              _fav = !_fav;
+                            });
                           },
                           child: Row(
-                            children : [
-                              Text ('from your favourite bill', style: TextStyle(color: Theme.of(context).colorScheme.secondary),),
-                              Icon(Icons.arrow_drop_down_rounded, color: Theme.of(context).colorScheme.secondary),
-                            ]
-                          )
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text('Favourite'),
+                              const SizedBox(width: 10,),
+                              Icon(_fav ? Icons.favorite_rounded : Icons.favorite_border_rounded)
+                            ],
+                          ),
                         ),
-                      ],
-                    ) : const SizedBox(),
+                      )
+                    ],
                   ),
+                ),
+          
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
                     SizedBox(
-                      height: 50,
-                      width: 320,
-                      child: FilledButton(
-                        onPressed: isFeildFull && noteCtrl.text.length <= 18 && !isSending ? () async {
-                          widget.isEdit ? await _edit() : await _create();
-                          Navigator.pop(context, true);
-                        } : null,
-                        child: Text(
-                          widget.isEdit ? 'Edit' : 'Create',
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      height: 35,
+                      child:
+                    !widget.isEdit ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton(
+                            onPressed: () async {
+                              dynamic favouritItem = await showModalBottomSheet(
+                                isScrollControlled: true,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const AllFavourite();
+                                }
+                              );
+                              if (favouritItem != null) {
+                                _setFavourite(favouritItem);
+                              }
+                            },
+                            child: Row(
+                              children : [
+                                Text ('from your favourite bill', style: TextStyle(color: Theme.of(context).colorScheme.secondary),),
+                                Icon(Icons.arrow_drop_down_rounded, color: Theme.of(context).colorScheme.secondary),
+                              ]
+                            )
+                          ),
+                        ],
+                      ) : const SizedBox(),
+                    ),
+                      SizedBox(
+                        height: 50,
+                        width: 320,
+                        child: FilledButton(
+                          onPressed: isFeildFull && noteCtrl.text.length <= 18 && !isSending ? () async {
+                            widget.isEdit ? await _edit() : await _create();
+                            Navigator.pop(context, true);
+                          } : null,
+                          child: Text(
+                            widget.isEdit ? 'Edit' : 'Create',
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                  const SizedBox(height: 40,),
-                ],
-              ),
-            ],
+                    const SizedBox(height: 40,),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
