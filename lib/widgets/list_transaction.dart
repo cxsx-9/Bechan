@@ -25,40 +25,40 @@ class _ListTransactionState extends State<ListTransaction> {
     widget.onDataChanged();
   }
 
-  _duplicate(transaction) async {
+  _duplicate() async {
     List<int> selectedTags = [];
-    if (transaction.tags != []) {
-      for (var tag in transaction.tags) {
+    if (widget.transaction.tags != []) {
+      for (var tag in widget.transaction.tags) {
         selectedTags.add(tag.tagId);
       }
     }
     await TransactionService().addTransaction({
-      "categorie_id": transaction.categorieId,
-      "amount": transaction.amount,
-      "note": transaction.note,
-      "transaction_datetime" : DateFormat('yyyy-MM-dd HH:mm:ss').format(transaction.transactionDatetime),
+      "categorie_id": widget.transaction.categorieId,
+      "amount": widget.transaction.amount,
+      "note": widget.transaction.note,
+      "transaction_datetime" : DateFormat('yyyy-MM-dd HH:mm:ss').format(widget.transaction.transactionDatetime),
       "fav": 0,
       "tag_id": selectedTags,
     });
     widget.onDataChanged();
   }
 
-  _edit(transaction) async {
+  _edit() async {
     dynamic res = await showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       builder: (BuildContext context) {
         return AddRecord(
           isEdit: true,
-          transactionsId: transaction.transactionsId,
-          amount: transaction.amount.toString(),
-          note: transaction.note,
-          detail: transaction.detail,
-          type: transaction.categorieType,
-          date: transaction.transactionDatetime,
-          categorieName: transaction.categorieName,
-          tags: transaction.tags,
-          fav: transaction.fav
+          transactionsId: widget.transaction.transactionsId,
+          amount: widget.transaction.amount.toString(),
+          note: widget.transaction.note,
+          detail: widget.transaction.detail,
+          type: widget.transaction.categorieType,
+          date: widget.transaction.transactionDatetime,
+          categorieName: widget.transaction.categorieName,
+          tags: widget.transaction.tags,
+          fav: widget.transaction.fav
         );
       }
     );
@@ -78,7 +78,7 @@ class _ListTransactionState extends State<ListTransaction> {
           SlidableAction(
             borderRadius: const BorderRadius.all(Radius.circular(15)),
             onPressed: (_) {
-              _duplicate(widget.transaction);
+              _duplicate();
             },
             backgroundColor: Colors.blue,
             foregroundColor: Colors.white,
@@ -92,7 +92,7 @@ class _ListTransactionState extends State<ListTransaction> {
           SlidableAction(
             borderRadius: const BorderRadius.horizontal(left: Radius.circular(15)),
             onPressed: (_) {
-              _edit(widget.transaction);
+              _edit();
             },
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,

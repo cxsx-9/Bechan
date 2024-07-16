@@ -56,14 +56,6 @@ class DetailTransaction extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 10,),
-              Text(
-                DateFormat('dd MMMM yyyy  HH:mm').format(transaction.transactionDatetime!),
-                style: const TextStyle(
-                  fontSize: 12,
-                ),
-              ),
-              const SizedBox(height: 5,),
               Text(
                 transaction.categorieName,
                 style: const TextStyle(
@@ -71,12 +63,11 @@ class DetailTransaction extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              const SizedBox(height: 35,),
+              const SizedBox(height: 25,),
               Text(
-                transaction.note,
+                DateFormat('EEE, dd MMMM yyyy  HH:mm').format(transaction.transactionDatetime!),
                 style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w400,
+                  fontSize: 12,
                 ),
               ),
               Text(
@@ -84,6 +75,14 @@ class DetailTransaction extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.w300,
+                ),
+              ),
+              const SizedBox(height: 20,),
+              Text(
+                transaction.note,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
               const SizedBox(height: 10,),
@@ -106,7 +105,6 @@ class DetailTransaction extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 10,),
               SizedBox(
                 height: 60,
                 width: 270,

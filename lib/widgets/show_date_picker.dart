@@ -25,6 +25,7 @@ class ShowDatePickerFunction {
               children: <Widget>[
                 Expanded(
                   child: SfDateRangePicker(
+                    maxDate: DateTime.now(),
                     backgroundColor: Theme.of(context).colorScheme.onPrimary,
                     headerStyle: DateRangePickerHeaderStyle(
                       backgroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -65,6 +66,7 @@ class ShowDatePickerFunction {
               children: <Widget>[
                 Expanded(
                   child: SfDateRangePicker(
+                    maxDate: DateTime.now(),
                     showNavigationArrow: true,
                     allowViewNavigation: false,
                     view: DateRangePickerView.year,
@@ -111,6 +113,7 @@ class ShowDatePickerFunction {
               children: <Widget>[
                 Expanded(
                   child: SfDateRangePicker(
+                    maxDate: DateTime.now(),
                     showNavigationArrow: true,
                     allowViewNavigation: false,
                     view: DateRangePickerView.decade,
@@ -165,6 +168,7 @@ class ShowDatePickerFunction {
               children: <Widget>[
                 Expanded(
                   child: SfDateRangePicker(
+                    maxDate: DateTime.now(),
                     backgroundColor: Theme.of(context).colorScheme.onPrimary,
                     headerStyle: DateRangePickerHeaderStyle(
                         backgroundColor: Theme.of(context).colorScheme.onPrimary,
