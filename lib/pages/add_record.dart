@@ -288,9 +288,9 @@ class _AddRecordState extends State<AddRecord> {
                                   fillColor: _selectedType[1] ? Colors.red[200] : Colors.green[200],
                                   color: Theme.of(context).colorScheme.secondary,
                                   // color: _selectedType[1] ? Colors.red[400] : Colors.green[400],
-                                  constraints: const BoxConstraints(
+                                  constraints: BoxConstraints(
                                     minHeight: 35.0,
-                                    minWidth: 160.0,
+                                    minWidth: (MediaQuery.of(context).size.width - 65)/2,
                                   ),
                                   isSelected: _selectedType,
                                   children: transactionType,
