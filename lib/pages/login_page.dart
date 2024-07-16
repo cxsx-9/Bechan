@@ -77,14 +77,13 @@ class _LoginPageState extends State<LoginPage> {
               ),
               GestureDetector(
                 // -------------Debug
-                onTap: () {
+                onLongPress: () {
                   Navigator.pushNamed(context, '/logPage');
                 },
-                onLongPress: () {
-                  emailCtrl.text = config.ADMIN_EMAIL;
-                  passCtrl.text = config.ADMIN_PASSWD;
-                },
-
+                // onTap: () {
+                //   emailCtrl.text = config.ADMIN_EMAIL;
+                //   passCtrl.text = config.ADMIN_PASSWD;
+                // },
                 onDoubleTap: () {
                   CustomDialog().inputDialog(
                     context : context,
