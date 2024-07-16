@@ -145,12 +145,9 @@ class _CategoryPageState extends State<CategoryPage> {
                                 }
                               },
                               separatorBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                                  child: Divider(
-                                    color: Theme.of(context).colorScheme.onSecondary,
-                                    height: 0,
-                                  ),
+                                return Divider(
+                                  color: Theme.of(context).colorScheme.shadow,
+                                  height: 0,
                                 );
                               },
                             ),
