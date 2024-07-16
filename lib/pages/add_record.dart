@@ -234,6 +234,7 @@ class _AddRecordState extends State<AddRecord> {
                         ],
                       ),
                       PopupMenuButton<Menu>(
+                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
                         elevation: 5,
                         shadowColor: Theme.of(context).colorScheme.secondary,
                         color: Theme.of(context).colorScheme.onPrimary,
