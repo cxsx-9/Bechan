@@ -48,6 +48,7 @@ class _ListCategoryState extends State<ListCategory> {
           motion: const ScrollMotion(),
           children: [
             SlidableAction(
+              borderRadius: const BorderRadius.horizontal(left: Radius.circular(15)),
               onPressed: (_) async {
                 nameCtrl.text = widget.item.name;
                 CustomDialog().inputDialog(context: context, controller: nameCtrl, onSubmit: onSubmitEdit, title: 'Edit', hint: 'category');
