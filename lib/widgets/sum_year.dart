@@ -97,6 +97,10 @@ class SumYear extends StatelessWidget {
                     itemCount: months.length,
                     itemBuilder: (context, index) {
                       final item = months[index];
+                      var color = Theme.of(context).colorScheme.primary;
+                      if (item.totalIncome == 0 && item.totalExpense == 0) {
+                        color = Theme.of(context).colorScheme.secondary;
+                      }
                       return SizedBox(
                         width: double.infinity,
                         child: ListTile(
@@ -104,9 +108,9 @@ class SumYear extends StatelessWidget {
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              SizedBox(width: 90, child: Text(DateFormat('MMMM').format(DateTime(0, item.month)), style: const TextStyle(fontSize: 15),textAlign: TextAlign.start )),
-                              SizedBox(width:100, child: Text(config.NUM_FORMAT.format(item.totalIncome), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
-                              SizedBox(width:100, child: Text(config.NUM_FORMAT.format(item.totalExpense), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
+                              SizedBox(width: 90, child: Text(DateFormat('MMMM').format(DateTime(0, item.month)), style: TextStyle(color: color, fontSize: 15),textAlign: TextAlign.start )),
+                              SizedBox(width:100, child: Text(config.NUM_FORMAT.format(item.totalIncome), style: TextStyle(color: color, fontSize: 15), textAlign: TextAlign.end,)),
+                              SizedBox(width:100, child: Text(config.NUM_FORMAT.format(item.totalExpense), style: TextStyle(color: color, fontSize: 15), textAlign: TextAlign.end,)),
                             ],
                           ),
                         ),
