@@ -20,40 +20,41 @@ class TinyCards extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 113,
-      height: 90,
-      child: Container(
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [BoxShadow(
-            color: Theme.of(context).colorScheme.shadow,
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          )]
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              topic,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: color,
-              )
-            ),
-            Text(
-              data,
-              style: TextStyle(
-                fontSize: data.length < 10 ? 18 : 14,
-                color: color,
+    return Expanded(
+      child: SizedBox(
+        height: 90,
+        child: Container(
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [BoxShadow(
+              color: Theme.of(context).colorScheme.shadow,
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            )]
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                topic,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                )
               ),
-            )
-          ],
+              Text(
+                data,
+                style: TextStyle(
+                  fontSize: data.length < 10 ? 18 : 14,
+                  color: color,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

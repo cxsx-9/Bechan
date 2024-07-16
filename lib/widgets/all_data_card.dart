@@ -38,7 +38,9 @@ class AllDataCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TinyCards(topic: 'Income', data: config.NUM_FORMAT.format(income)),
+            const SizedBox(width: 10,),
             TinyCards(topic: 'Expense', data: config.NUM_FORMAT.format(expense)),
+            const SizedBox(width: 10,),
             TinyCards(topic: 'Balance', color: Colors.white, backgroundColor: Colors.blue, data: config.NUM_FORMAT.format(balance)),
           ],
         ),

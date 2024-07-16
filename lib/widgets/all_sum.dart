@@ -25,7 +25,9 @@ class AllSum extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TinyCards(topic: 'Income', data: income),
+            const SizedBox(width: 10,),
             TinyCards(topic: 'Expense', data: expense),
+            const SizedBox(width: 10,),
             TinyCards(topic: 'Balance',color: Colors.white,backgroundColor: Colors.blue,data: balance),
           ],
         ),
