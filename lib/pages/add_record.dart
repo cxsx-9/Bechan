@@ -356,14 +356,15 @@ class _AddRecordState extends State<AddRecord> {
                         width: double.infinity,
                         decoration: cardDecoration(context),
                         child: Padding(
-                          padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
+                          padding: const EdgeInsets.all(15),
                           child: Column(
                             children: [
                               CupertinoButton(
+                                padding: EdgeInsets.zero,
                                 child: 
                                 Container(
                                   height: 35,
-                                  width: 260,
+                                  width: double.infinity,
                                   decoration: BoxDecoration(
                                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                                     border: Border.all(
@@ -407,6 +408,7 @@ class _AddRecordState extends State<AddRecord> {
                                   ),
                                 ),
                               ),
+                              const SizedBox(height: 10,),
                               // TAG
                               SizedBox(
                                 height: 40,
