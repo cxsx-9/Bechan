@@ -74,6 +74,8 @@ class _AddRecordState extends State<AddRecord> {
   bool isFromFav = false;
   List<int> selectedTags = [];
   bool _fav = false;
+  int _transactionId = 0;
+  String _detail = '';
   final DateTime _now = DateTime.now();
 
   @override
@@ -88,7 +90,9 @@ class _AddRecordState extends State<AddRecord> {
     _sendDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(widget.date);
     _selectedDate = DateFormat('dd MMMM yyyy').format(widget.date);
     _fav = widget.fav == 1;
+    _transactionId = widget.transactionsId;
     _isShowTags = !widget.isEdit;
+    _detail = widget.detail;
     bool t = widget.type == 'income';
     _selectedType = [t, !t];
     if (widget.tags != []) {
@@ -125,7 +129,7 @@ class _AddRecordState extends State<AddRecord> {
   Future<void> _edit() async {
     setState(() {isSending = true;});
     await TransactionService().editTransaction({
-      "transactions_id": widget.transactionsId,
+      "transactions_id": _transactionId,
       "categorie_id": categoryData[selectedCategory].categorieId,
       "amount": double.parse(amountCtrl.text),
       "note": noteCtrl.text,
@@ -172,19 +176,30 @@ class _AddRecordState extends State<AddRecord> {
     Navigator.of(context).pop();
   }
 
-  void _setFavourite(Favourite favouritItem) {
+  void _setFavourite(dynamic data) {
+    Favourite  favouritItem = data['data'];
     setState(() {
-      isFromFav = true;
-      amountCtrl.text = favouritItem.amount.toString();
       bool isIncome = favouritItem.categorieType == 'income';
       _selectedType = [isIncome, !isIncome];
+      selectedTags = [];
+      amountCtrl.text = favouritItem.amount.toString();
       categoryData = _selectedType[0] ? config.CATEGORY.income : config.CATEGORY.expenses;
       selectedCategory = categoryData.indexWhere((category) => category.categorieId == favouritItem.categorieId) ;
+      detailCtrl.text = favouritItem.detail;
       if (favouritItem.tags != []) {
         for (var tag in favouritItem.tags) {
           selectedTags.add(tag.tagId);
         }
         noteCtrl.text = favouritItem.note;
+      }
+      if (data['edit'] == true) {
+        _transactionId = favouritItem.transactionsId;
+        _selectedDate = DateFormat('dd MMMM yyyy').format(favouritItem.transactionDatetime);
+        _sendDate = DateFormat("yyyy-MM-dd HH:mm:ss").format(favouritItem.transactionDatetime);
+        _fav = favouritItem.fav == 1;
+        widget.isEdit = true;
+      } else {
+        isFromFav = true;
       }
     });
   }
@@ -444,7 +459,7 @@ class _AddRecordState extends State<AddRecord> {
                               const SizedBox(height: 5,),
                               widget.isEdit || isFromFav ? GestureDetector(onTap: _showTag, child: _isShowTags ? const Text('show less') : const Text('show more')) : const SizedBox(),
                               InputTextFeild(
-                                initialValue: widget.detail,
+                                initialValue: _detail,
                                 controller: detailCtrl,
                                 infoText: "Note",
                                 hintText: "note",
@@ -480,9 +495,6 @@ class _AddRecordState extends State<AddRecord> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    SizedBox(
-                      height: 35,
-                      child:
                     !widget.isEdit ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -507,8 +519,7 @@ class _AddRecordState extends State<AddRecord> {
                             )
                           ),
                         ],
-                      ) : const SizedBox(),
-                    ),
+                      ) : const SizedBox(height: 30),
                       SizedBox(
                         height: 50,
                         width: 320,
@@ -518,7 +529,7 @@ class _AddRecordState extends State<AddRecord> {
                             Navigator.pop(context, true);
                           } : null,
                           child: Text(
-                            widget.isEdit ? 'Edit' : 'Create',
+                            widget.isEdit ? 'Save' : 'Create',
                             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ),

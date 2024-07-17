@@ -61,6 +61,7 @@ class _ChartPageState extends State<ChartPage> {
 
   void onSelectedMonth(DateTime date) {
       setState(() {
+        selectDate = date;
         type = 'month';
         sendMonth = DateFormat('yyyy-MM').format(date);
         selectedMonth = DateFormat('MMMM yyyy').format(date);

@@ -28,7 +28,7 @@ class SumMonth extends StatelessWidget {
         DoughnutChart(data: sumExpense, topic: 'Expense', mid: expense),
         const SizedBox(height: 10,),
         Container(
-          constraints: BoxConstraints(maxHeight: sumTags.isNotEmpty ? 60 + (45 * min(sumTags.length.toDouble(), 5.0)) : 70, minHeight: 50),
+          constraints: BoxConstraints(maxHeight: sumTags.isNotEmpty ? 60 + (45 * min(sumTags.length.toDouble(), 10.0)) : 70, minHeight: 50),
           decoration: cardDecoration(context),
           child: Padding(
             padding: const EdgeInsets.all(15),
@@ -41,7 +41,7 @@ class SumMonth extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(width:70, child: Text('Tag', style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary))),
+                        SizedBox(width:70, child: Text('Tag (${sumTags.length})', style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary))),
                         SizedBox(width:80, child: Text('Income', style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary), textAlign: TextAlign.end, )),
                         SizedBox(width:80, child: Text('Expense', style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary), textAlign: TextAlign.end, )),
                       ],

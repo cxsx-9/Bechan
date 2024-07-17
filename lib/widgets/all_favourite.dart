@@ -3,6 +3,7 @@ import 'package:bechan/widgets/card_decoration.dart';
 import 'package:bechan/widgets/transaction_card.dart';
 import 'package:flutter/material.dart';
 import 'package:bechan/config.dart' as config;
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 
 class AllFavourite extends StatelessWidget{
@@ -16,7 +17,7 @@ class AllFavourite extends StatelessWidget{
       child: Container(
         decoration: cardDecoration(context),
         child: Padding(
-          padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
+          padding: const EdgeInsets.only(top: 20),
           child: FutureBuilder<dynamic>(
             future: TransactionService().fetchFav(),
             builder: (context, snapshot) {
@@ -42,13 +43,29 @@ class AllFavourite extends StatelessWidget{
                   children: [
                     SizedBox(
                       height: 40,
-                      child: Text(
-                        'Favourites',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                          color: Theme.of(context).colorScheme.primary,
-                        )
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const SizedBox(width: 20,),
+                            Text(
+                              'Favourites',
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w600,
+                                color: Theme.of(context).colorScheme.primary,
+                              )
+                            ),
+                            Text(
+                              '(${snapshot.data.favourite.length})',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).colorScheme.secondary)
+                              )
+                          ],
+                        ),
                       ),
                     ),
                     Expanded(
@@ -56,11 +73,27 @@ class AllFavourite extends StatelessWidget{
                         itemCount: snapshot.data.favourite.length,
                         itemBuilder: (context, index) {
                           final transaction = snapshot.data.favourite[index];
-                          return Center(
+                          return Slidable(
+                            key: ValueKey(transaction.transactionsId),
+                              endActionPane: ActionPane(
+                                extentRatio: 0.2,
+                                motion: const ScrollMotion(),
+                                children: [
+                                  SlidableAction(
+                                    borderRadius: const BorderRadius.horizontal(left: Radius.circular(15)),
+                                    onPressed: (_) {
+                                      Navigator.pop(context, {'data': transaction, 'edit': true});
+                                    },
+                                    backgroundColor: Colors.black,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.edit,
+                                  ),
+                                ],
+                              ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                               child: GestureDetector(
-                                onTap: () => {Navigator.pop(context, transaction)},
+                                onTap: () => {Navigator.pop(context, {'data': transaction, 'edit': false})},
                                 child: TransactionCard(
                                   amount: config.NUM_FORMAT.format(transaction.amount),
                                   note: transaction.note,

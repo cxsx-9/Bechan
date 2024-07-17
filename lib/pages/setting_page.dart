@@ -29,7 +29,6 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Future _pickImage() async {
-    print('PICK');
     try {
       final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (pickedFile == null) return;
@@ -43,7 +42,6 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Future<void> _cropImage() async {
-    print('CROP');
     if (image != null) {
       print(image.path);
       final croppedFile = await ImageCropper().cropImage(

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bechan/widgets/card_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -22,7 +24,7 @@ class DoughnutChart extends StatelessWidget {
     return Container(
       decoration: cardDecoration(context),
       width: double.infinity,
-      height: data.length != 0 ? 430 : 70,
+      height: data.length != 0 ? 310 + (44 * min(data.length.toDouble(), 3.0)) : 70,
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: data.length != 0 ? Column(
@@ -76,12 +78,15 @@ class DoughnutChart extends StatelessWidget {
                       width: double.infinity,
                       child: ListTile(
                         visualDensity: const VisualDensity(vertical: -3),
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(width:130, child: Text(item.name, style: const TextStyle(fontSize: 15,),)),
-                            SizedBox(width:130, child: Text(config.NUM_FORMAT.format(item.amount), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
-                          ],
+                        title: SizedBox(
+                          height: 20,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(width:130, child: Text(item.name, style: const TextStyle(fontSize: 15,),)),
+                              SizedBox(width:130, child: Text(config.NUM_FORMAT.format(item.amount), style: const TextStyle(fontSize: 15), textAlign: TextAlign.end,)),
+                            ],
+                          ),
                         ),
                       ),
                     ),
