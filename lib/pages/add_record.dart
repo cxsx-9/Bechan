@@ -456,8 +456,13 @@ class _AddRecordState extends State<AddRecord> {
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 5,),
-                              widget.isEdit || isFromFav ? GestureDetector(onTap: _showTag, child: _isShowTags ? const Text('show less') : const Text('show more')) : const SizedBox(),
+                              SizedBox(
+                                height: 20,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 5),
+                                  child: widget.isEdit || isFromFav ? GestureDetector(onTap: _showTag, child: _isShowTags ? const Text('show less') : const Text('show more')) : const SizedBox()
+                                ),
+                              ),
                               InputTextFeild(
                                 initialValue: _detail,
                                 controller: detailCtrl,
@@ -495,31 +500,35 @@ class _AddRecordState extends State<AddRecord> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    !widget.isEdit ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton(
-                            onPressed: () async {
-                              dynamic favouritItem = await showModalBottomSheet(
-                                isScrollControlled: true,
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const AllFavourite();
+                    SizedBox(
+                      height: 35,
+                      child:
+                      !widget.isEdit ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                              onPressed: () async {
+                                dynamic favouritItem = await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return const AllFavourite();
+                                  }
+                                );
+                                if (favouritItem != null) {
+                                  _setFavourite(favouritItem);
                                 }
-                              );
-                              if (favouritItem != null) {
-                                _setFavourite(favouritItem);
-                              }
-                            },
-                            child: Row(
-                              children : [
-                                Text ('from your favourite bill', style: TextStyle(color: Theme.of(context).colorScheme.secondary),),
-                                Icon(Icons.arrow_drop_down_rounded, color: Theme.of(context).colorScheme.secondary),
-                              ]
-                            )
-                          ),
-                        ],
-                      ) : const SizedBox(height: 30),
+                              },
+                              child: Row(
+                                children : [
+                                  Text ('from your favourite bill', style: TextStyle(color: Theme.of(context).colorScheme.secondary),),
+                                  Icon(Icons.arrow_drop_down_rounded, color: Theme.of(context).colorScheme.secondary),
+                                ]
+                              )
+                            ),
+                          ],
+                        ) : const SizedBox(),
+                      ),
                       SizedBox(
                         height: 50,
                         width: 320,
