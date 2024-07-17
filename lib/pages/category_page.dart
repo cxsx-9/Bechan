@@ -128,7 +128,7 @@ class _CategoryPageState extends State<CategoryPage> {
                   const SizedBox(height: 15,),
                   Container(
                     width: double.infinity,
-                    height: 580,
+                    height: 587,
                     decoration: cardDecoration(context),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),

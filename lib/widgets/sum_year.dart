@@ -94,6 +94,7 @@ class SumYear extends StatelessWidget {
                   ),
                 Expanded(
                   child: ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: months.length,
                     itemBuilder: (context, index) {
                       final item = months[index];

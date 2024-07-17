@@ -86,11 +86,11 @@ class _ChartPageState extends State<ChartPage> {
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: SafeArea(
           child: SmartRefresher(
-          controller: _refreshController,
-          onRefresh: type == 'month' ? fetchMSum : fetchYSum,
-          enablePullDown: true,
-          enablePullUp: false,
-          enableTwoLevel: false,
+            controller: _refreshController,
+            onRefresh: type == 'month' ? fetchMSum : fetchYSum,
+            enablePullDown: true,
+            enablePullUp: false,
+            enableTwoLevel: false,
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: Padding(
