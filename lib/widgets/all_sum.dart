@@ -7,11 +7,13 @@ import 'package:bechan/config.dart' as config;
 class AllSum extends StatelessWidget {
   final dynamic snapshot;
   final String type;
+  final Function onSelected;
 
   const AllSum({
     super.key,
     required this.snapshot,
     required this.type,
+    required this.onSelected,
   });
 
   @override
@@ -54,7 +56,7 @@ class AllSum extends StatelessWidget {
           )
         : type == 'month'
         ? SumMonth(data: snapshot.data)
-        : SumYear(data: snapshot.data)
+        : SumYear(data: snapshot.data, onSelected: onSelected)
       ],
     );
   }

@@ -36,8 +36,9 @@ class _ChartPageState extends State<ChartPage> {
       setState(() {
         selectDate = value;
         selectedMonth = DateFormat('MMMM yyyy').format(value);
-        if (sendMonth != DateFormat("yyyy-MM").format(value)) {
-          sendMonth = DateFormat("yyyy-MM").format(value);
+        String tmp = DateFormat("yyyy-MM").format(value);
+        if (sendMonth != tmp) {
+          sendMonth = tmp;
           fetchMSum();
         }
       });
@@ -56,6 +57,15 @@ class _ChartPageState extends State<ChartPage> {
       });
     }
     Navigator.of(context).pop();
+  }
+
+  void onSelectedMonth(DateTime date) {
+      setState(() {
+        type = 'month';
+        sendMonth = DateFormat('yyyy-MM').format(date);
+        selectedMonth = DateFormat('MMMM yyyy').format(date);
+      });
+      fetchMSum();
   }
 
   void fetchMSum () async {
@@ -201,7 +211,7 @@ class _ChartPageState extends State<ChartPage> {
                         future: type == 'month' ? _mres : _yres,
                         builder: (context, snapshot) {
                           hasData = snapshot.data != null ? snapshot.data.isNotEmpty() && !snapshot.hasError : false;
-                          return AllSum(snapshot: snapshot, type: type!);
+                          return AllSum(snapshot: snapshot, type: type!, onSelected: onSelectedMonth);
                         },
                       )
                     ),

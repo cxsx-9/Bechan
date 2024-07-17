@@ -7,10 +7,12 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 class SumYear extends StatelessWidget {
   final dynamic data;
+  final Function onSelected;
 
   const SumYear({
     super.key,
     required this.data,
+    required this.onSelected,
   });
 
   @override
@@ -70,9 +72,9 @@ class SumYear extends StatelessWidget {
           ) : const Center(child: Text('No Year data'),),
         ),
         const SizedBox(height: 10,),
-        months.isNotEmpty ? Container(
+        if (months.isNotEmpty) Container(
           width: double.infinity,
-          constraints: const BoxConstraints(maxHeight: 730, minHeight: 100),
+          constraints: const BoxConstraints(maxHeight: 720, minHeight: 100),
           decoration: cardDecoration(context),
           child: Padding(
             padding: const EdgeInsets.all(15.0),
@@ -105,14 +107,19 @@ class SumYear extends StatelessWidget {
                       return SizedBox(
                         width: double.infinity,
                         child: ListTile(
-                          // padding: const EdgeInsets.all(10),
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(width: 90, child: Text(DateFormat('MMMM').format(DateTime(0, item.month)), style: TextStyle(color: color, fontSize: 15),textAlign: TextAlign.start )),
-                              SizedBox(width:100, child: Text(config.NUM_FORMAT.format(item.totalIncome), style: TextStyle(color: color, fontSize: 15), textAlign: TextAlign.end,)),
-                              SizedBox(width:100, child: Text(config.NUM_FORMAT.format(item.totalExpense), style: TextStyle(color: color, fontSize: 15), textAlign: TextAlign.end,)),
-                            ],
+                          title: InkWell(
+                            onTap: item.totalIncome == 0 && item.totalExpense == 0 ? null 
+                            : () => {
+                              onSelected(DateTime(int.parse(data.summary.year), item.month)),
+                            } ,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(width: 90, child: Text(DateFormat('MMMM').format(DateTime(0, item.month)), style: TextStyle(color: color, fontSize: 15),textAlign: TextAlign.start )),
+                                SizedBox(width:100, child: Text(config.NUM_FORMAT.format(item.totalIncome), style: TextStyle(color: color, fontSize: 15), textAlign: TextAlign.end,)),
+                                SizedBox(width:100, child: Text(config.NUM_FORMAT.format(item.totalExpense), style: TextStyle(color: color, fontSize: 15), textAlign: TextAlign.end,)),
+                              ],
+                            ),
                           ),
                         ),
                       );
@@ -131,7 +138,7 @@ class SumYear extends StatelessWidget {
               ],
             ),
           ),
-        ) : const SizedBox(),
+        )
       ],
     );
   }

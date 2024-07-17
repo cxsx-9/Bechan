@@ -209,7 +209,7 @@ class _AddRecordState extends State<AddRecord> {
           ),
         ),
         body: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: SafeArea(
             child: Column(
               children: [

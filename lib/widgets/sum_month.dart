@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bechan/models/sum_month_model.dart';
 import 'package:bechan/widgets/card_decoration.dart';
 import 'package:bechan/widgets/doughnut_chart.dart';
@@ -26,7 +28,7 @@ class SumMonth extends StatelessWidget {
         DoughnutChart(data: sumExpense, topic: 'Expense', mid: expense),
         const SizedBox(height: 10,),
         Container(
-          constraints: BoxConstraints(maxHeight: sumTags.isNotEmpty ? 300 : 70, minHeight: 50),
+          constraints: BoxConstraints(maxHeight: sumTags.isNotEmpty ? 60 + (45 * min(sumTags.length.toDouble(), 5.0)) : 70, minHeight: 50),
           decoration: cardDecoration(context),
           child: Padding(
             padding: const EdgeInsets.all(15),
@@ -40,8 +42,8 @@ class SumMonth extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(width:70, child: Text('Tag', style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary))),
-                          SizedBox(width:80, child: Text('Income', style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary), textAlign: TextAlign.end, )),
-                          SizedBox(width:80, child: Text('Expense', style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary), textAlign: TextAlign.end, )),
+                        SizedBox(width:80, child: Text('Income', style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary), textAlign: TextAlign.end, )),
+                        SizedBox(width:80, child: Text('Expense', style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary), textAlign: TextAlign.end, )),
                       ],
                     ),
                   ),
@@ -52,6 +54,7 @@ class SumMonth extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final item = sumTags[index];
                       return SizedBox(
+                        height: 45,
                         width: double.infinity,
                         child: ListTile(
                           visualDensity: const VisualDensity(vertical: -3),
